@@ -1,0 +1,136 @@
+//
+// Created by ezra on 11/3/18.
+//
+
+#include <algorithm>
+#include <portaudio.h>
+
+#include "PaWrapper.h"
+#include "SoftCut.h"
+
+using namespace softcut;
+
+class PaWrapper::Imp {
+
+private:
+    enum { SAMPLE_RATE = 44100, FRAMES_PER_BUFFER = 1024 };
+    PaStream *stream;
+    const PaDeviceInfo* inputInfo;
+    const PaDeviceInfo* outputInfo;
+    PaStreamParameters inputParameters;
+    PaStreamParameters outputParameters;
+    int numChannels;
+
+    //softcuthead::SoftCutHeadLogic sc;
+    SoftCut sc;
+
+public:
+    static int AudioCallback( const void *input, void *output,
+                              unsigned long numFrames,
+                              const PaStreamCallbackTimeInfo* timeInfo,
+                              PaStreamCallbackFlags statusFlags,
+                              void *userData ) {
+
+        float *in[2];
+        float *out[2];
+        in[0] = ((float**)input)[0];
+        in[1] = ((float**)input)[1];
+        out[0] = ((float**)output)[0];
+        out[1] = ((float**)output)[1];
+
+        auto* imp = static_cast<PaWrapper::Imp*>(userData);
+        SoftCut& sc = imp->sc;
+
+        sc.processBlockMono(in[0], out[0], numFrames);
+        for( int i=0; i<numFrames; i++ ) {
+            out[1][i] = out[0][i];
+        }
+
+        return paContinue;
+    }
+
+    void setup() {
+
+
+        PaError err = Pa_Initialize();
+        if( err != paNoError ) {
+            throw("failed to initialize portaudio");
+        }
+
+        inputParameters.device = Pa_GetDefaultInputDevice(); /* default input device */
+        printf( "Input device # %d.\n", inputParameters.device );
+        inputInfo = Pa_GetDeviceInfo( inputParameters.device );
+        printf( "    Name: %s\n", inputInfo->name );
+        printf( "      LL: %g s\n", inputInfo->defaultLowInputLatency );
+        printf( "      HL: %g s\n", inputInfo->defaultHighInputLatency );
+
+        outputParameters.device = Pa_GetDefaultOutputDevice(); /* default output device */
+        printf( "Output device # %d.\n", outputParameters.device );
+        outputInfo = Pa_GetDeviceInfo( outputParameters.device );
+        printf( "   Name: %s\n", outputInfo->name );
+        printf( "     LL: %g s\n", outputInfo->defaultLowOutputLatency );
+        printf( "     HL: %g s\n", outputInfo->defaultHighOutputLatency );
+
+        numChannels = std::min(inputInfo->maxInputChannels, outputInfo->maxOutputChannels);
+        printf( "Num channels = %d.\n", numChannels );
+        assert(numChannels >= 2);
+
+        inputParameters.channelCount = numChannels;
+        inputParameters.sampleFormat = paFloat32 | paNonInterleaved;
+        inputParameters.suggestedLatency = inputInfo->defaultHighInputLatency ;
+        inputParameters.hostApiSpecificStreamInfo = nullptr;
+
+        outputParameters.channelCount = numChannels;
+        outputParameters.sampleFormat = paFloat32 | paNonInterleaved;
+        outputParameters.suggestedLatency = outputInfo->defaultHighOutputLatency;
+        outputParameters.hostApiSpecificStreamInfo = nullptr;
+
+        err = Pa_OpenStream(
+                &stream,
+                &inputParameters,
+                &outputParameters,
+                SAMPLE_RATE,
+                FRAMES_PER_BUFFER,
+                paClipOff | paDitherOff,
+                AudioCallback,
+                this );
+        if( err != paNoError ) {
+            throw("failed to open stream");
+        }
+    }
+
+    void start() {
+        PaError err = Pa_StartStream( stream );
+        if( err != paNoError ) { ;; }
+    }
+
+    void stop() {
+        PaError err = Pa_StopStream(stream);
+        if( err != paNoError ) { ;; }
+    }
+
+    void cleanup() {
+        PaError err = Pa_CloseStream(stream);
+        if( err != paNoError ) { ;; }
+        Pa_Terminate();
+    }
+};
+
+PaWrapper::Imp PaWrapper::imp;
+
+void PaWrapper::setup() {
+    PaWrapper::imp.setup();
+}
+
+void PaWrapper::cleanup() {
+    PaWrapper::imp.cleanup();
+}
+
+void PaWrapper::start() {
+    PaWrapper::imp.start();
+}
+
+void PaWrapper::stop() {
+    PaWrapper::imp.stop();
+}
+
