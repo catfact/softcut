@@ -111,7 +111,10 @@ namespace softcut {
             }
         }
 
-        void setRate(double r) { rate_ = r; }
+        void setRate(double r) {
+            rate_ = r;
+        }
+
         void setBuffer(float *buf, int frames) {
             buf_  = buf;
             bufFrames_ = frames;

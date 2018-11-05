@@ -57,7 +57,7 @@ namespace softcut {
 
         void setRate(float rate) {
             rate_ = rate;
-            resamp_.setRate(rate);
+            resamp_.setRate(std::fabs(rate));
         }
 
 	void setTrig(float trig) { trig_ = trig; }
