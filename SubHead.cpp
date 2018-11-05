@@ -5,7 +5,7 @@
 #include <string.h>
 #include <limits>
 
-#include "interp.h"
+#include "Interpolate.h"
 #include "SubHead.h"
 
 using namespace softcut;

@@ -8,7 +8,7 @@
 #include <limits>
 
 
-#include "interp.h"
+#include "Interpolate.h"
 #include "Resampler.h"
 
 #include "SoftCutHeadLogic.h"

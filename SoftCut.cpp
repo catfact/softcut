@@ -3,6 +3,8 @@
 //
 
 #include "SoftCut.h"
+#include "Commands.h"
+
 using namespace softcut;
 
 
@@ -12,9 +14,12 @@ SoftCut::SoftCut() {
 }
 
 void SoftCut::processBlockMono(float *in, float *out, int numFrames) {
-
+    // FIXME: save the trigger / phase outputs for anaysis
     float trigDummy;
     float phaseDummy;
+
+    Commands::handlePending(this);
+
     for(int i=0; i<numFrames; ++i) {
         head.nextSample(in[i], &phaseDummy, &trigDummy, &(out[i]));
     }
@@ -53,7 +58,6 @@ void SoftCut::setRecLevel(float amp) {
 void SoftCut::setPreLevel(float amp) {
     head.setPre(amp);
 }
-
 
 void SoftCut::setRecFlag(bool val) {
     head.setRecRun(val);

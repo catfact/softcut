@@ -3,6 +3,7 @@
 #include <thread>
 
 #include "PaWrapper.h"
+#include "OscInterface.h"
 
 static inline void sleep(int ms) {
     std::this_thread::sleep_for(std::chrono::milliseconds(ms));
@@ -12,8 +13,12 @@ int main() {
     PaWrapper::setup();
     PaWrapper::start();
 
+    OscInterface::init(PaWrapper::getSoftCut());
+
+    std::cout << "OSC rx port number: " << OscInterface::getPortNumber() << std::endl;
+
     // FIXME: stop!
-    while(true) {
+    while(!OscInterface::shouldQuit()) {
         sleep(100);
     }
 

@@ -12,6 +12,7 @@ using namespace softcut;
 
 class PaWrapper::Imp {
 
+    friend class PaWrapper;
 private:
     enum { SAMPLE_RATE = 44100, FRAMES_PER_BUFFER = 1024 };
     PaStream *stream;
@@ -21,7 +22,7 @@ private:
     PaStreamParameters outputParameters;
     int numChannels;
 
-    //softcuthead::SoftCutHeadLogic sc;
+protected:
     SoftCut sc;
 
 public:
@@ -51,6 +52,7 @@ public:
 
     void setup() {
 
+        sc.setSampleRate(SAMPLE_RATE);
 
         PaError err = Pa_Initialize();
         if( err != paNoError ) {
@@ -134,3 +136,7 @@ void PaWrapper::stop() {
     PaWrapper::imp.stop();
 }
 
+
+SoftCut* PaWrapper::getSoftCut() {
+    return &PaWrapper::imp.sc;
+}
