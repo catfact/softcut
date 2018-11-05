@@ -20,7 +20,6 @@ namespace softcut {
         return x;
     }
 
-    
     class Resampler {
 
     private:
@@ -39,6 +38,7 @@ namespace softcut {
 
     private:
         // write multiple output frames, interpolating between two values
+        // FIXME: allow higher-order interpolation
         void writeInterp(float x, int n) {
             int i = frame_;                 // index into buffer
             double m = (x - x_) / rate_;    // slope
@@ -77,6 +77,9 @@ namespace softcut {
             double phase = phase_ + rate_;
             int nframes = (int) phase;
             if (nframes > 0) {
+                // use linear interpolation from last written value
+                // FIXME: use higher order interpolation.
+                // this would require enforcing a higher minimum latency...
                 double m = (x - x_) / rate_;
                 buf_[frame_] = x + (m * (1.0 - phase_));
                 frame_ = (frame_ + 1) % bufFrames_;

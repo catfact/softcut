@@ -57,6 +57,8 @@ namespace softcut {
 
         void setRate(float rate) {
             rate_ = rate;
+            // NB: resampler doesn't handle negative rates.
+            // instead we copy the resampler output backwards into the buffer when rate < 0.
             resamp_.setRate(std::fabs(rate));
         }
 
