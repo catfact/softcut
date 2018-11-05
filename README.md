@@ -26,4 +26,4 @@ caveats:
 
 - write-head resampling is only linear and so doesn't sound very good. i'm pretty sure it is correct (based on output spectrograms) but should compare against a canonical implementation like SRC to be sure.
 
-higher-order resampling should be pretty straightforward to add - `Resampler.h` is primitive (doesn't have required input ringbuffer, only output ringbuffer,) but at least it is it's own module. 
+higher-order resampling should be pretty straightforward to add - `Resampler.h` is primitive (doesn't have required input ringbuffer, only output ringbuffer,) but at least it is a separate module. 
