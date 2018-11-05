@@ -18,6 +18,7 @@ namespace softcut {
             SET_RATE,
             SET_LOOP_START,
             SET_LOOP_END,
+            SET_LOOP_FLAG,
             SET_FADE_TIME,
             SET_REC_LEVEL,
             SET_PRE_LEVEL,

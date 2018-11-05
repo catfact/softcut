@@ -46,7 +46,9 @@ void SoftCutHeadLogic::nextSample(float in, float *outPhase, float *outTrig, flo
     *outAudio = mixFade(head[0].peek(), head[1].peek(), head[0].fade(), head[1].fade());
     *outTrig = head[0].trig() + head[1].trig();
 
-    if(outPhase != nullptr) { *outPhase = static_cast<float>(head[active].phase()); }
+    if(outPhase != nullptr) {
+        *outPhase = static_cast<float>(head[active].phase());
+    }
 
     if(recRun) {
         head[0].poke(in, pre, rec, fadePre, fadeRec);

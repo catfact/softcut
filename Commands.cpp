@@ -13,6 +13,7 @@ class Commands::CommandPacket {
 public:
     CommandPacket() { id = SET_LOOP_START; value.f = 0.0; }
     CommandPacket(Id i, float val) : id(i) { value.f = val; }
+    CommandPacket(Id i, bool val) : id(i) { value.b = val; }
 
     void setValue(bool v) { value.b = v; }
     void setValue(float v) { value.f = v; }
@@ -28,6 +29,9 @@ public:
                 break;
             case SET_LOOP_END:
                 sc->setLoopEnd(value.f);
+                break;
+            case SET_LOOP_FLAG:
+                sc->setLoopFlag(value.f);
                 break;
             case SET_FADE_TIME:
                 sc->setFadeTime(value.f);
