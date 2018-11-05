@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.7)
 project(softcut)
 
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
@@ -14,6 +14,10 @@ if(APPLE)
     find_library(audiounit_lib AudioUnit REQUIRED)
     find_library(carbon_lib Carbon REQUIRED)
     target_link_libraries( softcut ${coreaudio_lib} ${audiotoolbox_lib} ${audiounit_lib} ${carbon_lib})
+else()
+    target_link_libraries(softcut jack)
+    target_link_libraries(softcut pthread)
+    target_link_libraries(softcut asound)
 endif()
 
 if(APPLE)
@@ -21,12 +25,14 @@ if(APPLE)
 else()
     find_library(lo_lib liblo.so REQUIRED)
 endif()
+
 target_link_libraries(softcut ${lo_lib})
+
 
 include_directories(softcut /usr/local/include)
 
 set_target_properties(softcut PROPERTIES
-        CXX_STANDARD 17
+        CXX_STANDARD 14
         CXX_STANDARD_REQUIRED YES
-        CXX_EXTENSIONS YES
+        CXX_EXTENSIONS NO
         )

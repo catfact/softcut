@@ -82,7 +82,9 @@ public:
 
         numChannels = std::min(inputInfo->maxInputChannels, outputInfo->maxOutputChannels);
         printf( "Num channels = %d.\n", numChannels );
-        assert(numChannels >= 2);
+        if(numChannels < 2) { 
+            printf("warning: not enough I/O channels!");
+        }
 
         inputParameters.channelCount = numChannels;
         inputParameters.sampleFormat = paFloat32 | paNonInterleaved;
@@ -104,23 +106,30 @@ public:
                 AudioCallback,
                 this );
         if( err != paNoError ) {
+            printf("failed to open stream\n");
             throw("failed to open stream");
         }
     }
 
     void start() {
         PaError err = Pa_StartStream( stream );
-        if( err != paNoError ) { ;; }
+        if( err != paNoError ) { 
+            printf("failed to start stream\n");
+         }
     }
 
     void stop() {
         PaError err = Pa_StopStream(stream);
-        if( err != paNoError ) { ;; }
+        if( err != paNoError ) { 
+            printf("failed to stop stream\n");
+        }
     }
 
     void cleanup() {
         PaError err = Pa_CloseStream(stream);
-        if( err != paNoError ) { ;; }
+        if( err != paNoError ) { 
+            printf("failed to close stream\n");
+         }
         Pa_Terminate();
     }
 };
