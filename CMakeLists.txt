@@ -1,7 +1,14 @@
 cmake_minimum_required(VERSION 3.7)
 project(softcut)
 
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+
+# hmm...
+
+message("CMAKE_C_FLAGS_DEBUG is ${CMAKE_C_FLAGS_DEBUG}")
+message("CMAKE_C_FLAGS_RELEASE is ${CMAKE_C_FLAGS_RELEASE}")
+message("CMAKE_C_FLAGS_RELWITHDEBINFO is ${CMAKE_C_FLAGS_RELWITHDEBINFO}")
+message("CMAKE_C_FLAGS_MINSIZEREL is ${CMAKE_C_FLAGS_MINSIZEREL}")
 
 set (SOFTCUT_SRC
         softcut-main.cpp
@@ -9,7 +16,8 @@ set (SOFTCUT_SRC
         SubHead.cpp
         SoftCut.cpp
         Commands.cpp
-        OscInterface.cpp Platform.h)
+        OscInterface.cpp 
+        Resampler.cpp )
 
 
 if(UNIX)

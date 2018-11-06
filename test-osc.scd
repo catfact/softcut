@@ -12,4 +12,4 @@ n.sendMsg("/set/recOffset", -10);
 n.sendMsg("/set/position", 1.0);
 n.sendMsg("/quit");
 
-n.sendMsg("/set/rate", -2.0);
+// n.sendMsg("/set/rate", -2.0);

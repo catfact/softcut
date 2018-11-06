@@ -31,7 +31,7 @@ private:
 
     static int setRate(const char *path, const char *types,
                                lo_arg **argv, int argc, lo_message msg, void *user_data) {
-        auto *sc  = (SoftCut*)user_data;
+        //auto *sc  = (SoftCut*)user_data;
         cout << "set rate \t" <<  argv[0]->f << endl;
              Commands::post(Commands::SET_RATE, argv[0]->f);
         return 0;
@@ -39,7 +39,7 @@ private:
 
     static int setLoopStart(const char *path, const char *types,
                        lo_arg **argv, int argc, lo_message msg, void *user_data) {
-        auto *sc  = (SoftCut*)user_data;
+        //auto *sc  = (SoftCut*)user_data;
         cout << "set loop start \t" <<  argv[0]->f << endl;
         Commands::post(Commands::SET_LOOP_START, argv[0]->f);
         return 0;
@@ -47,7 +47,7 @@ private:
 
     static int setLoopEnd(const char *path, const char *types,
                             lo_arg **argv, int argc, lo_message msg, void *user_data) {
-        auto *sc  = (SoftCut*)user_data;
+        //auto *sc  = (SoftCut*)user_data;
         cout << "set loop end \t" <<  argv[0]->f << endl;
         Commands::post(Commands::SET_LOOP_END, argv[0]->f);
         return 0;
@@ -55,7 +55,7 @@ private:
 
     static int setLoopFlag(const char *path, const char *types,
                           lo_arg **argv, int argc, lo_message msg, void *user_data) {
-        auto *sc  = (SoftCut*)user_data;
+        //auto *sc  = (SoftCut*)user_data;
         cout << "set loop flag\t" <<  argv[0]->f << endl;
         Commands::post(Commands::SET_LOOP_FLAG, argv[0]->f);
         return 0;
@@ -63,7 +63,7 @@ private:
 
     static int setFadeTime(const char *path, const char *types,
                             lo_arg **argv, int argc, lo_message msg, void *user_data) {
-        auto *sc  = (SoftCut*)user_data;
+        //auto *sc  = (SoftCut*)user_data;
         cout << "set fade time \t" <<  argv[0]->f << endl;
         Commands::post(Commands::SET_FADE_TIME, argv[0]->f);
         return 0;
@@ -71,7 +71,7 @@ private:
 
     static int setRecLevel(const char *path, const char *types,
                             lo_arg **argv, int argc, lo_message msg, void *user_data) {
-        auto *sc  = (SoftCut*)user_data;
+        //auto *sc  = (SoftCut*)user_data;
         cout << "set rec level \t" <<  argv[0]->f << endl;
         Commands::post(Commands::SET_REC_LEVEL, argv[0]->f);
         return 0;
@@ -79,7 +79,7 @@ private:
 
     static int setPreLevel(const char *path, const char *types,
                             lo_arg **argv, int argc, lo_message msg, void *user_data) {
-        auto *sc  = (SoftCut*)user_data;
+        //auto *sc  = (SoftCut*)user_data;
         cout << "set pre level \t" <<  argv[0]->f << endl;
         Commands::post(Commands::SET_PRE_LEVEL, argv[0]->f);
         return 0;
@@ -87,7 +87,7 @@ private:
 
     static int setRecFlag(const char *path, const char *types,
                             lo_arg **argv, int argc, lo_message msg, void *user_data) {
-        auto *sc  = (SoftCut*)user_data;
+        //auto *sc  = (SoftCut*)user_data;
         cout << "set rec flag \t" <<  argv[0]->f << endl;
         Commands::post(Commands::SET_REC_FLAG, argv[0]->f > 0.0);
         return 0;
@@ -95,7 +95,7 @@ private:
 
     static int setRecOffset(const char *path, const char *types,
                             lo_arg **argv, int argc, lo_message msg, void *user_data) {
-        auto *sc  = (SoftCut*)user_data;
+        //auto *sc  = (SoftCut*)user_data;
         cout << "set rec offset \t" <<  argv[0]->f << endl;
         Commands::post(Commands::SET_REC_OFFSET, argv[0]->f);
         return 0;
@@ -103,7 +103,7 @@ private:
 
     static int setPosition(const char *path, const char *types,
                             lo_arg **argv, int argc, lo_message msg, void *user_data) {
-        auto *sc  = (SoftCut*)user_data;
+        //auto *sc  = (SoftCut*)user_data;
         cout << "set position \t" <<  argv[0]->f << endl;
         Commands::post(Commands::SET_POSITION, argv[0]->f);
         return 0;

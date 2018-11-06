@@ -133,3 +133,10 @@ float SubHead::peek4(double phase) {
     return static_cast<float>(cubicinterp(x, y0, y1, y2, y3));
 }
 
+
+int SubHead::wrap(int val, int bound) {
+    int x = val;
+    while(x >= bound) { x -= bound; }
+    while(x < 0) { return x += bound; }
+    return x;
+}

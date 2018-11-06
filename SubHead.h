@@ -28,6 +28,7 @@ namespace softcut {
 
     private:
         float peek4(double phase);
+        static int wrap(int val, int bound);
 
     protected:
         float peek();
