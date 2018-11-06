@@ -3,27 +3,32 @@ library for seamless audio looping
 
 test project for crossfaded sample playback/recording with interpolation and partial erase.
 
-`softcut` creates a single read/write "head" structure and runs it under Portaudio. 
+`softcut` creates a single read/write "head" structure and runs it under Portaudio (on mac) or jack (linux.) 
 
 the audio process can be controlled by OSC on port number 9999. see `OscInterface.h` for command paths.
 
----------
-
+## building on norns
 
 requirements:
+```
+sudo apt-get install cmake 
+sudo apt-get install libboost-dev
+```
 
-- cmake
-- portaudio
-- liblo
+[other requirements should already be installed (libjack-dev, liblo).]
 
+configure and build:
+```
+mkdir build && cd build
+cmake ..
+make
+```
 
-currently only tested on macOS 10.14, where libraries are assumed to be installed to `/usr/local` (e.g. by homebrew.)
-
-will probably require different include paths under linux but otherwise should work.
+running: `./softcut`. included is a supercollider script to send test OSC commands; edit the NetAddr IP for local/remote use.
 
 --------
 caveats:
 
-- write-head resampling is only linear and so doesn't sound very good. i'm pretty sure it is correct (based on output spectrograms) but should compare against a canonical implementation like SRC to be sure.
+- write-head resampling is only linear and so doesn't sound great with rates of high "diophantine order." i'm pretty sure it is correct (based on output spectrograms) but should compare against a canonical implementation like SRC to be sure.
 
-higher-order resampling should be pretty straightforward to add - `Resampler.h` is primitive (doesn't have required input ringbuffer, only output ringbuffer,) but at least it is a separate module. 
+- assuming basic structure is unborked, higher-order resampling should be pretty straightforward to add - `Resampler` class is primitive (doesn't have required input ringbuffer, only output ringbuffer,) but at least it is a separate module.
