@@ -3,33 +3,50 @@ project(softcut)
 
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 
-add_executable(softcut softcut-main.cpp SoftCutHeadLogic.cpp SubHead.cpp PaWrapper.cpp PaWrapper.h SoftCut.cpp SoftCut.h Commands.cpp Commands.h OscInterface.cpp OscInterface.h)
+set (SOFTCUT_SRC
+        softcut-main.cpp
+        SoftCutHeadLogic.cpp
+        SubHead.cpp
+        SoftCut.cpp
+        Commands.cpp
+        OscInterface.cpp Platform.h)
 
-find_library(portaudio_lib libportaudio.a REQUIRED)
-target_link_libraries(softcut ${portaudio_lib} ${lo_lib})
 
-if(APPLE)
-    find_library(coreaudio_lib CoreAudio REQUIRED)
-    find_library(audiotoolbox_lib AudioToolbox REQUIRED)
-    find_library(audiounit_lib AudioUnit REQUIRED)
-    find_library(carbon_lib Carbon REQUIRED)
-    target_link_libraries( softcut ${coreaudio_lib} ${audiotoolbox_lib} ${audiounit_lib} ${carbon_lib})
+if(UNIX)
+    if(APPLE)
+        list (APPEND SOFTCUT_SRC PaWrapper.cpp)
+    else()
+        list (APPEND SOFTCUT_SRC JackWrapper.cpp)
+    endif()
 else()
-    target_link_libraries(softcut jack)
-    target_link_libraries(softcut pthread)
-    target_link_libraries(softcut asound)
+    # nope
 endif()
 
-if(APPLE)
-    find_library(lo_lib liblo.dylib REQUIRED)
+add_executable(softcut ${SOFTCUT_SRC})
+
+if(UNIX)
+    if(APPLE)
+        find_library(coreaudio_lib CoreAudio REQUIRED)
+        find_library(audiotoolbox_lib AudioToolbox REQUIRED)
+        find_library(audiounit_lib AudioUnit REQUIRED)
+        find_library(carbon_lib Carbon REQUIRED)
+
+        find_library(lo_lib liblo.dylib REQUIRED)
+        find_library(portaudio_lib portaudio.a REQUIRED)
+
+        include_directories(softcut /usr/local/include)
+        target_link_libraries( softcut ${coreaudio_lib} ${audiotoolbox_lib} ${audiounit_lib} ${carbon_lib} ${portaudio_lib})
+    else()
+        find_library(lo_lib liblo.so REQUIRED)
+        target_link_libraries(softcut jack)
+        target_link_libraries(softcut pthread)
+        target_link_libraries(softcut asound)
+    endif()
 else()
-    find_library(lo_lib liblo.so REQUIRED)
+    # nope
 endif()
 
 target_link_libraries(softcut ${lo_lib})
-
-
-include_directories(softcut /usr/local/include)
 
 set_target_properties(softcut PROPERTIES
         CXX_STANDARD 14
