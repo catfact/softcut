@@ -24,7 +24,7 @@ cmake ..
 make
 ```
 
-running: `./softcut`. included is a supercollider script to send test OSC commands; edit the NetAddr IP for local/remote use.
+running: `./softcut`. included is a supercollider script to send test OSC commands (`test-osc.scd`); edit the NetAddr IP for local/remote use.
 
 --------
 caveats:
