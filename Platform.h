@@ -6,6 +6,7 @@
 #define SOFTCUT_PLATFORM_H
 
 #include "JackWrapper.h"
+#include "PaWrapper.h"
 
 namespace  softcut {
 
@@ -17,7 +18,7 @@ namespace  softcut {
 
 #ifdef __APPLE__
 
-    typedef PaWrapper AudioWrapper
+    typedef PaWrapper AudioWrapper;
 
 #endif
 
