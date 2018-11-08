@@ -23,3 +23,5 @@ for i=1:n
 end
 
 audiowrite('varispeed_sine.wav', y, sr);
+
+z = audioread('../resampler-test/resamp_varispeed.wav');
