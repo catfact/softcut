@@ -10,13 +10,21 @@ n.sendMsg("/set/loopEnd", 2.0);
 n.sendMsg("/set/loopFlag", 1.0);
 n.sendMsg("/set/rate", 1.0);
 
-
 n.sendMsg("/set/recLevel", 0.5);
 n.sendMsg("/set/preLevel", 0.5);
 n.sendMsg("/set/recFlag", 1);
 n.sendMsg("/set/recOffset", -10);
 n.sendMsg("/set/position", 1.0);
 )
+
+n.sendMsg("/set/rate", 1/8);
+n.sendMsg("/set/rate", 5/8 + 0.01);
+n.sendMsg("/set/rate", 3/2);
+
+
+n.sendMsg("/set/recLevel", 0.5);
+n.sendMsg("/set/preLevel", 1.0);
+
 
 // flappy
 (

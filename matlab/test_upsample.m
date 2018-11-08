@@ -21,7 +21,7 @@ for i=1:n
 end
 
 subplot(2, 1, 1);
-plot(x,'-*', 'MarkerSize', 4);
+plot(x,'-o', 'MarkerSize', 4);
 
 subplot(2, 1, 2);
-plot(y,'-*', 'MarkerSize', 4);
+plot(y,'-o', 'MarkerSize', 4);

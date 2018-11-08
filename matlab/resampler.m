@@ -96,10 +96,15 @@ classdef resampler < handle
         function writeOutInterp(rs, i, f) 
             % first try: linear interpolation
             % just take the last two input values
-            x0 = rs.in(rs.n-1);
-            x1 = rs.in(rs.n);
-            y = x0 + (x1-x0)*f;
+%             x0 = rs.in(rs.n-1);
+%             x1 = rs.in(rs.n);
+%             y = x0 + (x1-x0)*f;
+%             rs.out(1, i) = y;
+
+            % second try: cubic interp, with 1 input sample latency
+            y = hermite(f, rs.in(1), rs.in(2), rs.in(3), rs.in(4));
             rs.out(1, i) = y;
+
         end
     end
 end

@@ -1,3 +1,5 @@
+
+#include "Interpolate.h"
 #include "Resampler.h"
 
 using namespace softcut;
@@ -5,8 +7,12 @@ using namespace softcut;
 //----------
 //-- public
 
-Resampler::Resampler(float *buf, int frames) :
-                rate_(1.0), phase_(0.0) {}
+Resampler::Resampler() : rate_(1.0), phi_(1.0), phase_(0.0)
+#ifdef RESAMPLER_INTERPOLATE_LINEAR
+#else
+,inBufIdx_(0)
+#endif
+{}
 
 void Resampler::setRate(double r) {
     rate_ = r;
@@ -16,7 +22,13 @@ void Resampler::setRate(double r) {
 void Resampler::setPhase(double phase) { phase_ = phase; }
 
 void Resampler::reset() {
+
+#ifdef RESAMPLER_INTERPOLATE_LINEAR
     x_ = 0.f;
+#else
+    for(int i=0; i<IN_BUF_FRAMES; ++i) { inBuf_[i] = 0.f; }
+    inBufIdx_ = 0;
+#endif
 }
 
 int Resampler::processFrame(float x) {
@@ -44,12 +56,12 @@ int Resampler::writeUp() {
     f = f * phi_;
     // write the first output frame
     unsigned int i=0;
-    buf_[i] = interp(static_cast<float>(f));
+    outBuf_[i] = interp(static_cast<float>(f));
     i++;
     while(i < nf) {
         // distance between output frames in this normalized space is 1/rate
         f += phi_;
-        buf_[i] = interp(static_cast<float>(f));
+        outBuf_[i] = interp(static_cast<float>(f));
         i++;
     }
     // store the remainder of the updated, un-normalized output phase
@@ -67,7 +79,7 @@ int Resampler::writeDown() {
     if (nf > 0) {
         float f = 1.f - static_cast<float>(p);
         f *= phi_;
-        buf_[0] = interp(f);
+        outBuf_[0] = interp(f);
         phase_ = p - static_cast<double>(nf);
         return 1;
     } else {
@@ -77,14 +89,28 @@ int Resampler::writeDown() {
 }
 
 void Resampler::push(float x) {
+#ifdef RESAMPLER_INTERPOLATE_LINEAR
     x_1_ = x_;
     x_ = x;
+#else
+    inBuf_[inBufIdx_] = x;
+    inBufIdx_ = (inBufIdx_ + 1) & IN_BUF_MASK;
+#endif
 }
 
 float Resampler::interp(float f) {
+#ifdef RESAMPLER_INTERPOLATE_LINEAR
     return x_1_ + (x_ - x_1_)*f;
+#else
+    unsigned int i0, i1, i2, i3;
+    i0 = (inBufIdx_ + 1) & IN_BUF_MASK;
+    i1 = (inBufIdx_ + 2) & IN_BUF_MASK;
+    i2 = (inBufIdx_ + 3) & IN_BUF_MASK;
+    i3 = (inBufIdx_ + 4) & IN_BUF_MASK;
+    return static_cast<float>(Interpolate::hermite(f, inBuf_[i0], inBuf_[i1], inBuf_[i2], inBuf_[i3]));
+#endif
 }
 
 const float *Resampler::output() {
-    return static_cast<const float*>(buf_);
+    return static_cast<const float*>(outBuf_);
 }

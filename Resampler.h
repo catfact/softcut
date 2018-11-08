@@ -8,8 +8,11 @@
 #include <iostream>
 #include <cmath>
 
-// ultra-simple linear-interpolated resampling class
+// ultra-simple resampling class
 // works on mono output buffer and processes one input sample at a time
+
+// uncomment to use linear interpolation. honestly can't hear a huge difference?
+#define RESAMPLER_INTERPOLATE_LINEAR
 
 namespace softcut {
 
@@ -18,12 +21,13 @@ namespace softcut {
     public:
 
         enum {
-            IN_BUF_FRAMES = 2, // limits interpolation order
+            IN_BUF_FRAMES = 4, // limits interpolation order
+            IN_BUF_MASK = 3,
             OUT_BUF_FRAMES = 64 // limits resampling ratio
         };
 
         // constructor
-        Resampler(float *buf, int frames);
+        Resampler();
         int processFrame(float x);
         void setRate(double r);
         // void setBuffer(float *buf, int frames);
@@ -32,17 +36,23 @@ namespace softcut {
         void reset();
 
     private:
-        // output buffer
-        float buf_[OUT_BUF_FRAMES];
         double rate_;
         // phase increment
         double phi_;
         // last written phase
         double phase_;
+#ifdef RESAMPLER_INTERPOLATE_LINEAR
         // current input value
         float x_;
         // last input value
         float x_1_;
+#else
+        // input ringbuffer
+        float inBuf_[IN_BUF_FRAMES];
+        unsigned int inBufIdx_;
+#endif
+        // output buffer
+        float outBuf_[OUT_BUF_FRAMES];
 
     private:
         // push an input value

@@ -11,7 +11,7 @@
 using namespace softcut;
 
 
-SubHead::SubHead(): resamp_(ringBuf, RING_BUF_SIZE) {
+SubHead::SubHead() {
     this->init();
 }
 
@@ -20,7 +20,6 @@ void SubHead::init() {
     fade_ = 0;
     trig_ = 0;
     state_ = INACTIVE;
-    memset(ringBuf, 0, sizeof(ringBuf));
     resamp_.setPhase(0);
 }
 
@@ -130,7 +129,7 @@ float SubHead::peek4(double phase) {
     double y3 = buf_[wrap(phase3, bufFrames_)];
 
     double x = phase_ - (double)phase1;
-    return static_cast<float>(cubicinterp(x, y0, y1, y2, y3));
+    return static_cast<float>(Interpolate::hermite(x, y0, y1, y2, y3));
 }
 
 int SubHead::wrap(int val, int bound) {

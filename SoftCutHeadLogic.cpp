@@ -81,7 +81,6 @@ void SoftCutHeadLogic::setLoopEndSeconds(float x)
     end = x * sr;
 }
 
-
 void SoftCutHeadLogic::takeAction(Action act, int id)
 {
     switch (act) {
@@ -95,7 +94,6 @@ void SoftCutHeadLogic::takeAction(Action act, int id)
         case Action::NONE:
         default: ;;
     }
-
 }
 
 void SoftCutHeadLogic::cutToPhase(float pos) {

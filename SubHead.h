@@ -24,9 +24,6 @@ namespace softcut {
         void init();
 
     private:
-        enum { RING_BUF_SIZE = 64 }; // this limits rate multiplier
-
-    private:
         float peek4(double phase);
         static int wrap(int val, int bound);
 
@@ -68,8 +65,6 @@ namespace softcut {
     private:
         float * buf_; // output buffer
         int bufFrames_;
-
-        float ringBuf[RING_BUF_SIZE]; // ring buffer
         Resampler resamp_;
         State state_;
         double rate_;
