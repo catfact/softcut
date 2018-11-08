@@ -93,6 +93,7 @@ void SubHead::poke(float in, float pre, float rec, float fadePre, float fadeRec)
     if(state_ == INACTIVE) {
         return;
     }
+
     float fadeInv = 1.f - fade_;
     float preFade = pre * (1.f - fadePre) + fadePre * std::fmax(pre, (pre * fadeInv));
     float recFade = rec * (1.f - fadeRec) + fadeRec * (rec * fade_);

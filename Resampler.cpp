@@ -93,8 +93,8 @@ void Resampler::push(float x) {
     x_1_ = x_;
     x_ = x;
 #else
-    inBuf_[inBufIdx_] = x;
     inBufIdx_ = (inBufIdx_ + 1) & IN_BUF_MASK;
+    inBuf_[inBufIdx_] = x;
 #endif
 }
 
@@ -106,7 +106,7 @@ float Resampler::interp(float f) {
     i0 = (inBufIdx_ + 1) & IN_BUF_MASK;
     i1 = (inBufIdx_ + 2) & IN_BUF_MASK;
     i2 = (inBufIdx_ + 3) & IN_BUF_MASK;
-    i3 = (inBufIdx_ + 4) & IN_BUF_MASK;
+    i3 = inBufIdx_;
     return static_cast<float>(Interpolate::hermite(f, inBuf_[i0], inBuf_[i1], inBuf_[i2], inBuf_[i3]));
 #endif
 }

@@ -12,7 +12,7 @@
 // works on mono output buffer and processes one input sample at a time
 
 // uncomment to use linear interpolation. honestly can't hear a huge difference?
-#define RESAMPLER_INTERPOLATE_LINEAR
+// #define RESAMPLER_INTERPOLATE_LINEAR
 
 namespace softcut {
 
