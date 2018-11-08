@@ -2,12 +2,26 @@
 // Created by ezra on 11/3/18.
 //
 
+#include <iostream>
 #include "Commands.h"
 
 using namespace softcut;
 
-
 boost::lockfree::spsc_queue <Commands::CommandPacket> Commands::q(100);
+
+std::string Commands::labels[NUM_COMMANDS] = {
+    "SET_RATE",
+    "SET_LOOP_START",
+    "SET_LOOP_END",
+    "SET_LOOP_FLAG",
+    "SET_FADE_TIME",
+    "SET_REC_LEVEL",
+    "SET_PRE_LEVEL",
+    "SET_REC_FLAG",
+    "SET_REC_OFFSET",
+    "SET_POSITION"
+};
+
 
 class Commands::CommandPacket {
 public:
@@ -31,7 +45,7 @@ public:
                 sc->setLoopEnd(value.f);
                 break;
             case SET_LOOP_FLAG:
-                sc->setLoopFlag(value.f);
+                sc->setLoopFlag(value.b);
                 break;
             case SET_FADE_TIME:
                 sc->setFadeTime(value.f);
@@ -71,6 +85,7 @@ void Commands::post(Commands::Id id, float value) {
 
 void Commands::post(Commands::Id id, bool value) {
     CommandPacket p(id, value);
+    //std::cout << "post command: " << labels[id] << std::endl;
     q.push(p);
 }
 

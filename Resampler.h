@@ -34,31 +34,34 @@ namespace softcut {
         int bufFrames_;
         // output:input ratio
         double rate_;
+        // phase increment
+        double phi_;
         // last written phase
         double phase_;
         // last output frame
         int frame_;
-        // last input value
+        // current input value
         float x_;
+        // last input value
+        float x_1_;
 
     private:
+        // push an input value
+        void push(float x);
 
-        static int wrap(int val, int bound);
-        // write multiple output frames, interpolating between two values
-        // FIXME: allow higher-order interpolation
-        void writeInterp(float x, int n);
+        // interpolate the most recent input samples
+        // @param f in [0, 1]
+        float interp(float f);
 
         // write, upsampling
         // return frames written (>= 1)
-        // assume rate_ > 1.0
-        int writeUp(float x);
+        // assumptions: input has been pushed. rate_ > 1.0
+        int writeUp();
 
         // write, downsampling
         // return frames written (0 or 1)
-        // we assume rate_ < 1.0
-        int writeDown(float x);
-
-        void write(float x);
+        // assumptions: input has been pushed. rate_ <= 1.0
+        int writeDown();
    
     };
 

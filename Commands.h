@@ -24,13 +24,15 @@ namespace softcut {
             SET_PRE_LEVEL,
             SET_REC_FLAG,
             SET_REC_OFFSET,
-            SET_POSITION
+            SET_POSITION,
+            NUM_COMMANDS
         } Id;
 
     public:
         static void handlePending(SoftCut* sc);
         static void post(Id id, float value);
         static void post(Id id, bool value);
+        static std::string labels[NUM_COMMANDS];
     private:
         class CommandPacket;
         static boost::lockfree::spsc_queue <CommandPacket> q;
