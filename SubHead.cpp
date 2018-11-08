@@ -103,13 +103,15 @@ void SubHead::poke(float in, float pre, float rec, float fadePre, float fadeRec)
     int inc = rate_ > 0.f ? 1 : -1;
     int nframes = resamp_.processFrame(in);
 
-    idx = static_cast<int>(phase_);
+//    assert(phase_ > 0.0);
+
+    idx = wrapBufIndex(static_cast<int>(phase_));
     const float* src = resamp_.output();
     for(int i=0; i<nframes; ++i) {
         y = *src++;
         buf_[idx] *= preFade;
         buf_[idx] += y * recFade;
-	    idx = wrap(static_cast<int>(idx + inc), bufFrames_);
+        idx = wrapBufIndex(idx + inc);
     }
 }
 
@@ -123,18 +125,17 @@ float SubHead::peek4(double phase) {
     int phase2 = phase1 + 1;
     int phase3 = phase1 + 2;
 
-    double y0 = buf_[wrap(phase0, bufFrames_)];
-    double y1 = buf_[wrap(phase1, bufFrames_)];
-    double y2 = buf_[wrap(phase2, bufFrames_)];
-    double y3 = buf_[wrap(phase3, bufFrames_)];
+    double y0 = buf_[wrapBufIndex(phase0)];
+    double y1 = buf_[wrapBufIndex(phase1)];
+    double y3 = buf_[wrapBufIndex(phase3)];
+    double y2 = buf_[wrapBufIndex(phase2)];
 
     double x = phase_ - (double)phase1;
     return static_cast<float>(Interpolate::hermite(x, y0, y1, y2, y3));
 }
 
-int SubHead::wrap(int val, int bound) {
-    int x = val;
-    while(x >= bound) { x -= bound; }
-    while(x < 0) { x += bound; }
-    return x;
+unsigned int SubHead::wrapBufIndex(int x) {
+    x += bufFrames_;
+    assert(x >= 0);
+    return x & bufMask_;
 }

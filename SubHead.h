@@ -25,7 +25,7 @@ namespace softcut {
 
     private:
         float peek4(double phase);
-        static int wrap(int val, int bound);
+        unsigned int wrapBufIndex(int x);
 
     protected:
         float peek();
@@ -48,9 +48,12 @@ namespace softcut {
             resamp_.reset();
         }
 
-        void setBuffer(float *buf, int frames) {
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // **NB** buffer size must be a power of two!!!!
+        void setBuffer(float *buf, unsigned int frames) {
             buf_  = buf;
             bufFrames_ = frames;
+            bufMask_ = frames - 1;
         }
 
         void setRate(float rate) {
@@ -64,7 +67,8 @@ namespace softcut {
 
     private:
         float * buf_; // output buffer
-        int bufFrames_;
+        unsigned int bufFrames_;
+        unsigned int bufMask_;
         Resampler resamp_;
         State state_;
         double rate_;

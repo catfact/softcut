@@ -13,25 +13,38 @@ n.sendMsg("/set/rate", 1.0);
 n.sendMsg("/set/recLevel", 0.5);
 n.sendMsg("/set/preLevel", 0.5);
 n.sendMsg("/set/recFlag", 1);
-n.sendMsg("/set/recOffset", -10);
+n.sendMsg("/set/recOffset", 50);
 n.sendMsg("/set/position", 1.0);
 )
 
-n.sendMsg("/set/rate", 1/8);
+/// thingsss
+
+n.sendMsg("/set/rate", -0.42);
 n.sendMsg("/set/rate", 5/8 + 0.01);
-n.sendMsg("/set/rate", 3/2);
+n.sendMsg("/set/rate", -3/2);
 
 
-n.sendMsg("/set/recLevel", 0.5);
+n.sendMsg("/set/rate", 5/8);
+n.sendMsg("/set/rate", -0.25);
+
+
+n.sendMsg("/set/loopEnd", 1.1);
+n.sendMsg("/set/fadeTime", 0.1);
+
+
+n.sendMsg("/set/recLevel", 0.8);
 n.sendMsg("/set/preLevel", 1.0);
+n.sendMsg("/set/preLevel", 0.9);
 
+n.sendMsg("/set/position", 0.0);
 
 // flappy
 (
+~mindur = 1.0;
 r = Routine {
 	var rate;
 	inf.do {
-		(1 + (1.rand)).wait;
+		(~mindur + (1.rand)).wait;
 		if(0.5.coin, {
 			rate = [-1, 1].choose;
 			postln("rate: "++rate);
@@ -53,6 +66,9 @@ r = Routine {
 }.play;
 )
 
+
+// real flappy
+~mindur = 0.05;
 
 /*
 r.stop;
