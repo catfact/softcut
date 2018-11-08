@@ -135,6 +135,6 @@ float SubHead::peek4(double phase) {
 int SubHead::wrap(int val, int bound) {
     int x = val;
     while(x >= bound) { x -= bound; }
-    while(x < 0) { return x += bound; }
+    while(x < 0) { x += bound; }
     return x;
 }
