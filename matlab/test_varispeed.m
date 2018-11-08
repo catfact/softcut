@@ -1,7 +1,7 @@
 % input signal properties
 sr = 48000
-dur = 0.5
-hz = 440 * 8
+dur = 8
+hz = 440
 
 % resampler
 rs = resampler()

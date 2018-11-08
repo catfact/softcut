@@ -60,3 +60,16 @@ set_target_properties(softcut PROPERTIES
         CXX_STANDARD_REQUIRED YES
         CXX_EXTENSIONS NO
         )
+
+#----------------------
+# resampler test target
+
+
+add_executable(resampler-test Resampler.cpp resampler-test/resampler-test-main.cpp)
+if(APPLE)
+    include_directories(softcut /usr/local/include)
+endif()
+
+find_library(sndfile_lib libsndfile.a REQUIRED)
+target_link_libraries(resampler-test ${sndfile_lib})
+
