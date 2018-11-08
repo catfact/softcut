@@ -5,7 +5,7 @@ classdef resampler < handle
         m       % size of output buffer (limits upsampling ratio)
         in    % input ringbuffer
         out    % output ringbuffer
-        phi     % current output phase
+        phase     % current output phase
         r       % resampling ratio
     end
     
@@ -15,7 +15,7 @@ classdef resampler < handle
             rs.m = 16;
             rs.in = zeros(1, rs.n);
             rs.out = zeros(1, rs.m);
-            rs.phi = 0;
+            rs.phase = 0;
         end
         
         function push(rs,x)
@@ -42,7 +42,7 @@ classdef resampler < handle
         function nframes = writeUp(rs)
             % store the old phase
             % this is a remainder of %1 operation
-            rem = rs.phi;
+            rem = rs.phase;
             p = rem + rs.r;
             nf = floor(p);
             nframes = nf;
@@ -68,7 +68,7 @@ classdef resampler < handle
             end
             % store the remainder of the updated, un-normalized output
             % phase
-            rs.phi = mod(p, 1.0);
+            rs.phase = mod(p, 1.0);
         end
         
         % compute output with rate < 1 (downsampling)
@@ -78,7 +78,7 @@ classdef resampler < handle
             % as with the upsampling inner loop, 
             % we need to produce a fractional interpolation coefficent,
             % by "normalizing" to the output phase period
-            rem = rs.phi;
+            rem = rs.phase;
             p = rem + rs.r;
             nframes = floor(p);
             if nframes > 0 
@@ -88,7 +88,7 @@ classdef resampler < handle
                 f = f / rs.r;
                 rs.writeOutInterp(1, f);
             end
-            rs.phi = mod(p, 1.0);
+            rs.phase = mod(p, 1.0);
         end
         
         % store an output frame with interpolation
