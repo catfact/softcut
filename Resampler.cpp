@@ -9,18 +9,6 @@ Resampler::Resampler(float *buf, int frames) :
                 buf_(buf), bufFrames_(frames),
                 rate_(1.0), phase_(0.0), frame_(0) {}
 
-int Resampler::processFrame(float x) {
-    //frame_ = wrap(frame_, bufFrames_);
-    frame_ %= bufFrames_;
-    if (rate_ > 1.0) {
-        return writeUp(x);
-    } else if (rate_ < 1.0) {
-        return writeDown(x);
-    } else {
-        write(x);
-        return 1;
-    }
-}
 void Resampler::setRate(double r) {
     rate_ = r;
 }

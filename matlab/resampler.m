@@ -74,7 +74,21 @@ classdef resampler < handle
         % compute output with rate < 1 (downsampling)
         % assumption: input has just been pushed
         function nframes = writeDown(rs)
-            
+            % nframes will either be 1 or zero.
+            % as with the upsampling inner loop, 
+            % we need to produce a fractional interpolation coefficent,
+            % by "normalizing" to the output phase period
+            rem = rs.phi;
+            p = rem + rs.r;
+            nframes = floor(p);
+            if nframes > 0 
+                % distance to output frame boundary
+                f = 1 - rem;
+                % "normalize"
+                f = f / rs.r;
+                rs.writeOutInterp(1, f);
+            end
+            rs.phi = mod(p, 1.0);
         end
         
         % store an output frame with interpolation

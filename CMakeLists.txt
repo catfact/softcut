@@ -10,7 +10,7 @@ message("CMAKE_C_FLAGS_RELEASE is ${CMAKE_C_FLAGS_RELEASE}")
 message("CMAKE_C_FLAGS_RELWITHDEBINFO is ${CMAKE_C_FLAGS_RELWITHDEBINFO}")
 message("CMAKE_C_FLAGS_MINSIZEREL is ${CMAKE_C_FLAGS_MINSIZEREL}")
 
-set (SOFTCUT_SRC
+set (SRC
         softcut-main.cpp
         SoftCutHeadLogic.cpp
         SubHead.cpp
@@ -19,18 +19,17 @@ set (SOFTCUT_SRC
         OscInterface.cpp 
         Resampler.cpp )
 
-
 if(UNIX)
     if(APPLE)
-        list (APPEND SOFTCUT_SRC PaWrapper.cpp)
+        list (APPEND SRC PaWrapper.cpp)
     else()
-        list (APPEND SOFTCUT_SRC JackWrapper.cpp)
+        list (APPEND SRC JackWrapper.cpp)
     endif()
 else()
     # nope
 endif()
 
-add_executable(softcut ${SOFTCUT_SRC})
+add_executable(softcut ${SRC})
 
 if(UNIX)
     if(APPLE)
