@@ -12,34 +12,33 @@
 // works on mono output buffer and processes one input sample at a time
 
 namespace softcut {
-    
+
     class Resampler {
 
- public:
+    public:
+
+        enum {
+            IN_BUF_FRAMES = 2, // limits interpolation order
+            OUT_BUF_FRAMES = 64 // limits resampling ratio
+        };
+
         // constructor
         Resampler(float *buf, int frames);
         int processFrame(float x);
         void setRate(double r);
-        void setBuffer(float *buf, int frames);
+        // void setBuffer(float *buf, int frames);
         void setPhase(double phase);
-        float* buffer();
-        int bufferFrames();
-        int frame();
+        const float* output();
         void reset();
 
     private:
         // output buffer
-        float *buf_;
-        // total frames in output buffer
-        int bufFrames_;
-        // output:input ratio
+        float buf_[OUT_BUF_FRAMES];
         double rate_;
         // phase increment
         double phi_;
         // last written phase
         double phase_;
-        // last output frame
-        int frame_;
         // current input value
         float x_;
         // last input value
@@ -62,7 +61,7 @@ namespace softcut {
         // return frames written (0 or 1)
         // assumptions: input has been pushed. rate_ <= 1.0
         int writeDown();
-   
+
     };
 
 }

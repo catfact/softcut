@@ -100,14 +100,14 @@ void SubHead::poke(float in, float pre, float rec, float fadePre, float fadeRec)
 
     int idx; // write index
     float y; // write value
-    int frame = resamp_.frame();
 
     int inc = rate_ > 0.f ? 1 : -1;
     int nframes = resamp_.processFrame(in);
 
     idx = static_cast<int>(phase_);
-    for(int i=0; i<nframes; ++i) {        
-        y = resamp_.buffer()[wrap(frame + i, RING_BUF_SIZE)];
+    const float* src = resamp_.output();
+    for(int i=0; i<nframes; ++i) {
+        y = *src++;
         buf_[idx] *= preFade;
         buf_[idx] += y * recFade;
 	    idx = wrap(static_cast<int>(idx + inc), bufFrames_);
@@ -132,7 +132,6 @@ float SubHead::peek4(double phase) {
     double x = phase_ - (double)phase1;
     return static_cast<float>(cubicinterp(x, y0, y1, y2, y3));
 }
-
 
 int SubHead::wrap(int val, int bound) {
     int x = val;

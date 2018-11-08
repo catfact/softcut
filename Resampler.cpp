@@ -6,31 +6,18 @@ using namespace softcut;
 //-- public
 
 Resampler::Resampler(float *buf, int frames) :
-                buf_(buf), bufFrames_(frames),
-                rate_(1.0), phase_(0.0), frame_(0) {}
+                rate_(1.0), phase_(0.0) {}
 
 void Resampler::setRate(double r) {
     rate_ = r;
     phi_ = 1.0 / r;
 }
 
-void Resampler::setBuffer(float *buf, int frames) {
-    buf_  = buf;
-    bufFrames_ = frames;
-}
 void Resampler::setPhase(double phase) { phase_ = phase; }
 
-float* Resampler::buffer() { return buf_; }
-
-int Resampler::bufferFrames() { return bufFrames_; }
-
-int Resampler::frame() { return frame_; }
-
 void Resampler::reset() {
-    frame_ = 0;
     x_ = 0.f;
 }
-
 
 int Resampler::processFrame(float x) {
     push(x);
@@ -96,4 +83,8 @@ void Resampler::push(float x) {
 
 float Resampler::interp(float f) {
     return x_1_ + (x_ - x_1_)*f;
+}
+
+const float *Resampler::output() {
+    return static_cast<const float*>(buf_);
 }

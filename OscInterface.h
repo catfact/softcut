@@ -57,7 +57,7 @@ private:
                           lo_arg **argv, int argc, lo_message msg, void *user_data) {
         //auto *sc  = (SoftCut*)user_data;
         cout << "set loop flag\t" <<  argv[0]->f << endl;
-        Commands::post(Commands::SET_LOOP_FLAG, argv[0]->f);
+        Commands::post(Commands::SET_LOOP_FLAG, argv[0]->f > 0);
         return 0;
     }
 
@@ -89,7 +89,7 @@ private:
                             lo_arg **argv, int argc, lo_message msg, void *user_data) {
         //auto *sc  = (SoftCut*)user_data;
         cout << "set rec flag \t" <<  argv[0]->f << endl;
-        Commands::post(Commands::SET_REC_FLAG, argv[0]->f > 0.0);
+        Commands::post(Commands::SET_REC_FLAG, argv[0]->f > 0);
         return 0;
     }
 
