@@ -59,7 +59,7 @@ namespace  softcut{
         float end;
         float fadeInc;      // linear fade increment per sample
 
-        int active;     // current active play head (0 or 1)
+        int active;     // current active play sch (0 or 1)
         bool loopFlag;  // set to loop, unset for 1-shot
 
         fade_t fadeMode; // type of fade to use

@@ -10,7 +10,7 @@ n.sendMsg("/set/loopEnd", 2.0);
 n.sendMsg("/set/loopFlag", 1.0);
 n.sendMsg("/set/rate", 1.0);
 
-n.sendMsg("/set/recLevel", 0.5);
+n.sendMsg("/set/recLevel", 1.0);
 n.sendMsg("/set/preLevel", 0.5);
 n.sendMsg("/set/recFlag", 1);
 n.sendMsg("/set/recOffset", 50);
@@ -24,23 +24,25 @@ n.sendMsg("/set/rate", 5/8 + 0.01);
 n.sendMsg("/set/rate", 5/8);
 n.sendMsg("/set/rate", -3/2);
 
-
-n.sendMsg("/set/rate", 5/8);
+n.sendMsg("/set/rate", 3/8);
+;
 n.sendMsg("/set/rate", 8/5);
 n.sendMsg("/set/rate", -1);
 
 n.sendMsg("/set/rate", -6);
 n.sendMsg("/set/rate", 3/2);
 n.sendMsg("/set/rate", 1/8);
+n.sendMsg("/set/rate", 1/8);
 
 
 // short loop
-n.sendMsg("/set/loopEnd", 1.2);
+n.sendMsg("/set/loopEnd", 1.25);
 n.sendMsg("/set/fadeTime", 0.1);
 
 
 n.sendMsg("/set/recLevel", 1.0);
 n.sendMsg("/set/preLevel", 0.9);
+n.sendMsg("/set/preLevel", 0.0);
 
 n.sendMsg("/set/recFlag", 0);
 

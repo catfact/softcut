@@ -23,9 +23,8 @@ using std::min;
 #include <cmath>
 #include <math.h>
 
-float mydsp_faustpower2_f(float value) {
+static float mydsp_faustpower2_f(float value) {
 	return (value * value);
-	
 }
 
 #ifndef FAUSTCLASS 

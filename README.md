@@ -3,7 +3,7 @@ library for seamless audio looping
 
 test project for crossfaded sample playback/recording with interpolation and partial erase.
 
-`softcut` creates a single read/write "head" structure and runs it under Portaudio (on mac) or jack (linux.) 
+`softcut` creates a single read/write "sch" structure and runs it under Portaudio (on mac) or jack (linux.) 
 
 the audio process can be controlled by OSC on port number 9999. see `OscInterface.h` for command paths.
 
@@ -29,6 +29,6 @@ running: `./softcut`. included is a supercollider script to send test OSC comman
 --------
 caveats:
 
-- write-head resampling is only linear and so doesn't sound great with rates of high "diophantine order." i'm pretty sure it is correct (based on output spectrograms) but should compare against a canonical implementation like SRC to be sure.
+- write-sch resampling is only linear and so doesn't sound great with rates of high "diophantine order." i'm pretty sure it is correct (based on output spectrograms) but should compare against a canonical implementation like SRC to be sure.
 
 - assuming basic structure is unborked, higher-order resampling should be pretty straightforward to add - `Resampler` class is primitive (doesn't have required input ringbuffer, only output ringbuffer,) but at least it is a separate module.

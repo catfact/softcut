@@ -3,7 +3,7 @@
 //
 
 /*
- * this class implements one half of a crossfaded read/write head.
+ * this class implements one half of a crossfaded read/write sch.
  */
 
 #ifndef SOFTCUTHEAD_SUBHEAD_H

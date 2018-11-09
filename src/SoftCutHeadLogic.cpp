@@ -38,10 +38,10 @@ void SoftCutHeadLogic::init() {
 }
 
 void SoftCutHeadLogic::nextSample(float in, float *outPhase, float *outTrig, float *outAudio) {
-// FIXME: shuld not be checking thigns every sample
-    if(buf == nullptr) {
-        return;
-    }
+
+//    if(buf == nullptr) {
+//        return;
+//    }
 
     *outAudio = mixFade(head[0].peek(), head[1].peek(), head[0].fade(), head[1].fade());
     *outTrig = head[0].trig() + head[1].trig();
@@ -102,7 +102,7 @@ void SoftCutHeadLogic::cutToPhase(float pos) {
     // ignore if we are already in a crossfade
     if(s == State::FADEIN || s == State::FADEOUT) { return; }
 
-    // activate the other head
+    // activate the other sch
     int newActive = active == 0 ? 1 : 0;
     if(s != State::INACTIVE) {
         head[active].setState(State::FADEOUT);
@@ -137,12 +137,11 @@ void SoftCutHeadLogic::setSampleRate(float sr_) {
 }
 
 float SoftCutHeadLogic::mixFade(float x, float y, float a, float b) {
-    //if(fadeMode == FADE_EQ) {
-    // FIXME: use xfade table?
+#if 1
         return x * sinf(a * (float) M_PI_2) + y * sinf(b * (float) M_PI_2);
-    //} else {
-    //    return (x * a) + (y * b);
-    //}
+#else
+        return (x * a) + (y * b);
+#endif
 }
 
 void SoftCutHeadLogic::setRec(float x) {

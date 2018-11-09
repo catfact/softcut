@@ -17,7 +17,7 @@ set (SRC
         src/SoftCut.cpp
         src/Commands.cpp
         src/OscInterface.cpp 
-        src/Resampler.cpp )
+        src/Resampler.cpp src/Svf.h src/Svf.cpp)
 
 if(UNIX)
     if(APPLE)

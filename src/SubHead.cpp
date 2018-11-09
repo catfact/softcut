@@ -86,6 +86,11 @@ void SubHead::updateFade(double inc) {
 }
 
 void SubHead::poke(float in, float pre, float rec, float fadePre, float fadeRec) {
+    // hm... actually we should always be pushing input to both/all resampler...
+    // (which in turn suggests they should share an input ringbuffer (FIXME)
+
+    int nframes = resamp_.processFrame(in);
+    // if(nframes < 1) { return; }
     if (fade_ < std::numeric_limits<float>::epsilon()) { return; }
     if (rec < std::numeric_limits<float>::epsilon()) { return; }
 
@@ -94,20 +99,24 @@ void SubHead::poke(float in, float pre, float rec, float fadePre, float fadeRec)
     }
 
     float fadeInv = 1.f - fade_;
+#if 0
     float preFade = pre * (1.f - fadePre) + fadePre * std::fmax(pre, (pre * fadeInv));
     float recFade = rec * (1.f - fadeRec) + fadeRec * (rec * fade_);
-
+#else
+    float preFade = std::fmax(pre, (pre * fadeInv));
+    float recFade = rec * fade_;
+#endif
     int idx; // write index
     float y; // write value
 
     int inc = rate_ > 0.f ? 1 : -1;
-    int nframes = resamp_.processFrame(in);
-
-    idx = wrapBufIndex(static_cast<int>(phase_));
+    // idx = wrapBufIndex(static_cast<int>(phase_));
+    // hm... impose offset? maybe we are just hearing the last sample
+    idx = wrapBufIndex(static_cast<int>(phase_) - (8*inc));
 
     const float* src = resamp_.output();
     for(int i=0; i<nframes; ++i) {
-        y = *src++;
+        y = src[i];
         lpf_.processSample(&y);
         buf_[idx] *= preFade;
         buf_[idx] += y * recFade;

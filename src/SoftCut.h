@@ -8,6 +8,7 @@
 
 #include <array>
 #include "SoftCutHeadLogic.h"
+#include "Svf.h"
 
 namespace softcut {
     class SoftCut {
@@ -38,8 +39,11 @@ namespace softcut {
         float buf[BUF_FRAMES];
         float sampleRate;
 
-        // first try: one head only
-        SoftCutHeadLogic head;
+        // first try: one sch only
+        SoftCutHeadLogic sch;
+        Svf svf;
+        // default frequency for SVF
+        float fcBase;
     };
 }
 
