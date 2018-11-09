@@ -13,6 +13,7 @@
 
 #include "Resampler.h"
 #include "LowpassBrickwall.h"
+#include "SoftClip.h"
 
 namespace softcut {
 
@@ -20,7 +21,7 @@ namespace softcut {
     typedef enum { NONE, STOP, LOOP_POS, LOOP_NEG } Action ;
 
     class SubHead {
-        friend class SoftCutHeadLogic;
+        friend class SoftCutHead;
 
     public:
         SubHead();
@@ -47,7 +48,7 @@ namespace softcut {
         
         void setPhase(double phase) {
             phase_ = phase;
-            // FIXME: magic number hack here for small record offset
+            // FIXME?: magic number hack here for small record offset
             idx_ = wrapBufIndex(static_cast<int>(phase_) - inc_ * 8);
             // on phase change, the resampler should clear and reset its internal ringbuffer
             resamp_.reset();
@@ -73,12 +74,16 @@ namespace softcut {
 	void setTrig(float trig) { trig_ = trig; }
 
     private:
+        Resampler resamp_;
+        LowpassBrickwall lpf_;
+        SoftClip clip_;
+
         float * buf_; // output buffer
         unsigned int idx_; // write index
         unsigned int bufFrames_;
         unsigned int bufMask_;
-        Resampler resamp_;
-        LowpassBrickwall lpf_;
+
+
         State state_;
         double rate_;
         int inc_;

@@ -7,8 +7,10 @@
 
 using namespace softcut;
 
+// FIXME: can throw, shouldn't be storge level init
 boost::lockfree::spsc_queue <Commands::CommandPacket> Commands::q(100);
 
+#if 1 // unused for now
 std::string Commands::labels[NUM_COMMANDS] = {
     "SET_RATE",
     "SET_LOOP_START",
@@ -18,10 +20,17 @@ std::string Commands::labels[NUM_COMMANDS] = {
     "SET_REC_LEVEL",
     "SET_PRE_LEVEL",
     "SET_REC_FLAG",
-    "SET_REC_OFFSET",
-    "SET_POSITION"
+    "SET_POSITION",
+    "SET_FILTER_FC",
+    "SET_FILTER_FC_MOD",
+    "SET_FILTER_RQ",
+    "SET_FILTER_LP",
+    "SET_FILTER_HP",
+    "SET_FILTER_BP",
+    "SET_FILTER_BR",
+    "SET_FILTER_DRY",
 };
-
+#endif
 
 class Commands::CommandPacket {
 public:
@@ -59,13 +68,35 @@ public:
             case SET_REC_FLAG:
                 sc->setRecFlag(value.b);
                 break;
-            case SET_REC_OFFSET:
-                sc->setRecOffset(static_cast<int>(value.f));
-                break;
             case SET_POSITION:
                 sc->cutToPos(value.f);
                 break;
-            default:;;
+            case SET_FILTER_FC:
+                sc->setFilterFc(value.f);
+                break;
+            case SET_FILTER_FC_MOD:
+                sc->setFilterFcMod(value.f);
+                break;
+            case SET_FILTER_RQ:
+                sc->setFilterRq(value.f);
+                break;
+            case SET_FILTER_LP:
+                sc->setFilterLp(value.f);
+                break;
+            case SET_FILTER_HP:
+                sc->setFilterHp(value.f);
+                break;
+            case SET_FILTER_BP:
+                sc->setFilterBp(value.f);
+                break;
+            case SET_FILTER_BR:
+                sc->setFilterBr(value.f);
+                break;
+            case SET_FILTER_DRY:
+                sc->setFilterDry(value.f);
+                break;
+            default:
+                ;;
         }
     }
 
@@ -80,12 +111,13 @@ private:
 
 void Commands::post(Commands::Id id, float value) {
     CommandPacket p(id, value);
+    std::cout << "post command: " << labels[id] << std::endl;
     q.push(p);
 }
 
 void Commands::post(Commands::Id id, bool value) {
     CommandPacket p(id, value);
-    //std::cout << "post command: " << labels[id] << std::endl;
+    std::cout << "post command: " << labels[id] << std::endl;
     q.push(p);
 }
 

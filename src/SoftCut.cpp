@@ -1,6 +1,8 @@
 //
 // Created by ezra on 11/3/18.
 //
+// main audo
+//
 
 #include "SoftCut.h"
 #include "Commands.h"
@@ -17,6 +19,7 @@ SoftCut::SoftCut() {
     svf.setBrMix(0.0);
     svf.setRq(20.0);
     svf.setFc(fcBase);
+    svfDryLevel = 1.0;
 }
 
 void SoftCut::processBlockMono(float *in, float *out, int numFrames) {
@@ -27,8 +30,7 @@ void SoftCut::processBlockMono(float *in, float *out, int numFrames) {
 
     float x;
     for(int i=0; i<numFrames; ++i) {
-        //x = in[i];
-        x = svf.getNextSample(in[i]);
+            x = svf.getNextSample(in[i]) + in[i]*svfDryLevel;
         sch.nextSample(x, &phaseDummy, &trigDummy, &(out[i]));
     }
 }
@@ -41,9 +43,7 @@ void SoftCut::setSampleRate(float hz) {
 
 void SoftCut::setRate(float rate) {
     sch.setRate(rate);
-    float fc = std::min(fcBase, fcBase * std::fabs(rate));
-    std::cout << fc << std::endl;
-    svf.setFc(fc);
+    updateFilterFc();
 }
 
 void SoftCut::setLoopStart(float sec) {
@@ -59,8 +59,7 @@ void SoftCut::setFadeTime(float sec) {
 }
 
 void SoftCut::cutToPos(float sec) {
-    // FIXME: wrap this...
-    sch.cutToPhase(sec * sampleRate);
+    sch.cutToPos(sec);
 }
 
 void SoftCut::setRecLevel(float amp) {
@@ -79,6 +78,42 @@ void SoftCut::setLoopFlag(bool val) {
     sch.setLoopFlag(val);
 }
 
-void SoftCut::setRecOffset(int samples) {
-    sch.setRecOffset(samples);
+void SoftCut::setFilterFc(float x) {
+    fcBase = x;
+    updateFilterFc();
 }
+
+void SoftCut::setFilterRq(float x) {
+    svf.setRq(x);
+}
+
+void SoftCut::setFilterLp(float x) {
+    svf.setLpMix(x);
+}
+
+void SoftCut::setFilterHp(float x) {
+    svf.setHpMix(x);
+}
+
+void SoftCut::setFilterBp(float x) {
+    svf.setBpMix(x);
+}
+
+void SoftCut::setFilterBr(float x) {
+    svf.setBrMix(x);
+}
+
+void SoftCut::setFilterDry(float x) {
+    svfDryLevel = x;
+}
+
+void SoftCut::setFilterFcMod(float x) {
+    fcMod = x;
+}
+
+void SoftCut::updateFilterFc() {
+    float fc = std::min(fcBase, fcBase * std::fabs(sch.getRate()));
+    std::cout << fc << std::endl;
+    svf.setFc(fc*fcMod + (1.f-fcMod )*svf.getFc());
+}
+

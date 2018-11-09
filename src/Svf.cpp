@@ -91,3 +91,7 @@ void Svf::svf_update(t_svf* svf, float in) {
     svf->hp = svf->v0 - svf->rq * svf->v1 - svf->v2;
     svf->br = svf->v0 - svf->rq * svf->v1;
 }
+
+float Svf::getFc() {
+    return svf.fc;
+}

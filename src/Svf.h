@@ -24,6 +24,8 @@ public:
     void setBrMix(float mix);
 
 
+    float getFc();
+
 private:
     float lpMix;
     float hpMix;

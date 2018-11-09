@@ -1,9 +1,6 @@
 //
 // Created by ezra on 12/6/17.
 //
-
-// TODO: looping/1shot behavior flag
-
 #include <cmath>
 #include <limits>
 
@@ -11,8 +8,7 @@
 #include "Interpolate.h"
 #include "Resampler.h"
 
-#include "SoftCutHeadLogic.h"
-
+#include "SoftCutHead.h"
 
 /// wtf...
 #ifndef nullptr
@@ -22,12 +18,11 @@
 using namespace softcut;
 using namespace std;
 
-SoftCutHeadLogic::SoftCutHeadLogic() {
+SoftCutHead::SoftCutHead() {
     this->init();
-    playRun = true;
 }
 
-void SoftCutHeadLogic::init() {
+void SoftCutHead::init() {
     sr = 44100.f;
     start = 0.f;
     end = 0.f;
@@ -37,7 +32,7 @@ void SoftCutHeadLogic::init() {
     recRun = false;
 }
 
-void SoftCutHeadLogic::nextSample(float in, float *outPhase, float *outTrig, float *outAudio) {
+void SoftCutHead::nextSample(float in, float *outPhase, float *outTrig, float *outAudio) {
     *outAudio = mixFade(head[0].peek(), head[1].peek(), head[0].fade(), head[1].fade());
     *outTrig = head[0].trig() + head[1].trig();
 
@@ -60,23 +55,24 @@ void SoftCutHeadLogic::nextSample(float in, float *outPhase, float *outTrig, flo
 }
 
 
-void SoftCutHeadLogic::setRate(float x)
+void SoftCutHead::setRate(float x)
 {
+    rate = x;
     head[0].setRate(x);
     head[1].setRate(x);
 }
 
-void SoftCutHeadLogic::setLoopStartSeconds(float x)
+void SoftCutHead::setLoopStartSeconds(float x)
 {
     start = x * sr;
 }
 
-void SoftCutHeadLogic::setLoopEndSeconds(float x)
+void SoftCutHead::setLoopEndSeconds(float x)
 {
     end = x * sr;
 }
 
-void SoftCutHeadLogic::takeAction(Action act, int id)
+void SoftCutHead::takeAction(Action act, int id)
 {
     switch (act) {
         case Action::LOOP_POS:
@@ -91,7 +87,7 @@ void SoftCutHeadLogic::takeAction(Action act, int id)
     }
 }
 
-void SoftCutHeadLogic::cutToPhase(float pos) {
+void SoftCutHead::cutToPhase(float pos) {
     State s = head[active].state();
 
     // ignore if we are already in a crossfade
@@ -112,27 +108,27 @@ void SoftCutHeadLogic::cutToPhase(float pos) {
     active = newActive;
 }
 
-void SoftCutHeadLogic::setFadeTime(float secs) {
+void SoftCutHead::setFadeTime(float secs) {
     fadeInc = (float) 1.0 / (secs * sr);
 }
 
-void SoftCutHeadLogic::setBuffer(float *b, uint32_t bf) {
+void SoftCutHead::setBuffer(float *b, uint32_t bf) {
     buf = b;
     head[0].setBuffer(b, bf);
     head[1].setBuffer(b, bf);
 }
 
-void SoftCutHeadLogic::setLoopFlag(bool val) {
+void SoftCutHead::setLoopFlag(bool val) {
     loopFlag = val;
 }
 
-void SoftCutHeadLogic::setSampleRate(float sr_) {
+void SoftCutHead::setSampleRate(float sr_) {
     sr = sr_;
     head[0].setSampleRate(sr);
     head[1].setSampleRate(sr);
 }
 
-float SoftCutHeadLogic::mixFade(float x, float y, float a, float b) {
+float SoftCutHead::mixFade(float x, float y, float a, float b) {
 #if 1
         return x * sinf(a * (float) M_PI_2) + y * sinf(b * (float) M_PI_2);
 #else
@@ -140,39 +136,36 @@ float SoftCutHeadLogic::mixFade(float x, float y, float a, float b) {
 #endif
 }
 
-void SoftCutHeadLogic::setRec(float x) {
+void SoftCutHead::setRec(float x) {
     rec = x;
 }
 
-void SoftCutHeadLogic::setPre(float x) {
+void SoftCutHead::setPre(float x) {
     pre= x;
 }
 
-void SoftCutHeadLogic::setFadePre(float x) {
-    fadePre = x;
-}
-
-void SoftCutHeadLogic::setFadeRec(float x) {
-    fadeRec = x;
-}
-
-void SoftCutHeadLogic::setRecRun(bool val) {
+void SoftCutHead::setRecRun(bool val) {
     recRun = val;
 }
 
-void SoftCutHeadLogic::setRecOffset(float x) {
-    recPhaseOffset = x;
-}
 
-float SoftCutHeadLogic::getActivePhase() {
+float SoftCutHead::getActivePhase() {
   return static_cast<float>(head[active].phase());
 }
 
-float SoftCutHeadLogic::getTrig() {
+float SoftCutHead::getTrig() {
   return head[0].trig()+ head[1].trig();
 }
 
-void SoftCutHeadLogic::resetTrig() {
+void SoftCutHead::resetTrig() {
   head[0].setTrig(0);
   head[1].setTrig(0);
+}
+
+void SoftCutHead::cutToPos(float seconds) {
+    cutToPhase(seconds * sr);
+}
+
+float SoftCutHead::getRate() {
+    return rate;
 }

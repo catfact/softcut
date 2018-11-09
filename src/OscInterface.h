@@ -93,13 +93,13 @@ private:
         return 0;
     }
 
-    static int setRecOffset(const char *path, const char *types,
-                            lo_arg **argv, int argc, lo_message msg, void *user_data) {
-        //auto *sc  = (SoftCut*)user_data;
-        cout << "set rec offset \t" <<  argv[0]->f << endl;
-        Commands::post(Commands::SET_REC_OFFSET, argv[0]->f);
-        return 0;
-    }
+//    static int setRecOffset(const char *path, const char *types,
+//                            lo_arg **argv, int argc, lo_message msg, void *user_data) {
+//        //auto *sc  = (SoftCut*)user_data;
+//        cout << "set rec offset \t" <<  argv[0]->f << endl;
+//        Commands::post(Commands::SET_REC_OFFSET, argv[0]->f);
+//        return 0;
+//    }
 
     static int setPosition(const char *path, const char *types,
                             lo_arg **argv, int argc, lo_message msg, void *user_data) {
@@ -113,6 +113,35 @@ private:
                     lo_arg **argv, int argc, lo_message msg, void *user_data) {
         quitFlag = true;
         return 0;
+    }
+    
+    static int setFilterFc(const char *path, const char *types, lo_arg **argv, int argc, lo_message msg, void *data) {
+      Commands::post(Commands::SET_FILTER_FC, argv[0]->f);
+      return 0;
+    }
+    static int setFilterRq(const char *path, const char *types, lo_arg **argv, int argc, lo_message msg, void *data) {
+      Commands::post(Commands::SET_FILTER_RQ, argv[0]->f);
+      return 0;
+    }
+    static int setFilterLp(const char *path, const char *types, lo_arg **argv, int argc, lo_message msg, void *data) {
+      Commands::post(Commands::SET_FILTER_FC, argv[0]->f);
+      return 0;
+    }
+    static int setFilterHp(const char *path, const char *types, lo_arg **argv, int argc, lo_message msg, void *data) {
+      Commands::post(Commands::SET_FILTER_HP, argv[0]->f);
+      return 0;
+    }
+    static int setFilterBp(const char *path, const char *types, lo_arg **argv, int argc, lo_message msg, void *data) {
+      Commands::post(Commands::SET_FILTER_BP, argv[0]->f);
+      return 0;
+    }
+    static int setFilterBr(const char *path, const char *types, lo_arg **argv, int argc, lo_message msg, void *data) {
+      Commands::post(Commands::SET_FILTER_BR, argv[0]->f);
+      return 0;
+    }
+    static int setFilterDry(const char *path, const char *types, lo_arg **argv, int argc, lo_message msg, void *data) {
+      Commands::post(Commands::SET_FILTER_DRY, argv[0]->f);
+      return 0;
     }
 
 public:
@@ -128,8 +157,16 @@ public:
         lo_server_thread_add_method(st, "/set/recLevel", "f", OscInterface::setRecLevel, sc);
         lo_server_thread_add_method(st, "/set/preLevel", "f", OscInterface::setPreLevel, sc);
         lo_server_thread_add_method(st, "/set/recFlag", "f", OscInterface::setRecFlag, sc);
-        lo_server_thread_add_method(st, "/set/recOffset", "f", OscInterface::setRecOffset, sc);
+//        lo_server_thread_add_method(st, "/set/recOffset", "f", OscInterface::setRecOffset, sc);
         lo_server_thread_add_method(st, "/set/position", "f", OscInterface::setPosition, sc);
+        lo_server_thread_add_method(st, "/set/filterFc", "f", OscInterface::setFilterFc, sc);
+        lo_server_thread_add_method(st, "/set/filterRq", "f", OscInterface::setFilterRq, sc);
+        lo_server_thread_add_method(st, "/set/filterLp", "f", OscInterface::setFilterLp, sc);
+        lo_server_thread_add_method(st, "/set/filterHp", "f", OscInterface::setFilterHp, sc);
+        lo_server_thread_add_method(st, "/set/filterBp", "f", OscInterface::setFilterBp, sc);
+        lo_server_thread_add_method(st, "/set/filterBr", "f", OscInterface::setFilterBr, sc);
+        lo_server_thread_add_method(st, "/set/filterDry", "f", OscInterface::setFilterDry, sc);
+	
         lo_server_thread_add_method(st, "/quit", "", OscInterface::setQuit, sc);
         lo_server_thread_start(st);
         quitFlag = false;

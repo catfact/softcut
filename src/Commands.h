@@ -23,8 +23,15 @@ namespace softcut {
             SET_REC_LEVEL,
             SET_PRE_LEVEL,
             SET_REC_FLAG,
-            SET_REC_OFFSET,
             SET_POSITION,
+            SET_FILTER_FC,
+            SET_FILTER_FC_MOD,
+            SET_FILTER_RQ,
+            SET_FILTER_LP,
+            SET_FILTER_HP,
+            SET_FILTER_BP,
+            SET_FILTER_BR,
+            SET_FILTER_DRY,
             NUM_COMMANDS
         } Id;
 

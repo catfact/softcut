@@ -91,7 +91,6 @@ void SubHead::poke(float in, float pre, float rec, float fadePre, float fadeRec)
     // (which in turn suggests they should share an input ringbuffer? (FIXME))
     int nframes = resamp_.processFrame(in);
 
-    // if(nframes < 1) { return; }
     if (fade_ < std::numeric_limits<float>::epsilon()) { return; }
     if (rec < std::numeric_limits<float>::epsilon()) { return; }
 
@@ -100,18 +99,19 @@ void SubHead::poke(float in, float pre, float rec, float fadePre, float fadeRec)
     }
 
     float fadeInv = 1.f - fade_;
-#if 0
-    float preFade = pre * (1.f - fadePre) + fadePre * std::fmax(pre, (pre * fadeInv));
-    float recFade = rec * (1.f - fadeRec) + fadeRec * (rec * fade_);
-#else
     float preFade = std::fmax(pre, (pre * fadeInv));
     float recFade = rec * fade_;
-#endif
     float y; // write value
     const float* src = resamp_.output();
     for(int i=0; i<nframes; ++i) {
         y = src[i];
+
+#if 1 // soft clipper
+        y = clip_.processSample(y);
+#endif
+#if 1 // lowpass filter
         lpf_.processSample(&y);
+#endif
         buf_[idx_] *= preFade;
         buf_[idx_] += y * recFade;
         idx_ = wrapBufIndex(idx_ + inc_);

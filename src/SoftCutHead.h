@@ -10,10 +10,10 @@
 
 namespace  softcut{
 
-    class SoftCutHeadLogic {
+    class SoftCutHead {
 
     public:
-        SoftCutHeadLogic();
+        SoftCutHead();
         void init();
 
         // per-sample update function
@@ -28,20 +28,23 @@ namespace  softcut{
         void setLoopFlag(bool val);
         void setRec(float x);
         void setPre(float x);
-        void setFadeRec(float x);
-        void setFadePre(float x);
         void setRecRun(bool val);
-        void setRecOffset(float x);
 
         /// FIXME: this method accepts samples and doesn't wrap.
         /// should add something like cutToPos(seconds)
-        void cutToPhase(float newPhase); // fade in to new position (given in samples)
+        void cutToPos(float seconds);
+
 
         float getActivePhase();
         float getTrig();
         void resetTrig();
 
+        float getRate();
+
     private:
+        // fade in to new position (given in samples)
+        // assumption: phase is in range!
+        void cutToPhase(float newPhase);
         void takeAction(Action act, int id);
         float mixFade(float x, float y, float a, float b); // mix two inputs with phases
 
@@ -53,11 +56,11 @@ namespace  softcut{
     private:
         SubHead head[2];
 
-        float *buf;   // audio buffer (allocated elsewhere)
-        float sr;           // sample rate
-        float start;        // start/end points
+        float *buf;     // audio buffer (allocated elsewhere)
+        float sr;       // sample rate
+        float start;    // start/end points
         float end;
-        float fadeInc;      // linear fade increment per sample
+        float fadeInc;  // linear fade increment per sample
 
         int active;     // current active play sch (0 or 1)
         bool loopFlag;  // set to loop, unset for 1-shot
@@ -68,10 +71,8 @@ namespace  softcut{
         float fadePre; // pre-level modulated by xfade
         float fadeRec; // record level modulated by xfade
         bool recRun;
-        bool playRun;
 
-        // FIXME: not using this right now...
-        double recPhaseOffset;
+        float rate;
     };
 
 }

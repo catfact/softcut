@@ -102,12 +102,26 @@ q = Routine {
 // real flappy
 ~mindur = 0.05;
 
-
 // less flappy
 ~mindur = 0.25;
 
-// stop it all
+// freeze
 n.sendMsg("/set/recFlag", 0);
+
+// input filters
+n.sendMsg("/set/filterFc", 880 * 8);
+n.sendMsg("/set/filterRq", 0.25);
+n.sendMsg("/set/filterLp", 0.8);
+n.sendMsg("/set/filterBp", 0.85);
+// different!
+n.sendMsg("/set/filterFc", 550);
+n.sendMsg("/set/filterLp", 0.0);
+n.sendMsg("/set/filterHp", 0.8);
+n.sendMsg("/set/filterRq", 0.01);
+
+
+n.sendMsg("/set/filterLp", 0.8);
+n.sendMsg("/set/filterHp", 0.0);
 
 /*
 r.stop;
