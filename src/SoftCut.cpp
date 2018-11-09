@@ -11,9 +11,9 @@ SoftCut::SoftCut() {
     fcBase = 16000;
     sch.init();
     sch.setBuffer(buf, BUF_FRAMES);
-    svf.setLpMix(0.0);
+    svf.setLpMix(1.0);
     svf.setHpMix(0.0);
-    svf.setBpMix(1.0);
+    svf.setBpMix(0.0);
     svf.setBrMix(0.0);
     svf.setRq(20.0);
     svf.setFc(fcBase);

@@ -26,8 +26,8 @@ void Resampler::reset() {
 #ifdef RESAMPLER_INTERPOLATE_LINEAR
     x_ = 0.f;
 #else
-    for(int i=0; i<IN_BUF_FRAMES; ++i) { inBuf_[i] = 0.f; }
-    for(int i=0; i<OUT_BUF_FRAMES; ++i) { outBuf_[i] = 0.f; }
+    for (float &i : inBuf_) { i = 0.f; }
+    for (float &i : outBuf_) { i = 0.f; }
     inBufIdx_ = 0;
 #endif
 }

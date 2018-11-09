@@ -12,29 +12,30 @@ n.sendMsg("/set/rate", 1.0);
 
 n.sendMsg("/set/recLevel", 1.0);
 n.sendMsg("/set/preLevel", 0.5);
+
 n.sendMsg("/set/recFlag", 1);
+
 n.sendMsg("/set/recOffset", 50);
 n.sendMsg("/set/position", 1.0);
 )
 
 /// thingsss
-
 n.sendMsg("/set/rate", 0.47);
 n.sendMsg("/set/rate", -0.47);
 
-n.sendMsg("/set/rate", 5/8 + 0.01);
 n.sendMsg("/set/rate", 5/8);
+n.sendMsg("/set/rate", 5/8 + 0.01);
 n.sendMsg("/set/rate", -3/2);
-
 n.sendMsg("/set/rate", 3/8);
-;
 n.sendMsg("/set/rate", 8/5);
+
 n.sendMsg("/set/rate", -1);
 
 n.sendMsg("/set/rate", -6);
+n.sendMsg("/set/rate", 15);
 n.sendMsg("/set/rate", 3/2);
 n.sendMsg("/set/rate", 1/8);
-n.sendMsg("/set/rate", 1/8);
+n.sendMsg("/set/rate", -1/8);
 
 
 // short loop
@@ -47,9 +48,7 @@ n.sendMsg("/set/preLevel", 0.9);
 n.sendMsg("/set/preLevel", 0.0);
 
 n.sendMsg("/set/recFlag", 0);
-
 n.sendMsg("/set/position", 0.0);
-
 
 // long loop, long fade
 n.sendMsg("/set/loopEnd", 5.0);
@@ -71,7 +70,6 @@ r = Routine {
 			/*
 			var rate = 4.0.rand2;
 			*/
-
 			var num = 1 + 5.rand;
 			var den = 1 + 5.rand;
 			var sgn = [-1, 1].choose;
@@ -107,6 +105,9 @@ q = Routine {
 
 // less flappy
 ~mindur = 0.25;
+
+// stop it all
+n.sendMsg("/set/recFlag", 0);
 
 /*
 r.stop;
