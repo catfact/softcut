@@ -3,7 +3,7 @@ library for seamless audio looping
 
 test project for crossfaded sample playback/recording with read/write interpolation and partial erase.
 
-`softcut` creates a single read/write "sch" structure and runs it under Portaudio (on mac) or jack (linux.) 
+`softcut` creates a single read/write "head" structure and runs it under Portaudio (on mac) or jack (linux.) 
 
 the audio process can be controlled by OSC on port number 9999. see `OscInterface.h` for command paths.
 
