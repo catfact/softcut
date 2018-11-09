@@ -101,7 +101,7 @@ classdef resampler < handle
 %             y = x0 + (x1-x0)*f;
 %             rs.out(1, i) = y;
 
-            % second try: cubic interp, with 1 input sample latency
+            % second try: cubic interpolation
             y = hermite(f, rs.in(1), rs.in(2), rs.in(3), rs.in(4));
             
             rs.out(1, i) = y;
