@@ -40,7 +40,7 @@ n.sendMsg("/set/rate", -1/8);
 
 // short loop
 n.sendMsg("/set/loopEnd", 1.25);
-n.sendMsg("/set/fadeTime", 0.1);
+n.sendMsg("/set/fadeTime", 0.2);
 
 
 n.sendMsg("/set/recLevel", 1.0);
@@ -109,7 +109,7 @@ q = Routine {
 n.sendMsg("/set/recFlag", 0);
 
 // input filters
-n.sendMsg("/set/filterFc", 880 * 8);
+n.sendMsg("/set/filterFc", 880 * 4);
 n.sendMsg("/set/filterRq", 0.25);
 n.sendMsg("/set/filterLp", 0.8);
 n.sendMsg("/set/filterBp", 0.85);
@@ -119,10 +119,14 @@ n.sendMsg("/set/filterLp", 0.0);
 n.sendMsg("/set/filterHp", 0.8);
 n.sendMsg("/set/filterRq", 0.01);
 
-
 n.sendMsg("/set/filterLp", 0.8);
 n.sendMsg("/set/filterHp", 0.0);
 
+n.sendMsg("/set/filterFcMod", 0);
+n.sendMsg("/set/filterDry", 0);
+n.sendMsg("/set/filterFc", 330);
+
+n.sendMsg("/set/filterFcMod", 0.5);
 /*
 r.stop;
 q.stop;

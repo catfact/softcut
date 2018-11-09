@@ -23,7 +23,6 @@ public:
     void setBpMix(float mix);
     void setBrMix(float mix);
 
-
     float getFc();
 
 private:

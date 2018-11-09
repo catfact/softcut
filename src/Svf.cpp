@@ -37,7 +37,7 @@ void Svf::setBpMix(float mix) {
 }
 
 void Svf::setBrMix(float mix) {
-    brMix = mix;
+        brMix = mix;
 }
 
 /////////////////

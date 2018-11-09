@@ -119,6 +119,10 @@ private:
       Commands::post(Commands::SET_FILTER_FC, argv[0]->f);
       return 0;
     }
+    static int setFilterFcMod(const char *path, const char *types, lo_arg **argv, int argc, lo_message msg, void *data) {
+        Commands::post(Commands::SET_FILTER_FC_MOD, argv[0]->f);
+        return 0;
+    }
     static int setFilterRq(const char *path, const char *types, lo_arg **argv, int argc, lo_message msg, void *data) {
       Commands::post(Commands::SET_FILTER_RQ, argv[0]->f);
       return 0;
@@ -144,6 +148,7 @@ private:
       return 0;
     }
 
+
 public:
 
     static void init(SoftCut* sc)
@@ -160,6 +165,7 @@ public:
 //        lo_server_thread_add_method(st, "/set/recOffset", "f", OscInterface::setRecOffset, sc);
         lo_server_thread_add_method(st, "/set/position", "f", OscInterface::setPosition, sc);
         lo_server_thread_add_method(st, "/set/filterFc", "f", OscInterface::setFilterFc, sc);
+        lo_server_thread_add_method(st, "/set/filterFcMod", "f", OscInterface::setFilterFcMod, sc);
         lo_server_thread_add_method(st, "/set/filterRq", "f", OscInterface::setFilterRq, sc);
         lo_server_thread_add_method(st, "/set/filterLp", "f", OscInterface::setFilterLp, sc);
         lo_server_thread_add_method(st, "/set/filterHp", "f", OscInterface::setFilterHp, sc);
