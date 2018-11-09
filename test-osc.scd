@@ -19,7 +19,9 @@ n.sendMsg("/set/position", 1.0);
 
 /// thingsss
 
-n.sendMsg("/set/rate", -0.42);
+n.sendMsg("/set/rate", 0.47);
+n.sendMsg("/set/rate", -0.47);
+
 n.sendMsg("/set/rate", 5/8 + 0.01);
 n.sendMsg("/set/rate", 5/8);
 n.sendMsg("/set/rate", -3/2);

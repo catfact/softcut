@@ -5,7 +5,6 @@
 #ifndef SOFTCUT_SOFTCUT_H
 #define SOFTCUT_SOFTCUT_H
 
-
 #include <array>
 #include "SoftCutHeadLogic.h"
 #include "Svf.h"
@@ -31,18 +30,17 @@ namespace softcut {
         void cutToPos(float sec);
         // process a single channel
         void processBlockMono(float* in, float* out, int numFrames);
-        // process a single channel, copy to 2 output channels
-
 
     private:
         enum {  BUF_FRAMES = 16777216 };
         float buf[BUF_FRAMES];
         float sampleRate;
 
-        // first try: one sch only
+        // first try: one head only
         SoftCutHeadLogic sch;
         Svf svf;
         // default frequency for SVF
+        // reduced automatically when setting rate
         float fcBase;
     };
 }

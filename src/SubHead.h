@@ -9,6 +9,8 @@
 #ifndef SOFTCUTHEAD_SUBHEAD_H
 #define SOFTCUTHEAD_SUBHEAD_H
 
+#include <boost/math/special_functions/sign.hpp>
+
 #include "Resampler.h"
 #include "LowpassBrickwall.h"
 
@@ -45,6 +47,8 @@ namespace softcut {
         
         void setPhase(double phase) {
             phase_ = phase;
+            // FIXME: magic number hack here for small record offset
+            idx_ = wrapBufIndex(static_cast<int>(phase_) - inc_ * 8);
             // on phase change, the resampler should clear and reset its internal ringbuffer
             resamp_.reset();
         }
@@ -55,10 +59,12 @@ namespace softcut {
             buf_  = buf;
             bufFrames_ = frames;
             bufMask_ = frames - 1;
+            assert((bufFrames_ != 0) && !(bufFrames_ & bufMask_));
         }
 
         void setRate(float rate) {
             rate_ = rate;
+            inc_ = boost::math::sign(rate);
             // NB: resampler doesn't handle negative rates.
             // instead we copy the resampler output backwards into the buffer when rate < 0.
             resamp_.setRate(std::fabs(rate));
@@ -68,18 +74,20 @@ namespace softcut {
 
     private:
         float * buf_; // output buffer
+        unsigned int idx_; // write index
         unsigned int bufFrames_;
         unsigned int bufMask_;
         Resampler resamp_;
         LowpassBrickwall lpf_;
         State state_;
         double rate_;
+        int inc_;
         double phase_;
         float fade_;
         float trig_; // output trigger value
         bool active_;
 
-
+        void reset();
     };
 
 }

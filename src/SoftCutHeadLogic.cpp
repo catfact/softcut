@@ -38,11 +38,6 @@ void SoftCutHeadLogic::init() {
 }
 
 void SoftCutHeadLogic::nextSample(float in, float *outPhase, float *outTrig, float *outAudio) {
-
-//    if(buf == nullptr) {
-//        return;
-//    }
-
     *outAudio = mixFade(head[0].peek(), head[1].peek(), head[0].fade(), head[1].fade());
     *outTrig = head[0].trig() + head[1].trig();
 
@@ -102,7 +97,7 @@ void SoftCutHeadLogic::cutToPhase(float pos) {
     // ignore if we are already in a crossfade
     if(s == State::FADEIN || s == State::FADEOUT) { return; }
 
-    // activate the other sch
+    // activate the inactive head
     int newActive = active == 0 ? 1 : 0;
     if(s != State::INACTIVE) {
         head[active].setState(State::FADEOUT);
@@ -110,6 +105,7 @@ void SoftCutHeadLogic::cutToPhase(float pos) {
 
     head[newActive].setState(State::FADEIN);
     head[newActive].setPhase(pos);
+    head[newActive].reset();
 
     head[active].active_ = false;
     head[newActive].active_ = true;
