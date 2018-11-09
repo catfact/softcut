@@ -101,6 +101,10 @@ q = Routine {
 // real flappy
 ~mindur = 0.05;
 
+
+// less flappy
+~mindur = 0.25;
+
 /*
 r.stop;
 q.stop;

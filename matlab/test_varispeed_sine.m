@@ -1,6 +1,6 @@
 % input signal properties
 sr = 48000
-dur = 8
+dur = 1
 hz = 440
 
 % resampler
@@ -22,6 +22,12 @@ for i=1:n
     nf = rs.process(x(i));
     y = (cat(1, y', (rs.out(1, 1:nf))'))';
 end
+help
+% apply lowpass butterworth
+lpf_fc = 12000;
+[lpf_b, lpf_a] = butter(6, lpf_fc/(sr/2), 'low');
+
+y = filter(lpf_b, lpf_a, y);
 
 subplot(3, 1, 1);
 plot(x,'-', 'MarkerSize', 4);

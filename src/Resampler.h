@@ -56,11 +56,14 @@ namespace softcut {
 
     private:
         // push an input value
-        void push(float x);
+        void pushInput(float x);
 
         // interpolate the most recent input samples
         // @param f in [0, 1]
-        float interp(float f);
+        float interpolate(float f);
+
+        // apply lowpass filtering to sample
+        float applyLowpass(float x);
 
         // write, upsampling
         // return frames written (>= 1)

@@ -11,19 +11,19 @@ message("CMAKE_C_FLAGS_RELWITHDEBINFO is ${CMAKE_C_FLAGS_RELWITHDEBINFO}")
 message("CMAKE_C_FLAGS_MINSIZEREL is ${CMAKE_C_FLAGS_MINSIZEREL}")
 
 set (SRC
-        softcut-main.cpp
-        SoftCutHeadLogic.cpp
-        SubHead.cpp
-        SoftCut.cpp
-        Commands.cpp
-        OscInterface.cpp 
-        Resampler.cpp )
+        src/softcut-main.cpp
+        src/SoftCutHeadLogic.cpp
+        src/SubHead.cpp
+        src/SoftCut.cpp
+        src/Commands.cpp
+        src/OscInterface.cpp 
+        src/Resampler.cpp )
 
 if(UNIX)
     if(APPLE)
-        list (APPEND SRC PaWrapper.cpp)
+        list (APPEND SRC src/PaWrapper.cpp)
     else()
-        list (APPEND SRC JackWrapper.cpp)
+        list (APPEND SRC src/JackWrapper.cpp)
     endif()
 else()
     # nope
@@ -65,11 +65,18 @@ set_target_properties(softcut PROPERTIES
 # resampler test target
 
 
-add_executable(resampler-test Resampler.cpp resampler-test/resampler-test-main.cpp)
+add_executable(resampler-test src/Resampler.cpp src/resampler-test/resampler-test-main.cpp)
 if(APPLE)
     include_directories(softcut /usr/local/include)
 endif()
 
 find_library(sndfile_lib libsndfile.a REQUIRED)
 target_link_libraries(resampler-test ${sndfile_lib})
+
+
+set_target_properties(resampler-test PROPERTIES
+        CXX_STANDARD 14
+        CXX_STANDARD_REQUIRED YES
+        CXX_EXTENSIONS NO
+        )
 

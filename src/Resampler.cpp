@@ -32,7 +32,7 @@ void Resampler::reset() {
 }
 
 int Resampler::processFrame(float x) {
-    push(x);
+    pushInput(x);
     if(rate_ > 1.0) {
         return writeUp();
     } else {
@@ -56,12 +56,12 @@ int Resampler::writeUp() {
     f = f * phi_;
     // write the first output frame
     unsigned int i=0;
-    outBuf_[i] = interp(static_cast<float>(f));
+    outBuf_[i] = interpolate(static_cast<float>(f));
     i++;
     while(i < nf) {
         // distance between output frames in this normalized space is 1/rate
         f += phi_;
-        outBuf_[i] = interp(static_cast<float>(f));
+        outBuf_[i] = interpolate(static_cast<float>(f));
         i++;
     }
     // store the remainder of the updated, un-normalized output phase
@@ -79,7 +79,7 @@ int Resampler::writeDown() {
     if (nf > 0) {
         float f = 1.f - static_cast<float>(p);
         f *= phi_;
-        outBuf_[0] = interp(f);
+        outBuf_[0] = interpolate(f);
         phase_ = p - static_cast<double>(nf);
         return 1;
     } else {
@@ -88,7 +88,7 @@ int Resampler::writeDown() {
     }
 }
 
-void Resampler::push(float x) {
+void Resampler::pushInput(float x) {
 #ifdef RESAMPLER_INTERPOLATE_LINEAR
     x_1_ = x_;
     x_ = x;
@@ -98,7 +98,7 @@ void Resampler::push(float x) {
 #endif
 }
 
-float Resampler::interp(float f) {
+float Resampler::interpolate(float f) {
 #ifdef RESAMPLER_INTERPOLATE_LINEAR
     return x_1_ + (x_ - x_1_)*f;
 #else

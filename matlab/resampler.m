@@ -103,8 +103,10 @@ classdef resampler < handle
 
             % second try: cubic interp, with 1 input sample latency
             y = hermite(f, rs.in(1), rs.in(2), rs.in(3), rs.in(4));
+            
             rs.out(1, i) = y;
-
+            
+            
         end
     end
 end
