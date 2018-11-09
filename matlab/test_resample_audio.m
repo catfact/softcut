@@ -1,9 +1,10 @@
 % resampler
 rs = resampler();
-rs.r = 0.46
+rs.r = 0.47
 
 % input
-x = audioread('../src/resampler-test/dont_explain_short.wav');
+[x, fs] = audioread('../src/resampler-test/dont_explain_short.wav');
+fs
 n = length(x)
 y = zeros(1, int32((n * rs.r) + 10));
 m = 1;
