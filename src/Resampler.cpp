@@ -27,6 +27,7 @@ void Resampler::reset() {
     x_ = 0.f;
 #else
     for(int i=0; i<IN_BUF_FRAMES; ++i) { inBuf_[i] = 0.f; }
+    for(int i=0; i<OUT_BUF_FRAMES; ++i) { outBuf_[i] = 0.f; }
     inBufIdx_ = 0;
 #endif
 }
@@ -77,15 +78,14 @@ int Resampler::writeDown() {
     double p = phase_ + rate_;
     auto nf = static_cast<unsigned int>(p);
     if (nf > 0) {
-        float f = 1.f - static_cast<float>(p);
+        float f = 1.f - static_cast<float>(phase_);
         f *= phi_;
         outBuf_[0] = interpolate(f);
         phase_ = p - static_cast<double>(nf);
-        return 1;
     } else {
         phase_ = p;
-        return 0;
     }
+    return nf;
 }
 
 void Resampler::pushInput(float x) {
