@@ -10,7 +10,6 @@
 
 using namespace softcut;
 
-
 SubHead::SubHead() {
     this->init();
 }
@@ -104,12 +103,12 @@ void SubHead::poke(float in, float pre, float rec, float fadePre, float fadeRec)
     int inc = rate_ > 0.f ? 1 : -1;
     int nframes = resamp_.processFrame(in);
 
-//    assert(phase_ > 0.0);
-
     idx = wrapBufIndex(static_cast<int>(phase_));
+
     const float* src = resamp_.output();
     for(int i=0; i<nframes; ++i) {
         y = *src++;
+        lpf_.processSample(&y);
         buf_[idx] *= preFade;
         buf_[idx] += y * recFade;
         idx = wrapBufIndex(idx + inc);
@@ -139,4 +138,8 @@ unsigned int SubHead::wrapBufIndex(int x) {
     x += bufFrames_;
     assert(x >= 0);
     return x & bufMask_;
+}
+
+void SubHead::setSampleRate(float sr) {
+    lpf_.init(static_cast<int>(sr));
 }

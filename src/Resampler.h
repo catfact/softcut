@@ -62,9 +62,6 @@ namespace softcut {
         // @param f in [0, 1]
         float interpolate(float f);
 
-        // apply lowpass filtering to sample
-        float applyLowpass(float x);
-
         // write, upsampling
         // return frames written (>= 1)
         // assumptions: input has been pushed. rate_ > 1.0

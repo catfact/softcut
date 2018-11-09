@@ -1,0 +1,1 @@
+faust -a LowpassBrickwall-template.h LowpassBrickwall.dsp > ../src/LowpassBrickwall.h

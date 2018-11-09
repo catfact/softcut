@@ -132,6 +132,8 @@ void SoftCutHeadLogic::setLoopFlag(bool val) {
 
 void SoftCutHeadLogic::setSampleRate(float sr_) {
     sr = sr_;
+    head[0].setSampleRate(sr);
+    head[1].setSampleRate(sr);
 }
 
 float SoftCutHeadLogic::mixFade(float x, float y, float a, float b) {

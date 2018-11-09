@@ -10,6 +10,7 @@
 #define SOFTCUTHEAD_SUBHEAD_H
 
 #include "Resampler.h"
+#include "LowpassBrickwall.h"
 
 namespace softcut {
 
@@ -22,7 +23,7 @@ namespace softcut {
     public:
         SubHead();
         void init();
-
+        void setSampleRate(float sr);
     private:
         float peek4(double phase);
         unsigned int wrapBufIndex(int x);
@@ -70,6 +71,7 @@ namespace softcut {
         unsigned int bufFrames_;
         unsigned int bufMask_;
         Resampler resamp_;
+        LowpassBrickwall lpf_;
         State state_;
         double rate_;
         double phase_;
