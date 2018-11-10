@@ -47,8 +47,8 @@ void SoftCutHead::nextSample(float in, float *outPhase, float *outTrig, float *o
     }
 
     Action act0 = head[0].updatePhase(start, end, loopFlag);
-    Action act1 = head[1].updatePhase(start, end, loopFlag);
     takeAction(act0, 0);
+    Action act1 = head[1].updatePhase(start, end, loopFlag);
     takeAction(act1, 1);
 
     head[0].updateFade(fadeInc);

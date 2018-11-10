@@ -90,19 +90,20 @@ void SubHead::updateFade(double inc) {
 }
 
 void SubHead::poke(float in, float pre, float rec, float fadePre, float fadeRec) {
-    // hm... actually we should always be pushing input to both/all resamplers... right?
-    // (which in turn suggests they should share an input ringbuffer? (FIXME))
+    // FIXME: since there's never really a reason to not push input, or to reset input rinbuf,
+    // it follows that all resamplers can share an input ringbuf
     int nframes = resamp_.processFrame(in);
-
-    if (isSmall(fade_)) { return; }
-    if (isSmall(rec)) { return; }
 
     if(state_ == INACTIVE) {
         return;
     }
 
     float fadeInv = 1.f - fade_;
-    float preFade = std::fmax(pre, (pre * fadeInv));
+
+    // pre-level should have its own fade in/out
+    // the top of this fade should be 1
+    // and the button should be the specified prelevel
+    float preFade = fadeInv * (1.f - pre) + pre;
     float recFade = rec * fade_;
     float y; // write value
     const float* src = resamp_.output();

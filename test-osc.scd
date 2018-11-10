@@ -92,6 +92,8 @@ r = Routine {
 
 // randomize loop duration too rarrh
 (
+
+~mindur = 1.0;
 q = Routine {
 	var dur, fade;
 	inf.do {
@@ -109,6 +111,7 @@ q = Routine {
 
 // randomly cut to position
 (
+~mindur = 0.1
 p = Routine {
     var pos;
     inf.do {
@@ -154,7 +157,7 @@ n.sendMsg("/set/filterFcMod", 1.0);
 /*
 r.stop;
 q.stop;
-
+p.stop;
 
 
 n.sendMsg("/quit");
