@@ -48,10 +48,6 @@ namespace  softcut{
         void takeAction(Action act);
         sample_t mixFade(sample_t x, sample_t y, float a, float b); // mix two inputs with phases
         void calcFadeInc();
-    public:
-        typedef enum {
-            FADE_LIN, FADE_EQ, FADE_EXP
-        } fade_t;
 
     private:
         SubHead head[2];
@@ -63,10 +59,8 @@ namespace  softcut{
         float fadeTime; // fade time in seconds
         float fadeInc;  // linear fade increment per sample
 
-        int active;     // current active play sch (0 or 1)
+        int active;     // current active play head index (0 or 1)
         bool loopFlag;  // set to loop, unset for 1-shot
-
-        fade_t fadeMode; // type of fade to use
         float pre; // pre-record level
         float rec; // record level
         bool recRun;

@@ -26,124 +26,134 @@ private:
 
 private:
     static void handleLoError(int num, const char *m, const char *path) {
-        std::cerr << "liblo error \t" <<  std::endl;
+        std::cerr << "liblo error: " <<  num << "; " << m << "; " << path << std::endl;
     }
 
     static int setRate(const char *path, const char *types,
-                               lo_arg **argv, int argc, lo_message msg, void *user_data) {
-        //auto *sc  = (SoftCut*)user_data;
-        // cout << "set rate \t" <<  argv[0]->f << endl;
+                               lo_arg **argv, int argc, lo_message msg, void *data) {
+        (void)path; (void)types; (void)argc; (void)msg; (void)data;
+        if(argc<1) { return 0; }
         Commands::post(Commands::SET_RATE, argv[0]->f);
         return 0;
     }
 
     static int setLoopStart(const char *path, const char *types,
-                       lo_arg **argv, int argc, lo_message msg, void *user_data) {
-        //auto *sc  = (SoftCut*)user_data;
-        // cout << "set loop start \t" <<  argv[0]->f << endl;
+                       lo_arg **argv, int argc, lo_message msg, void *data) {
+        (void)path; (void)types; (void)argc; (void)msg; (void)data;
+        if(argc<1) { return 0; }
         Commands::post(Commands::SET_LOOP_START, argv[0]->f);
         return 0;
     }
 
     static int setLoopEnd(const char *path, const char *types,
-                            lo_arg **argv, int argc, lo_message msg, void *user_data) {
-        //auto *sc  = (SoftCut*)user_data;
-        // cout << "set loop end \t" <<  argv[0]->f << endl;
+                            lo_arg **argv, int argc, lo_message msg, void *data) {
+        (void)path; (void)types; (void)argc; (void)msg; (void)data;
+        if(argc<1) { return 0; }
         Commands::post(Commands::SET_LOOP_END, argv[0]->f);
         return 0;
     }
 
     static int setLoopFlag(const char *path, const char *types,
-                          lo_arg **argv, int argc, lo_message msg, void *user_data) {
-        //auto *sc  = (SoftCut*)user_data;
-        // cout << "set loop flag\t" <<  argv[0]->f << endl;
+                          lo_arg **argv, int argc, lo_message msg, void *data) {
+        (void)path; (void)types; (void)argc; (void)msg; (void)data;
+        if(argc<1) { return 0; }
         Commands::post(Commands::SET_LOOP_FLAG, argv[0]->f > 0);
         return 0;
     }
 
     static int setFadeTime(const char *path, const char *types,
-                            lo_arg **argv, int argc, lo_message msg, void *user_data) {
-        //auto *sc  = (SoftCut*)user_data;
-        // cout << "set fade time \t" <<  argv[0]->f << endl;
+                            lo_arg **argv, int argc, lo_message msg, void *data) {
+        (void)path; (void)types; (void)argc; (void)msg; (void)data;
+        if(argc<1) { return 0; }
         Commands::post(Commands::SET_FADE_TIME, argv[0]->f);
         return 0;
     }
 
     static int setRecLevel(const char *path, const char *types,
-                            lo_arg **argv, int argc, lo_message msg, void *user_data) {
-        //auto *sc  = (SoftCut*)user_data;
-        // cout << "set rec level \t" <<  argv[0]->f << endl;
+                            lo_arg **argv, int argc, lo_message msg, void *data) {
+        (void)path; (void)types; (void)argc; (void)msg; (void)data;
+        if(argc<1) { return 0; }
         Commands::post(Commands::SET_REC_LEVEL, argv[0]->f);
         return 0;
     }
 
     static int setPreLevel(const char *path, const char *types,
-                            lo_arg **argv, int argc, lo_message msg, void *user_data) {
-        //auto *sc  = (SoftCut*)user_data;
-        // cout << "set pre level \t" <<  argv[0]->f << endl;
+                            lo_arg **argv, int argc, lo_message msg, void *data) {
+        (void)path; (void)types; (void)argc; (void)msg; (void)data;
+        if(argc<1) { return 0; }
         Commands::post(Commands::SET_PRE_LEVEL, argv[0]->f);
         return 0;
     }
 
     static int setRecFlag(const char *path, const char *types,
-                            lo_arg **argv, int argc, lo_message msg, void *user_data) {
-        //auto *sc  = (SoftCut*)user_data;
-        // cout << "set rec flag \t" <<  argv[0]->f << endl;
+                            lo_arg **argv, int argc, lo_message msg, void *data) {
+        (void)path; (void)types; (void)argc; (void)msg; (void)data;
         Commands::post(Commands::SET_REC_FLAG, argv[0]->f > 0);
         return 0;
     }
 
-//    static int setRecOffset(const char *path, const char *types,
-//                            lo_arg **argv, int argc, lo_message msg, void *user_data) {
-//        //auto *sc  = (SoftCut*)user_data;
-//        cout << "set rec offset \t" <<  argv[0]->f << endl;
-//        Commands::post(Commands::SET_REC_OFFSET, argv[0]->f);
-//        return 0;
-//    }
-
     static int setPosition(const char *path, const char *types,
-                            lo_arg **argv, int argc, lo_message msg, void *user_data) {
-        //auto *sc  = (SoftCut*)user_data;
-        // cout << "set position \t" <<  argv[0]->f << endl;
+                            lo_arg **argv, int argc, lo_message msg, void *data) {
+        (void)path; (void)types; (void)argc; (void)msg; (void)data;
+        if(argc<1) { return 0; }
+        if(argc<1) { return 0; }
         Commands::post(Commands::SET_POSITION, argv[0]->f);
         return 0;
     }
 
     static int setQuit(const char *path, const char *types,
-                    lo_arg **argv, int argc, lo_message msg, void *user_data) {
+                    lo_arg **argv, int argc, lo_message msg, void *data) {
+        (void)argv; (void)path; (void)types; (void)argc; (void)msg; (void)data;
+        if(argc<1) { return 0; }
         quitFlag = true;
         return 0;
     }
     
     static int setFilterFc(const char *path, const char *types, lo_arg **argv, int argc, lo_message msg, void *data) {
+        (void)path; (void)types; (void)argc; (void)msg; (void)data;
+        if(argc<1) { return 0; }
       Commands::post(Commands::SET_FILTER_FC, argv[0]->f);
       return 0;
     }
     static int setFilterFcMod(const char *path, const char *types, lo_arg **argv, int argc, lo_message msg, void *data) {
+        (void)path; (void)types; (void)argc; (void)msg; (void)data;
+        if(argc<1) { return 0; }
         Commands::post(Commands::SET_FILTER_FC_MOD, argv[0]->f);
         return 0;
     }
     static int setFilterRq(const char *path, const char *types, lo_arg **argv, int argc, lo_message msg, void *data) {
+        (void)path; (void)types; (void)argc; (void)msg; (void)data;
+        if(argc<1) { return 0; }
       Commands::post(Commands::SET_FILTER_RQ, argv[0]->f);
       return 0;
     }
     static int setFilterLp(const char *path, const char *types, lo_arg **argv, int argc, lo_message msg, void *data) {
+        (void)path; (void)types; (void)argc; (void)msg; (void)data;
+        if(argc<1) { return 0; }
       Commands::post(Commands::SET_FILTER_FC, argv[0]->f);
       return 0;
     }
     static int setFilterHp(const char *path, const char *types, lo_arg **argv, int argc, lo_message msg, void *data) {
+        (void)path; (void)types; (void)argc; (void)msg; (void)data;
+        if(argc<1) { return 0; }
       Commands::post(Commands::SET_FILTER_HP, argv[0]->f);
       return 0;
     }
     static int setFilterBp(const char *path, const char *types, lo_arg **argv, int argc, lo_message msg, void *data) {
+        (void)path; (void)types; (void)argc; (void)msg; (void)data;
+        if(argc<1) { return 0; }
       Commands::post(Commands::SET_FILTER_BP, argv[0]->f);
       return 0;
     }
     static int setFilterBr(const char *path, const char *types, lo_arg **argv, int argc, lo_message msg, void *data) {
+        (void)path; (void)types; (void)argc; (void)msg; (void)data;
+        if(argc<1) { return 0; }
       Commands::post(Commands::SET_FILTER_BR, argv[0]->f);
       return 0;
     }
     static int setFilterDry(const char *path, const char *types, lo_arg **argv, int argc, lo_message msg, void *data) {
+        (void)path; (void)types; (void)argc; (void)msg; (void)data;
+        if(argc<1) { return 0; }
       Commands::post(Commands::SET_FILTER_DRY, argv[0]->f);
       return 0;
     }

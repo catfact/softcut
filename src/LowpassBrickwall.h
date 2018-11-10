@@ -2,16 +2,15 @@
 name: "BrickwallLowpass"
 Code generated with Faust 2.5.30 (https://faust.grame.fr)
 Compilation options: cpp, -scal -ftz 0
+
+output edit for efficiency - don't regenerate!
+
 ------------------------------------------------------------ */
 
 #ifndef  __mydsp_H__
 #define  __mydsp_H__
 
 #include <algorithm>
-
-#include "faust/gui/UI.h"
-#include "faust/gui/meta.h"
-#include "faust/dsp/dsp.h"
 
 using std::max;
 using std::min;
@@ -54,65 +53,7 @@ class mydsp : public dsp {
 	float fRec0[3];
 	
  public:
-	
-	void metadata(Meta* m) { 
-		m->declare("filename", "LowpassBrickwall");
-		m->declare("filters.lib/name", "Faust Filters Library");
-		m->declare("filters.lib/version", "0.0");
-		m->declare("maths.lib/author", "GRAME");
-		m->declare("maths.lib/copyright", "GRAME");
-		m->declare("maths.lib/license", "LGPL with exception");
-		m->declare("maths.lib/name", "Faust Math Library");
-		m->declare("maths.lib/version", "2.1");
-		m->declare("name", "BrickwallLowpass");
-	}
-
-	virtual int getNumInputs() {
-		return 1;
-		
-	}
-	virtual int getNumOutputs() {
-		return 1;
-		
-	}
-	virtual int getInputRate(int channel) {
-		int rate;
-		switch (channel) {
-			case 0: {
-				rate = 1;
-				break;
-			}
-			default: {
-				rate = -1;
-				break;
-			}
-			
-		}
-		return rate;
-		
-	}
-	virtual int getOutputRate(int channel) {
-		int rate;
-		switch (channel) {
-			case 0: {
-				rate = 1;
-				break;
-			}
-			default: {
-				rate = -1;
-				break;
-			}
-			
-		}
-		return rate;
-		
-	}
-	
-	static void classInit(int samplingFreq) {
-		
-	}
-	
-	virtual void instanceConstants(int samplingFreq) {
+	 void instanceConstants(int samplingFreq) {
 		fSamplingFreq = samplingFreq;
 		fConst0 = tanf((50265.4844f / min(192000.0f, max(1.0f, float(fSamplingFreq)))));
 		fConst1 = (1.0f / fConst0);
@@ -125,12 +66,8 @@ class mydsp : public dsp {
 		fConst8 = (((fConst1 + -0.517638087f) / fConst0) + 1.0f);
 		
 	}
-	
-	virtual void instanceResetUserInterface() {
-		
-	}
-	
-	virtual void instanceClear() {
+
+	 void instanceClear() {
 		for (int l0 = 0; (l0 < 3); l0 = (l0 + 1)) {
 			fRec2[l0] = 0.0f;
 			
@@ -146,57 +83,39 @@ class mydsp : public dsp {
 		
 	}
 	
-	virtual void init(int samplingFreq) {
-		classInit(samplingFreq);
+	 void init(int samplingFreq) {
 		instanceInit(samplingFreq);
 	}
-	virtual void instanceInit(int samplingFreq) {
+	 void instanceInit(int samplingFreq) {
 		instanceConstants(samplingFreq);
-		instanceResetUserInterface();
 		instanceClear();
 	}
-	
-	virtual mydsp* clone() {
-		return new mydsp();
-	}
-	virtual int getSampleRate() {
-		return fSamplingFreq;
-		
-	}
-	
-	virtual void buildUserInterface(UI* ui_interface) {
-		ui_interface->openVerticalBox("BrickwallLowpass");
-		ui_interface->closeBox();
-		
-	}
-	
-	virtual void compute(int count, FAUSTFLOAT** inputs, FAUSTFLOAT** outputs) {
+
+	 void compute(int count, FAUSTFLOAT** inputs, FAUSTFLOAT** outputs) {
 		FAUSTFLOAT* input0 = inputs[0];
 		FAUSTFLOAT* output0 = outputs[0];
 		for (int i = 0; (i < count); i = (i + 1)) {
-			fRec2[0] = (float(input0[i]) - (fConst4 * ((fConst5 * fRec2[1]) + (fConst6 * fRec2[2]))));
-			fRec1[0] = ((fConst4 * (fRec2[2] + (fRec2[0] + (2.0f * fRec2[1])))) - (fConst3 * ((fConst5 * fRec1[1]) + (fConst7 * fRec1[2]))));
-			fRec0[0] = ((fConst3 * (fRec1[2] + (fRec1[0] + (2.0f * fRec1[1])))) - (fConst2 * ((fConst5 * fRec0[1]) + (fConst8 * fRec0[2]))));
-			output0[i] = FAUSTFLOAT((fConst2 * (fRec0[2] + (fRec0[0] + (2.0f * fRec0[1])))));
-			fRec2[2] = fRec2[1];
-			fRec2[1] = fRec2[0];
-			fRec1[2] = fRec1[1];
-			fRec1[1] = fRec1[0];
-			fRec0[2] = fRec0[1];
-			fRec0[1] = fRec0[0];
-			
-		}
-		
-	}
+            fRec2[0] = (input0[i] - (fConst4 * ((fConst5 * fRec2[1]) + (fConst6 * fRec2[2]))));
+            fRec1[0] = ((fConst4 * (fRec2[2] + (fRec2[0] + (2.0f * fRec2[1])))) -
+                        (fConst3 * ((fConst5 * fRec1[1]) + (fConst7 * fRec1[2]))));
+            fRec0[0] = ((fConst3 * (fRec1[2] + (fRec1[0] + (2.0f * fRec1[1])))) -
+                        (fConst2 * ((fConst5 * fRec0[1]) + (fConst8 * fRec0[2]))));
+            output0[i] = fConst2 * (fRec0[2] + (fRec0[0] + (2.0f * fRec0[1])));
+            fRec2[2] = fRec2[1];
+            fRec2[1] = fRec2[0];
+            fRec1[2] = fRec1[1];
+            fRec1[1] = fRec1[0];
+            fRec0[2] = fRec0[1];
+            fRec0[1] = fRec0[0];
 
-	
+        }
+	}
 };
 
 class LowpassBrickwall { 
     mydsp dsp_;
 public:        
     void init(int sr) {
-        mydsp::classInit(sr);
         dsp_.instanceConstants(sr);
         dsp_.instanceClear();
     }

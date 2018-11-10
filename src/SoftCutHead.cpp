@@ -24,7 +24,6 @@ void SoftCutHead::init() {
     active = 0;
     rate = 1.f;
     setFadeTime(0.1f);
-    fadeMode = FADE_EQ;
     recRun = false;
 }
 
