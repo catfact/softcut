@@ -109,7 +109,7 @@ void SubHead::poke(float in, float pre, float rec, float fadePre, float fadeRec)
 #if 1 // soft clipper
         y = clip_.processSample(y);
 #endif
-#if 1 // lowpass filter
+#if 0 // lowpass filter
         lpf_.processSample(&y);
 #endif
         buf_[idx_] *= preFade;

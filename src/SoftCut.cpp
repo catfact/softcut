@@ -30,7 +30,11 @@ void SoftCut::processBlockMono(float *in, float *out, int numFrames) {
 
     float x;
     for(int i=0; i<numFrames; ++i) {
-            x = svf.getNextSample(in[i]) + in[i]*svfDryLevel;
+#if 1
+        x = svf.getNextSample(in[i]) + in[i]*svfDryLevel;
+#else
+        x = in[i];
+#endif
         sch.nextSample(x, &phaseDummy, &trigDummy, &(out[i]));
     }
 }
@@ -113,7 +117,7 @@ void SoftCut::setFilterFcMod(float x) {
 
 void SoftCut::updateFilterFc() {
     float fc = std::min(fcBase, fcBase * std::fabs(sch.getRate()));
-    std::cout << fc << std::endl;
+    // std::cout << fc << std::endl;
     svf.setFc(fc*fcMod + (1.f-fcMod )*svf.getFc());
 }
 
