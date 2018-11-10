@@ -13,6 +13,7 @@ requirements:
 ```
 sudo apt-get install cmake 
 sudo apt-get install libboost-dev
+sudo apt-get install faust-common
 ```
 
 [other requirements should already be installed (libjack-dev, liblo).]
@@ -22,6 +23,12 @@ configure and build:
 mkdir build && cd build
 cmake ..
 make
+```
+
+to just build and run the main target (from the top directory)
+```
+cmake --build build/ --target softcut
+./build/softcut
 ```
 
 running: `./softcut`. included is a supercollider script to send test OSC commands (`test-osc.scd`); edit the NetAddr IP for local/remote use.

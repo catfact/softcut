@@ -64,7 +64,6 @@ set_target_properties(softcut PROPERTIES
 #----------------------
 # resampler test target
 
-
 add_executable(resampler-test src/Resampler.cpp src/resampler-test/resampler-test-main.cpp)
 if(APPLE)
     include_directories(softcut /usr/local/include)
