@@ -107,7 +107,6 @@ class mydsp {
             fRec1[1] = fRec1[0];
             fRec0[2] = fRec0[1];
             fRec0[1] = fRec0[0];
-
         }
 	}
 };
