@@ -26,7 +26,7 @@ set (SRC
         src/SoftClip.h
         src/Types.h
         src/SoftCut.cpp
-        src/SoftCut.h)
+        src/SoftCut.h src/Slew.h)
 
 if(UNIX)
     if(APPLE)
