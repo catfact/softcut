@@ -37,8 +37,8 @@ void SoftCutHead::nextSample(float in, float *outPhase, float *outTrig, float *o
     }
 
     if(recRun) {
-        head[0].poke(in, pre, rec, fadePre, fadeRec);
-        head[1].poke(in, pre, rec, fadePre, fadeRec);
+        head[0].poke(in, pre, rec);
+        head[1].poke(in, pre, rec);
     }
 
     Action act0 = head[0].updatePhase(start, end, loopFlag);

@@ -28,12 +28,12 @@ namespace softcut {
         void init();
         void setSampleRate(float sr);
     private:
-        float peek4(double phase);
+        float peek4();
         unsigned int wrapBufIndex(int x);
 
     protected:
         float peek();
-        void poke(float in, float pre, float rec, float fadePre, float fadeRec);
+        void poke(float in, float pre, float rec);
         Action updatePhase(double start, double end, bool loop);
         void updateFade(double inc);
 

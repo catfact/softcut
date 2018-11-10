@@ -89,7 +89,7 @@ void SubHead::updateFade(double inc) {
     }
 }
 
-void SubHead::poke(float in, float pre, float rec, float fadePre, float fadeRec) {
+void SubHead::poke(float in, float pre, float rec) {
     // FIXME: since there's never really a reason to not push input, or to reset input rinbuf,
     // it follows that all resamplers can share an input ringbuf
     int nframes = resamp_.processFrame(in);
@@ -123,10 +123,10 @@ void SubHead::poke(float in, float pre, float rec, float fadePre, float fadeRec)
 }
 
 float SubHead::peek() {
-    return peek4(phase_);
+    return peek4();
 }
 
-float SubHead::peek4(double phase) {
+float SubHead::peek4() {
     int phase1 = static_cast<int>(phase_);
     int phase0 = phase1 - 1;
     int phase2 = phase1 + 1;
@@ -143,7 +143,7 @@ float SubHead::peek4(double phase) {
 
 unsigned int SubHead::wrapBufIndex(int x) {
     x += bufFrames_;
-    assert(x >= 0);
+    BOOST_ASSERT_MSG(x >= 0, "buffer index before masking is non-negative");
     return x & bufMask_;
 }
 
@@ -156,16 +156,14 @@ void SubHead::setPhase(double phase) {
     // FIXME?: magic number hack here for small record offset
     idx_ = wrapBufIndex(static_cast<int>(phase_) - inc_ * 8);
     // std::cout << "pos change; phase=" << phase_ << "; inc=" << inc_ << "; idx=" << idx_ << std::endl;
-    BOOST_ASSERT_MSG(isSmall(fade_), "changing phase with fade>0");
-    // on phase change, the resampler should clear and reset its internal ringbuffer
+    if(!isSmall(fade_)) {
+        BOOST_ASSERT_MSG(false, "changing phase with fade>0");
+        std::cerr << "fade=" << fade_ << std::endl;
+    }
 
-    // actually this seems unnecessary and maybe wrong...
-    // it's ok to keep history of input when changing positions.
-    // resmp output doesn't need clearing b/c we write/read from beginning oneach sample anyway
-    // resamp_.reset();
-
-    // hm...
-    resamp_.setPhase(0);
+    // NB: not resetting the resampler here:
+    // - it's ok to keep history of input when changing positions.
+    // - resmp output doesn't need clearing b/c we write/read from beginning on each sample anyway
 }
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -174,7 +172,7 @@ void SubHead::setBuffer(float *buf, unsigned int frames) {
     buf_  = buf;
     bufFrames_ = frames;
     bufMask_ = frames - 1;
-    assert((bufFrames_ != 0) && !(bufFrames_ & bufMask_));
+    BOOST_ASSERT_MSG((bufFrames_ != 0) && !(bufFrames_ & bufMask_), "buffer size is not 2^N");
 }
 
 void SubHead::setRate(float rate) {
