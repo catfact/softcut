@@ -16,8 +16,11 @@ set (SRC
         src/SubHead.cpp
         src/SoftCut.cpp
         src/Commands.cpp
-        src/OscInterface.cpp 
-        src/Resampler.cpp src/Svf.h src/Svf.cpp src/SoftClip.h)
+        src/OscInterface.cpp
+        src/Resampler.h
+        src/Svf.h
+        src/Svf.cpp
+        src/SoftClip.h)
 
 if(UNIX)
     if(APPLE)
@@ -60,6 +63,8 @@ set_target_properties(softcut PROPERTIES
         CXX_STANDARD_REQUIRED YES
         CXX_EXTENSIONS NO
         )
+
+target_compile_options(softcut PRIVATE -Wall -Wextra -pedantic)
 
 #----------------------
 # resampler test target

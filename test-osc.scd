@@ -39,6 +39,9 @@ n.sendMsg("/set/rate", 1/8);
 n.sendMsg("/set/rate", -1/8);
 
 
+n.sendMsg("/set/rate", -4.7);
+
+
 // short loop
 n.sendMsg("/set/loopEnd", 1.25);
 n.sendMsg("/set/fadeTime", 0.06);
@@ -62,7 +65,7 @@ n.sendMsg("/set/loopEnd", 1.0 + 1/110);
 n.sendMsg("/set/fadeTime", 1/220);
 n.sendMsg("/set/preLevel", 0.977);
 
-// flappy
+// randomize rate
 (
 ~mindur = 1.0;
 r = Routine {
@@ -137,6 +140,7 @@ n.sendMsg("/set/filterFc", 880 * 4);
 n.sendMsg("/set/filterRq", 0.7);
 n.sendMsg("/set/filterLp", 0.8);
 n.sendMsg("/set/filterBp", 0.0);
+
 // different!
 n.sendMsg("/set/filterFc", 550);
 n.sendMsg("/set/filterLp", 0.0);
@@ -151,8 +155,6 @@ n.sendMsg("/set/filterDry", 0);
 n.sendMsg("/set/filterFc", 330);
 
 n.sendMsg("/set/filterFcMod", 0.5);
-
-
 n.sendMsg("/set/filterFcMod", 1.0);
 /*
 r.stop;

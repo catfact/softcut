@@ -10,11 +10,6 @@
 
 #include "SoftCutHead.h"
 
-/// wtf...
-#ifndef nullptr
-#define nullptr ((void*)0)
-#endif
-
 using namespace softcut;
 using namespace std;
 

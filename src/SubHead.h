@@ -55,7 +55,7 @@ namespace softcut {
 
 
     private:
-        Resampler resamp_;
+        Resampler<float> resamp_;
         LowpassBrickwall lpf_;
         SoftClip clip_;
 
