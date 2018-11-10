@@ -34,7 +34,7 @@ static float mydsp_faustpower2_f(float value) {
 #define exp10 __exp10
 #endif
 
-class mydsp : public dsp {
+class mydsp {
 	
  private:
 	
@@ -107,7 +107,6 @@ class mydsp : public dsp {
             fRec1[1] = fRec1[0];
             fRec0[2] = fRec0[1];
             fRec0[1] = fRec0[0];
-
         }
 	}
 };
