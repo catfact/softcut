@@ -1,7 +1,7 @@
 n = NetAddr("localhost", 9999);
 
 // change this to norns address for remote test
-//n = NetAddr("192.168.1.11", 9999);
+n = NetAddr("192.168.1.11", 9999);
 
 // echo
 (
@@ -32,16 +32,16 @@ n.sendMsg("/set/rate", 8/5);
 n.sendMsg("/set/rate", -1);
 
 n.sendMsg("/set/rate", -6);
-n.sendMsg("/set/rate", 15);
-n.sendMsg("/set/rate", 3/2);
+n.sendMsg("/set/rate", 8);
+n.sendMsg("/set/rate", 5.5);
+n.sendMsg("/set/rate", -3/2);
 n.sendMsg("/set/rate", 1/8);
 n.sendMsg("/set/rate", -1/8);
 
 
 // short loop
 n.sendMsg("/set/loopEnd", 1.25);
-n.sendMsg("/set/fadeTime", 0.2);
-
+n.sendMsg("/set/fadeTime", 0.06);
 
 n.sendMsg("/set/recLevel", 1.0);
 n.sendMsg("/set/preLevel", 0.9);
@@ -54,6 +54,13 @@ n.sendMsg("/set/position", 0.0);
 n.sendMsg("/set/loopEnd", 5.0);
 n.sendMsg("/set/fadeTime", 2.0);
 
+
+/// resonaturr
+
+n.sendMsg("/set/loopStart", 1.0);
+n.sendMsg("/set/loopEnd", 1.0 + 1/110);
+n.sendMsg("/set/fadeTime", 1/220);
+n.sendMsg("/set/preLevel", 0.977);
 
 // flappy
 (
@@ -86,16 +93,30 @@ r = Routine {
 // randomize loop duration too rarrh
 (
 q = Routine {
-	var dur;
+	var dur, fade;
 	inf.do {
 		(~mindur + (1.rand)).wait;
-		if(0.5.coin, {
-			dur = ~mindur + ~mindur.rand;
-			postln("dur " ++dur);
-			n.sendMsg("/set/loopEnd", 1 + dur);
-			n.sendMsg("/set/fadeTime", dur * (0.1  + 0.8.rand));
-		});
+		dur = ~mindur + ~mindur.rand;
+		fade = dur * (0.1  + 0.8.rand);
+		postln([dur, fade]);
+		if(fade > dur, { postln("!!!!!!!!!!!!!!!"); });
+		n.sendMsg("/set/loopEnd", 1 + dur);
+		n.sendMsg("/set/fadeTime", fade);
 	}
+}.play;
+)
+
+
+// randomly cut to position
+(
+p = Routine {
+    var pos;
+    inf.do {
+		(~mindur + ~mindur.rand).wait;
+		pos = 1.0 + 0.8.rand;
+		postln("pos " ++pos);
+		n.sendMsg("/set/position", pos);
+    }
 }.play;
 )
 
@@ -110,14 +131,14 @@ n.sendMsg("/set/recFlag", 0);
 
 // input filters
 n.sendMsg("/set/filterFc", 880 * 4);
-n.sendMsg("/set/filterRq", 0.25);
+n.sendMsg("/set/filterRq", 0.7);
 n.sendMsg("/set/filterLp", 0.8);
-n.sendMsg("/set/filterBp", 0.85);
+n.sendMsg("/set/filterBp", 0.0);
 // different!
 n.sendMsg("/set/filterFc", 550);
 n.sendMsg("/set/filterLp", 0.0);
 n.sendMsg("/set/filterHp", 0.8);
-n.sendMsg("/set/filterRq", 0.01);
+n.sendMsg("/set/filterRq", 0.02);
 
 n.sendMsg("/set/filterLp", 0.8);
 n.sendMsg("/set/filterHp", 0.0);
@@ -127,9 +148,14 @@ n.sendMsg("/set/filterDry", 0);
 n.sendMsg("/set/filterFc", 330);
 
 n.sendMsg("/set/filterFcMod", 0.5);
+
+
+n.sendMsg("/set/filterFcMod", 1.0);
 /*
 r.stop;
 q.stop;
+
+
 
 n.sendMsg("/quit");
 */

@@ -44,34 +44,15 @@ namespace softcut {
         State state() { return state_; }
         
         // setters
-        void setState(State state) { state_ = state; }
-        
-        void setPhase(double phase) {
-            phase_ = phase;
-            // FIXME?: magic number hack here for small record offset
-            idx_ = wrapBufIndex(static_cast<int>(phase_) - inc_ * 8);
-            // on phase change, the resampler should clear and reset its internal ringbuffer
-            resamp_.reset();
-        }
+        void setState(State state);
+        void setTrig(float trig);
+        void setPhase(double phase);
 
         // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         // **NB** buffer size must be a power of two!!!!
-        void setBuffer(float *buf, unsigned int frames) {
-            buf_  = buf;
-            bufFrames_ = frames;
-            bufMask_ = frames - 1;
-            assert((bufFrames_ != 0) && !(bufFrames_ & bufMask_));
-        }
+        void setBuffer(float *buf, unsigned int frames);
+        void setRate(float rate);
 
-        void setRate(float rate) {
-            rate_ = rate;
-            inc_ = boost::math::sign(rate);
-            // NB: resampler doesn't handle negative rates.
-            // instead we copy the resampler output backwards into the buffer when rate < 0.
-            resamp_.setRate(std::fabs(rate));
-        }
-
-	void setTrig(float trig) { trig_ = trig; }
 
     private:
         Resampler resamp_;
@@ -91,8 +72,6 @@ namespace softcut {
         float fade_;
         float trig_; // output trigger value
         bool active_;
-
-        void reset();
     };
 
 }

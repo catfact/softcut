@@ -10,6 +10,8 @@
 
 using namespace softcut;
 
+static inline bool isSmall(float f) { return f <std::numeric_limits<float>::epsilon(); }
+
 SubHead::SubHead() {
     this->init();
 }
@@ -92,8 +94,8 @@ void SubHead::poke(float in, float pre, float rec, float fadePre, float fadeRec)
     // (which in turn suggests they should share an input ringbuffer? (FIXME))
     int nframes = resamp_.processFrame(in);
 
-    if (fade_ < std::numeric_limits<float>::epsilon()) { return; }
-    if (rec < std::numeric_limits<float>::epsilon()) { return; }
+    if (isSmall(fade_)) { return; }
+    if (isSmall(rec)) { return; }
 
     if(state_ == INACTIVE) {
         return;
@@ -148,6 +150,40 @@ void SubHead::setSampleRate(float sr) {
     lpf_.init(static_cast<int>(sr));
 }
 
-void SubHead::reset() {
-    resamp_.reset();
+void SubHead::setPhase(double phase) {
+    phase_ = phase;
+    // FIXME?: magic number hack here for small record offset
+    idx_ = wrapBufIndex(static_cast<int>(phase_) - inc_ * 8);
+    // std::cout << "pos change; phase=" << phase_ << "; inc=" << inc_ << "; idx=" << idx_ << std::endl;
+    BOOST_ASSERT_MSG(isSmall(fade_), "changing phase with fade>0");
+    // on phase change, the resampler should clear and reset its internal ringbuffer
+
+    // actually this seems unnecessary and maybe wrong...
+    // it's ok to keep history of input when changing positions.
+    // resmp output doesn't need clearing b/c we write/read from beginning oneach sample anyway
+    // resamp_.reset();
+
+    // hm...
+    resamp_.setPhase(0);
 }
+
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// **NB** buffer size must be a power of two!!!!
+void SubHead::setBuffer(float *buf, unsigned int frames) {
+    buf_  = buf;
+    bufFrames_ = frames;
+    bufMask_ = frames - 1;
+    assert((bufFrames_ != 0) && !(bufFrames_ & bufMask_));
+}
+
+void SubHead::setRate(float rate) {
+    rate_ = rate;
+    inc_ = boost::math::sign(rate);
+    // NB: resampler doesn't handle negative rates.
+    // instead we copy the resampler output backwards into the buffer when rate < 0.
+    resamp_.setRate(std::fabs(rate));
+}
+
+
+void SubHead::setState(State state) { state_ = state; }
+void SubHead::setTrig(float trig) { trig_ = trig; }

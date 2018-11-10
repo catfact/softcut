@@ -93,7 +93,10 @@ void SoftCutHead::cutToPhase(float pos) {
     State s = head[active].state();
 
     // ignore if we are already in a crossfade
-    if(s == State::FADEIN || s == State::FADEOUT) { return; }
+    if(s == State::FADEIN || s == State::FADEOUT) {
+        // std::cout << "skipping phase change due to ongoing xfade" << std::endl;
+        return;
+    }
 
     // activate the inactive head
     int newActive = active ^ 1;
@@ -103,7 +106,6 @@ void SoftCutHead::cutToPhase(float pos) {
 
     head[newActive].setState(State::FADEIN);
     head[newActive].setPhase(pos);
-    head[newActive].reset();
 
     head[active].active_ = false;
     head[newActive].active_ = true;
