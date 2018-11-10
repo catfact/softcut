@@ -9,7 +9,11 @@
 
 using namespace softcut;
 
-SoftCutVoice::SoftCutVoice() {
+SoftCutVoice::SoftCutVoice() :
+rateRamp(48000, 0.1),
+preRamp(48000, 0.1),
+recRamp(48000, 0.1)
+{
     fcBase = 16000;
     sch.init();
     svf.setLpMix(1.0);
@@ -35,18 +39,24 @@ void SoftCutVoice::processBlockMono(float *in, float *out, int numFrames) {
 #else
         x = in[i];
 #endif
+        sch.setRate(rateRamp.update());
+        sch.setPre(preRamp.update());
+        sch.setRec(recRamp.update());
         sch.processSample(x, &phaseDummy, &trigDummy, &(out[i]));
     }
 }
 
 void SoftCutVoice::setSampleRate(float hz) {
     sampleRate = hz;
+    rateRamp.setSampleRate(hz);
+    preRamp.setSampleRate(hz);
+    recRamp.setSampleRate(hz);
     sch.setSampleRate(sampleRate);
     svf.setSampleRate(hz);
 }
 
 void SoftCutVoice::setRate(float rate) {
-    sch.setRate(rate);
+    rateRamp.setTarget(rate);
     updateFilterFc();
 }
 
@@ -67,11 +77,11 @@ void SoftCutVoice::cutToPos(float sec) {
 }
 
 void SoftCutVoice::setRecLevel(float amp) {
-    sch.setRec(amp);
+    recRamp.setTarget(amp);
 }
 
 void SoftCutVoice::setPreLevel(float amp) {
-    sch.setPre(amp);
+    preRamp.setTarget(amp);
 }
 
 void SoftCutVoice::setRecFlag(bool val) {

@@ -12,21 +12,17 @@ message("CMAKE_C_FLAGS_MINSIZEREL is ${CMAKE_C_FLAGS_MINSIZEREL}")
 
 set (SRC
         src/softcut-main.cpp
-        src/SoftCutHead.h
-        src/SoftCutHead.cpp
-        src/SubHead.h
-        src/SubHead.cpp
-        src/SoftCutVoice.h
+        src/SoftCut.cpp
         src/SoftCutVoice.cpp
+        src/SoftCutHead.cpp
+        src/SubHead.cpp
         src/Commands.cpp
         src/OscInterface.cpp
         src/Resampler.h
-        src/Svf.h
         src/Svf.cpp
         src/SoftClip.h
         src/Types.h
-        src/SoftCut.cpp
-        src/SoftCut.h src/Slew.h)
+        src/Utilities.h)
 
 if(UNIX)
     if(APPLE)

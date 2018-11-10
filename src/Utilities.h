@@ -10,9 +10,7 @@
 #include <cassert>
 #include <array>
 #include <math.h>
-
-/////////////////////////////////
-#pragma mark constants, conversions, basic utilities
+#include <cmath>
 
 namespace softcut {
 
@@ -47,7 +45,7 @@ namespace softcut {
     }
 
     static float dbamp(float db) {
-        return isinf(db) ? 0.f : powf(10.f, db * 0.05);
+        return std::isinf(db) ? 0.f : powf(10.f, db * 0.05);
     }
 
     static float ampdb(float amp) {
@@ -196,7 +194,7 @@ namespace softcut {
     };
 
 // a smoother with separate rise and fall times
-// "ye old AFG"
+// "ye olde AFG"
     class Slew {
     private:
         float sampleRate;

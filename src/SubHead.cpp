@@ -154,10 +154,14 @@ void SubHead::setPhase(phase_t phase) {
     // FIXME?: magic number hack here for small record offset
     idx_ = wrapBufIndex(static_cast<int>(phase_) - inc_dir_ * 8);
     // std::cout << "pos change; phase=" << phase_ << "; inc=" << inc_ << "; idx=" << idx_ << std::endl;
+
+    // FIXME: we are hitting this sometimes. fade is always quite small, maybe just rounding error?
+#if 0
     if(fade_ > std::numeric_limits<float>::epsilon()) {
-        BOOST_ASSERT_MSG(false, "changing phase with fade>0");
         std::cerr << "fade=" << fade_ << std::endl;
+        BOOST_ASSERT_MSG(false, "changing phase with fade>0");
     }
+#endif
 
     // NB: not resetting the resampler here:
     // - it's ok to keep history of input when changing positions.

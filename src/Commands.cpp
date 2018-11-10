@@ -42,58 +42,58 @@ public:
     void setValue(float v) { value.f = v; }
 
     // handler should be called on audio thread
-    void handle(SoftCutVoice* sc) {
+    void handle(SoftCutVoice* scv) {
         switch (id) {
             case SET_RATE:
-                sc->setRate(value.f);
+                scv->setRate(value.f);
                 break;
             case SET_LOOP_START:
-                sc->setLoopStart(value.f);
+                scv->setLoopStart(value.f);
                 break;
             case SET_LOOP_END:
-                sc->setLoopEnd(value.f);
+                scv->setLoopEnd(value.f);
                 break;
             case SET_LOOP_FLAG:
-                sc->setLoopFlag(value.b);
+                scv->setLoopFlag(value.b);
                 break;
             case SET_FADE_TIME:
-                sc->setFadeTime(value.f);
+                scv->setFadeTime(value.f);
                 break;
             case SET_REC_LEVEL:
-                sc->setRecLevel(value.f);
+                scv->setRecLevel(value.f);
                 break;
             case SET_PRE_LEVEL:
-                sc->setPreLevel(value.f);
+                scv->setPreLevel(value.f);
                 break;
             case SET_REC_FLAG:
-                sc->setRecFlag(value.b);
+                scv->setRecFlag(value.b);
                 break;
             case SET_POSITION:
-                sc->cutToPos(value.f);
+                scv->cutToPos(value.f);
                 break;
             case SET_FILTER_FC:
-                sc->setFilterFc(value.f);
+                scv->setFilterFc(value.f);
                 break;
             case SET_FILTER_FC_MOD:
-                sc->setFilterFcMod(value.f);
+                scv->setFilterFcMod(value.f);
                 break;
             case SET_FILTER_RQ:
-                sc->setFilterRq(value.f);
+                scv->setFilterRq(value.f);
                 break;
             case SET_FILTER_LP:
-                sc->setFilterLp(value.f);
+                scv->setFilterLp(value.f);
                 break;
             case SET_FILTER_HP:
-                sc->setFilterHp(value.f);
+                scv->setFilterHp(value.f);
                 break;
             case SET_FILTER_BP:
-                sc->setFilterBp(value.f);
+                scv->setFilterBp(value.f);
                 break;
             case SET_FILTER_BR:
-                sc->setFilterBr(value.f);
+                scv->setFilterBr(value.f);
                 break;
             case SET_FILTER_DRY:
-                sc->setFilterDry(value.f);
+                scv->setFilterDry(value.f);
                 break;
             default:
                 ;;

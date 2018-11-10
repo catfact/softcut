@@ -8,6 +8,7 @@
 #include <array>
 #include "SoftCutHead.h"
 #include "Svf.h"
+#include "Utilities.h"
 
 namespace softcut {
     class SoftCutVoice {
@@ -40,14 +41,22 @@ namespace softcut {
         // process a single channel
         void processBlockMono(float* in, float* out, int numFrames);
 
-
     private:
         float* buf;
         int bufFrames;
         float sampleRate;
 
+        // xfaded read/write head
         SoftCutHead sch;
+        // input filter
         Svf svf;
+        // rate ramp
+        LogRamp rateRamp;
+        // pre-level ramp
+        LogRamp preRamp;
+        // record-level ramp
+        LogRamp recRamp;
+
         // default frequency for SVF
         // reduced automatically when setting rate
         float fcBase;
