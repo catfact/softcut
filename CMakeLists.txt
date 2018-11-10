@@ -69,7 +69,7 @@ target_compile_options(softcut PRIVATE -Wall -Wextra -pedantic)
 #----------------------
 # resampler test target
 
-add_executable(resampler-test src/Resampler.cpp src/resampler-test/resampler-test-main.cpp)
+add_executable(resampler-test src/resampler-test/resampler-test-main.cpp)
 if(APPLE)
     include_directories(softcut /usr/local/include)
 endif()
