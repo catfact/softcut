@@ -1,4 +1,5 @@
 
+#include <boost/assert.hpp>
 #include "Interpolate.h"
 #include "Resampler.h"
 
@@ -47,7 +48,7 @@ int Resampler::processFrame(float x) {
 
 int Resampler::writeUp() {
     double p = phase_ + rate_;
-    int nf = static_cast<int>(p);
+    unsigned int nf = static_cast<unsigned int>(p);
     // we can assume that n >= 1 here
     // we want to track fractional output phase for interpolation
     // this is normalized to the distance between input frames
@@ -76,6 +77,7 @@ int Resampler::writeDown() {
     // we need to produce a fractional interpolation coefficient,
     // by "normalizing" to the output phase period
     double p = phase_ + rate_;
+    BOOST_ASSERT_MSG(p >= 0.0, "resampler encountered negative phase");
     auto nf = static_cast<unsigned int>(p);
     if (nf > 0) {
         float f = 1.f - static_cast<float>(phase_);

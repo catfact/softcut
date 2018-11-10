@@ -47,7 +47,7 @@ namespace  softcut{
         void cutToPhase(float newPhase);
         void takeAction(Action act, int id);
         float mixFade(float x, float y, float a, float b); // mix two inputs with phases
-
+        void calcFadeInc();
     public:
         typedef enum {
             FADE_LIN, FADE_EQ, FADE_EXP
@@ -60,6 +60,7 @@ namespace  softcut{
         float sr;       // sample rate
         float start;    // start/end points
         float end;
+        float fadeTime; // fade time in seconds
         float fadeInc;  // linear fade increment per sample
 
         int active;     // current active play sch (0 or 1)

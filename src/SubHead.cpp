@@ -33,6 +33,7 @@ Action SubHead::updatePhase(double start, double end, bool loop) {
         case ACTIVE:
             p = phase_ + rate_;
             if(active_) {
+                // FIXME: should refactor this a bit. 
                 if (rate_ > 0.f) {
                     if (p > end || p < start) {
                         if (loop) {

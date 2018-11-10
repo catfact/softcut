@@ -27,6 +27,7 @@ void SoftCutHead::init() {
     start = 0.f;
     end = 0.f;
     active = 0;
+    rate = 1.f;
     setFadeTime(0.1f);
     fadeMode = FADE_EQ;
     recRun = false;
@@ -46,8 +47,8 @@ void SoftCutHead::nextSample(float in, float *outPhase, float *outTrig, float *o
     }
 
     Action act0 = head[0].updatePhase(start, end, loopFlag);
-    takeAction(act0, 0);
     Action act1 = head[1].updatePhase(start, end, loopFlag);
+    takeAction(act0, 0);
     takeAction(act1, 1);
 
     head[0].updateFade(fadeInc);
@@ -58,6 +59,7 @@ void SoftCutHead::nextSample(float in, float *outPhase, float *outTrig, float *o
 void SoftCutHead::setRate(float x)
 {
     rate = x;
+    calcFadeInc();
     head[0].setRate(x);
     head[1].setRate(x);
 }
@@ -94,7 +96,7 @@ void SoftCutHead::cutToPhase(float pos) {
     if(s == State::FADEIN || s == State::FADEOUT) { return; }
 
     // activate the inactive head
-    int newActive = active == 0 ? 1 : 0;
+    int newActive = active ^ 1;
     if(s != State::INACTIVE) {
         head[active].setState(State::FADEOUT);
     }
@@ -109,7 +111,13 @@ void SoftCutHead::cutToPhase(float pos) {
 }
 
 void SoftCutHead::setFadeTime(float secs) {
-    fadeInc = (float) 1.0 / (secs * sr);
+    fadeTime = secs;
+    calcFadeInc();
+}
+void SoftCutHead::calcFadeInc() {
+    fadeInc = (float) fabs(rate) / std::max(1.f, (fadeTime * sr));
+    fadeInc = std::min(fadeInc, 1.f);
+    // printf("fade time = %f; rate = %f; inc = %f\n", fadeTime, rate, fadeInc);
 }
 
 void SoftCutHead::setBuffer(float *b, uint32_t bf) {
@@ -147,7 +155,6 @@ void SoftCutHead::setPre(float x) {
 void SoftCutHead::setRecRun(bool val) {
     recRun = val;
 }
-
 
 float SoftCutHead::getActivePhase() {
   return static_cast<float>(head[active].phase());
