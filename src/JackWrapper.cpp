@@ -3,7 +3,7 @@
 //
 
 #include "JackWrapper.h"
-#include "SoftCutVoice.h"
+#include "SoftCut.h"
 
 #include <jack/jack.h>
 
@@ -26,7 +26,7 @@ private:
         in = (jack_default_audio_sample_t *) jack_port_get_buffer (imp->input_port, numFrames);
         out = (jack_default_audio_sample_t *) jack_port_get_buffer (imp->output_port, numFrames);
 
-        SoftCutVoice& sc = imp->sc;
+        SoftCut& sc = imp->sc;
 
         sc.processBlockMono(in, out, numFrames);
 
@@ -39,7 +39,7 @@ private:
     }
 
 protected:
-    SoftCutVoice sc;
+    SoftCut sc;
 
 public:
     void setup() {
@@ -166,6 +166,6 @@ void JackWrapper::stop() {
     JackWrapper::imp.stop();
 }
 
-SoftCutVoice* JackWrapper::getSoftCut() {
+SoftCut* JackWrapper::getSoftCut() {
     return &JackWrapper::imp.sc;
 }

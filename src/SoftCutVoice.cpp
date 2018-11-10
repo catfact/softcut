@@ -9,10 +9,9 @@
 
 using namespace softcut;
 
-SoftCutVoice::SoftCut() {
+SoftCutVoice::SoftCutVoice() {
     fcBase = 16000;
     sch.init();
-    sch.setBuffer(buf, BUF_FRAMES);
     svf.setLpMix(1.0);
     svf.setHpMix(0.0);
     svf.setBpMix(0.0);
@@ -26,6 +25,7 @@ void SoftCutVoice::processBlockMono(float *in, float *out, int numFrames) {
     float trigDummy;
     float phaseDummy;
 
+    /// FIXME: need to handle in parent; commands need voice ids...
     Commands::handlePending(this);
 
     float x;
@@ -119,5 +119,11 @@ void SoftCutVoice::updateFilterFc() {
     float fc = std::min(fcBase, fcBase * std::fabs(sch.getRate()));
     // std::cout << fc << std::endl;
     svf.setFc(fc*fcMod + (1.f-fcMod )*svf.getFc());
+}
+
+void SoftCutVoice::setBuffer(float *b, int nf) {
+    buf = b;
+    bufFrames = nf;
+    sch.setBuffer(buf, bufFrames);
 }
 

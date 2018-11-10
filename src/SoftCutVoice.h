@@ -2,8 +2,8 @@
 // Created by ezra on 11/3/18.
 //
 
-#ifndef SOFTCUT_SOFTCUT_H
-#define SOFTCUT_SOFTCUT_H
+#ifndef SOFTCUT_SOFTCUTVOICE_H
+#define SOFTCUT_SOFTCUTVOICE_H
 
 #include <array>
 #include "SoftCutHead.h"
@@ -26,7 +26,6 @@ namespace softcut {
         void setRecLevel(float amp);
         void setPreLevel(float amp);
         void setRecFlag(bool val);
-        //void setRecOffset(int samples);
 
         void setFilterFc(float);
         void setFilterRq(float);
@@ -44,10 +43,11 @@ namespace softcut {
 
     private:
         float* buf;
+        int bufFrames;
         float sampleRate;
 
         SoftCutHead sch;
-        Svf svf[4];
+        Svf svf;
         // default frequency for SVF
         // reduced automatically when setting rate
         float fcBase;
@@ -60,4 +60,4 @@ namespace softcut {
 }
 
 
-#endif //SOFTCUT_SOFTCUT_H
+#endif //SOFTCUT_SOFTCUTVOICE_H

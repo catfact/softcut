@@ -67,6 +67,5 @@ namespace  softcut{
 
         float rate;
     };
-
 }
 #endif //CUTFADEVOICE_CUTFADEVOICELOGIC_H

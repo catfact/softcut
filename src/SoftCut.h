@@ -11,14 +11,23 @@ namespace softcut {
 
     class SoftCut {
 
-    private:
 
     public:
-        enum { numVoices = 2};
+        enum { numVoices = 2 };
         enum {  BUF_FRAMES = 16777216 };
-        float buf[BUF_FRAMES];
+
+
+        SoftCut();
+
+        void init();
+
+        void processBlockMono(float* in, float* out, int numFrames);
+
+        void setSampleRate(unsigned int i);
+
+    private:
         SoftCutVoice scv[numVoices];
-        void init ();
+        float buf[BUF_FRAMES];
     };
 }
 
