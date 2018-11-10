@@ -10,8 +10,6 @@
 
 using namespace softcut;
 
-static inline bool isSmall(float f) { return f <std::numeric_limits<float>::epsilon(); }
-
 SubHead::SubHead() {
     this->init();
 }
@@ -22,13 +20,13 @@ void SubHead::init() {
     trig_ = 0;
     state_ = INACTIVE;
     resamp_.setPhase(0);
-    inc_ = 1;
+    inc_dir_ = 1;
 }
 
-Action SubHead::updatePhase(double start, double end, bool loop) {
+Action SubHead::updatePhase(phase_t start, phase_t end, bool loop) {
     Action res = NONE;
     trig_ = 0.f;
-    double p;
+    phase_t p;
     switch(state_) {
         case FADEIN:
         case FADEOUT:
@@ -67,7 +65,7 @@ Action SubHead::updatePhase(double start, double end, bool loop) {
     return res;
 }
 
-void SubHead::updateFade(double inc) {
+void SubHead::updateFade(float inc) {
     switch(state_) {
         case FADEIN:
             fade_ += inc;
@@ -90,7 +88,7 @@ void SubHead::updateFade(double inc) {
 }
 
 void SubHead::poke(float in, float pre, float rec) {
-    // FIXME: since there's never really a reason to not push input, or to reset input rinbuf,
+    // FIXME: since there's never really a reason to not push input, or to reset input ringbuf,
     // it follows that all resamplers can share an input ringbuf
     int nframes = resamp_.processFrame(in);
 
@@ -105,8 +103,8 @@ void SubHead::poke(float in, float pre, float rec) {
     // and the button should be the specified prelevel
     float preFade = fadeInv * (1.f - pre) + pre;
     float recFade = rec * fade_;
-    float y; // write value
-    const float* src = resamp_.output();
+    sample_t y; // write value
+    const sample_t* src = resamp_.output();
     for(int i=0; i<nframes; ++i) {
         y = src[i];
 
@@ -118,7 +116,7 @@ void SubHead::poke(float in, float pre, float rec) {
 #endif
         buf_[idx_] *= preFade;
         buf_[idx_] += y * recFade;
-        idx_ = wrapBufIndex(idx_ + inc_);
+        idx_ = wrapBufIndex(idx_ + inc_dir_);
     }
 }
 
@@ -132,13 +130,13 @@ float SubHead::peek4() {
     int phase2 = phase1 + 1;
     int phase3 = phase1 + 2;
 
-    double y0 = buf_[wrapBufIndex(phase0)];
-    double y1 = buf_[wrapBufIndex(phase1)];
-    double y3 = buf_[wrapBufIndex(phase3)];
-    double y2 = buf_[wrapBufIndex(phase2)];
+    float y0 = buf_[wrapBufIndex(phase0)];
+    float y1 = buf_[wrapBufIndex(phase1)];
+    float y3 = buf_[wrapBufIndex(phase3)];
+    float y2 = buf_[wrapBufIndex(phase2)];
 
-    double x = phase_ - (double)phase1;
-    return static_cast<float>(Interpolate::hermite(x, y0, y1, y2, y3));
+    auto x = static_cast<float>(phase_ - (float)phase1);
+    return Interpolate::hermite<float>(x, y0, y1, y2, y3);
 }
 
 unsigned int SubHead::wrapBufIndex(int x) {
@@ -151,12 +149,12 @@ void SubHead::setSampleRate(float sr) {
     lpf_.init(static_cast<int>(sr));
 }
 
-void SubHead::setPhase(double phase) {
+void SubHead::setPhase(phase_t phase) {
     phase_ = phase;
     // FIXME?: magic number hack here for small record offset
-    idx_ = wrapBufIndex(static_cast<int>(phase_) - inc_ * 8);
+    idx_ = wrapBufIndex(static_cast<int>(phase_) - inc_dir_ * 8);
     // std::cout << "pos change; phase=" << phase_ << "; inc=" << inc_ << "; idx=" << idx_ << std::endl;
-    if(!isSmall(fade_)) {
+    if(fade_ > std::numeric_limits<float>::epsilon()) {
         BOOST_ASSERT_MSG(false, "changing phase with fade>0");
         std::cerr << "fade=" << fade_ << std::endl;
     }
@@ -177,7 +175,7 @@ void SubHead::setBuffer(float *buf, unsigned int frames) {
 
 void SubHead::setRate(float rate) {
     rate_ = rate;
-    inc_ = boost::math::sign(rate);
+    inc_dir_ = boost::math::sign(rate);
     // NB: resampler doesn't handle negative rates.
     // instead we copy the resampler output backwards into the buffer when rate < 0.
     resamp_.setRate(std::fabs(rate));

@@ -28,12 +28,12 @@ void SoftCutHead::init() {
     recRun = false;
 }
 
-void SoftCutHead::nextSample(float in, float *outPhase, float *outTrig, float *outAudio) {
+void SoftCutHead::processSample(sample_t in, phase_t *outPhase, float *outTrig, sample_t *outAudio) {
     *outAudio = mixFade(head[0].peek(), head[1].peek(), head[0].fade(), head[1].fade());
     *outTrig = head[0].trig() + head[1].trig();
 
     if(outPhase != nullptr) {
-        *outPhase = static_cast<float>(head[active].phase());
+        *outPhase = head[active].phase();
     }
 
     if(recRun) {
@@ -42,16 +42,16 @@ void SoftCutHead::nextSample(float in, float *outPhase, float *outTrig, float *o
     }
 
     Action act0 = head[0].updatePhase(start, end, loopFlag);
-    takeAction(act0, 0);
+    takeAction(act0);
     Action act1 = head[1].updatePhase(start, end, loopFlag);
-    takeAction(act1, 1);
+    takeAction(act1);
 
     head[0].updateFade(fadeInc);
     head[1].updateFade(fadeInc);
 }
 
 
-void SoftCutHead::setRate(float x)
+void SoftCutHead::setRate(rate_t x)
 {
     rate = x;
     calcFadeInc();
@@ -69,7 +69,7 @@ void SoftCutHead::setLoopEndSeconds(float x)
     end = x * sr;
 }
 
-void SoftCutHead::takeAction(Action act, int id)
+void SoftCutHead::takeAction(Action act)
 {
     switch (act) {
         case Action::LOOP_POS:
@@ -133,9 +133,9 @@ void SoftCutHead::setSampleRate(float sr_) {
     head[1].setSampleRate(sr);
 }
 
-float SoftCutHead::mixFade(float x, float y, float a, float b) {
+sample_t SoftCutHead::mixFade(sample_t x, sample_t y, float a, float b) {
 #if 1
-        return x * sinf(a * (float) M_PI_2) + y * sinf(b * (float) M_PI_2);
+        return x * sinf(a * (float)M_PI_2) + y * sinf(b * (float) M_PI_2);
 #else
         return (x * a) + (y * b);
 #endif
@@ -153,8 +153,8 @@ void SoftCutHead::setRecRun(bool val) {
     recRun = val;
 }
 
-float SoftCutHead::getActivePhase() {
-  return static_cast<float>(head[active].phase());
+phase_t SoftCutHead::getActivePhase() {
+  return head[active].phase();
 }
 
 float SoftCutHead::getTrig() {
@@ -170,6 +170,6 @@ void SoftCutHead::cutToPos(float seconds) {
     cutToPhase(seconds * sr);
 }
 
-float SoftCutHead::getRate() {
+rate_t SoftCutHead::getRate() {
     return rate;
 }

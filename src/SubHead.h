@@ -14,6 +14,7 @@
 #include "Resampler.h"
 #include "LowpassBrickwall.h"
 #include "SoftClip.h"
+#include "Types.h"
 
 namespace softcut {
 
@@ -22,23 +23,22 @@ namespace softcut {
 
     class SubHead {
         friend class SoftCutHead;
-
     public:
         SubHead();
         void init();
         void setSampleRate(float sr);
     private:
-        float peek4();
+        sample_t peek4();
         unsigned int wrapBufIndex(int x);
 
     protected:
-        float peek();
-        void poke(float in, float pre, float rec);
-        Action updatePhase(double start, double end, bool loop);
-        void updateFade(double inc);
+        sample_t peek();
+        void poke(sample_t in, float pre, float rec);
+        Action updatePhase(phase_t start, phase_t end, bool loop);
+        void updateFade(float inc);
 
         // getters
-        double phase() { return phase_; }
+        phase_t phase() { return phase_; }
         float fade() { return fade_; }
         float trig() { return trig_; }
         State state() { return state_; }
@@ -46,29 +46,29 @@ namespace softcut {
         // setters
         void setState(State state);
         void setTrig(float trig);
-        void setPhase(double phase);
+        void setPhase(phase_t phase);
 
         // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         // **NB** buffer size must be a power of two!!!!
-        void setBuffer(float *buf, unsigned int frames);
-        void setRate(float rate);
+        void setBuffer(sample_t *buf, unsigned int frames);
+        void setRate(rate_t rate);
 
 
     private:
-        Resampler<float> resamp_;
+        Resampler<sample_t> resamp_;
         LowpassBrickwall lpf_;
         SoftClip clip_;
 
-        float * buf_; // output buffer
+        sample_t* buf_; // output buffer
         unsigned int idx_; // write index
         unsigned int bufFrames_;
         unsigned int bufMask_;
 
 
         State state_;
-        double rate_;
-        int inc_;
-        double phase_;
+        rate_t rate_;
+        int inc_dir_;
+        phase_t phase_;
         float fade_;
         float trig_; // output trigger value
         bool active_;

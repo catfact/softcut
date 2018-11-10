@@ -35,7 +35,7 @@ void SoftCut::processBlockMono(float *in, float *out, int numFrames) {
 #else
         x = in[i];
 #endif
-        sch.nextSample(x, &phaseDummy, &trigDummy, &(out[i]));
+        sch.processSample(x, &phaseDummy, &trigDummy, &(out[i]));
     }
 }
 

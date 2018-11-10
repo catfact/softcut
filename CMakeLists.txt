@@ -20,7 +20,7 @@ set (SRC
         src/Resampler.h
         src/Svf.h
         src/Svf.cpp
-        src/SoftClip.h)
+        src/SoftClip.h src/Types.h)
 
 if(UNIX)
     if(APPLE)
