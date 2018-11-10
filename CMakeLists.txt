@@ -14,13 +14,13 @@ set (SRC
         src/softcut-main.cpp
         src/SoftCutHead.cpp
         src/SubHead.cpp
-        src/SoftCut.cpp
+        src/SoftCutVoice.cpp
         src/Commands.cpp
         src/OscInterface.cpp
         src/Resampler.h
         src/Svf.h
         src/Svf.cpp
-        src/SoftClip.h src/Types.h)
+        src/SoftClip.h src/Types.h src/SoftCut.cpp src/SoftCut.h)
 
 if(UNIX)
     if(APPLE)
@@ -65,22 +65,3 @@ set_target_properties(softcut PROPERTIES
         )
 
 target_compile_options(softcut PRIVATE -Wall -Wextra -pedantic)
-
-#----------------------
-# resampler test target
-
-add_executable(resampler-test src/resampler-test/resampler-test-main.cpp)
-if(APPLE)
-    include_directories(softcut /usr/local/include)
-endif()
-
-find_library(sndfile_lib libsndfile.a REQUIRED)
-target_link_libraries(resampler-test ${sndfile_lib})
-
-
-set_target_properties(resampler-test PROPERTIES
-        CXX_STANDARD 14
-        CXX_STANDARD_REQUIRED YES
-        CXX_EXTENSIONS NO
-        )
-

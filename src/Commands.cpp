@@ -42,7 +42,7 @@ public:
     void setValue(float v) { value.f = v; }
 
     // handler should be called on audio thread
-    void handle(SoftCut* sc) {
+    void handle(SoftCutVoice* sc) {
         switch (id) {
             case SET_RATE:
                 sc->setRate(value.f);
@@ -121,7 +121,7 @@ void Commands::post(Commands::Id id, bool value) {
     q.push(p);
 }
 
-void Commands::handlePending(SoftCut* sc) {
+void Commands::handlePending(SoftCutVoice* sc) {
     CommandPacket p;
     while (q.pop(p)) {
         p.handle(sc);

@@ -6,7 +6,7 @@
 #include <portaudio.h>
 
 #include "PaWrapper.h"
-#include "SoftCut.h"
+#include "SoftCutVoice.h"
 
 using namespace softcut;
 

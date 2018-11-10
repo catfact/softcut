@@ -10,7 +10,7 @@
 
 #include <lo/lo.h>
 
-#include "SoftCut.h"
+#include "SoftCutVoice.h"
 #include "Commands.h"
 
 using namespace softcut;
@@ -161,7 +161,7 @@ private:
 
 public:
 
-    static void init(SoftCut* sc)
+    static void init(SoftCutVoice* sc)
     {
         st = lo_server_thread_new(port.c_str(), handleLoError);
         lo_server_thread_add_method(st, "/set/rate", "f", OscInterface::setRate, sc);

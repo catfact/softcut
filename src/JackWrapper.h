@@ -6,7 +6,7 @@
 #define SOFTCUT_JACKWRAPPER_H
 
 namespace softcut {
-    class SoftCut;
+    class SoftCutVoice;
 
     class JackWrapper {
     public:
@@ -18,7 +18,7 @@ namespace softcut {
 
         static void stop();
 
-        static SoftCut* getSoftCut();
+        static SoftCutVoice* getSoftCut();
 
     private:
         class Imp;
