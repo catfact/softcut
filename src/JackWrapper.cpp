@@ -14,21 +14,29 @@ class JackWrapper::Imp {
     friend class JackWrapper;
 private:
 
-    jack_port_t *input_port;
-    jack_port_t *output_port;
+    jack_port_t *input_port[2];
+    jack_port_t *output_port[2];
     jack_client_t *client;
 
     static int process (jack_nframes_t numFrames, void *data) {
-        jack_default_audio_sample_t *in, *out;
+        jack_default_audio_sample_t *in[2], *out[2];
 
         auto * imp = (JackWrapper::Imp*)(data);
 
-        in = (jack_default_audio_sample_t *) jack_port_get_buffer (imp->input_port, numFrames);
-        out = (jack_default_audio_sample_t *) jack_port_get_buffer (imp->output_port, numFrames);
+        in[0] = (jack_default_audio_sample_t *) jack_port_get_buffer (imp->input_port[0], numFrames);
+        in[1] = (jack_default_audio_sample_t *) jack_port_get_buffer (imp->input_port[1], numFrames);
+        out[0] = (jack_default_audio_sample_t *) jack_port_get_buffer (imp->output_port[0], numFrames);
+        out[1] = (jack_default_audio_sample_t *) jack_port_get_buffer (imp->output_port[1], numFrames);
 
         SoftCut& sc = imp->sc;
 
-        sc.processBlockMono(in, out, numFrames);
+        // process in R -> out L
+        sc.processBlockMono(in[0], out[0], numFrames);
+
+        // copy out L -> out R
+        for(int i=0; i<numFrames; ++i) {
+            out[1][i] = out[0][i];
+        }
 
         return 0;
     }
@@ -77,12 +85,18 @@ public:
         sc.setSampleRate(jack_get_sample_rate(client));
 
         // create client ports
-        input_port = jack_port_register (client, "input",
+        input_port[0] = jack_port_register (client, "in_0",
                                          JACK_DEFAULT_AUDIO_TYPE,
                                          JackPortIsInput, 0);
-        output_port = jack_port_register (client, "output",
-                                          JACK_DEFAULT_AUDIO_TYPE,
-                                          JackPortIsOutput, 0);
+        input_port[1] = jack_port_register (client, "in_1",
+                                            JACK_DEFAULT_AUDIO_TYPE,
+                                            JackPortIsInput, 0);
+        output_port[0] = jack_port_register (client, "out_0",
+                                             JACK_DEFAULT_AUDIO_TYPE,
+                                             JackPortIsOutput, 0);
+        output_port[1] = jack_port_register (client, "out_r",
+                                             JACK_DEFAULT_AUDIO_TYPE,
+                                             JackPortIsOutput, 0);
 
         if ((input_port == nullptr) || (output_port == nullptr)) {
             fprintf(stderr, "no more JACK ports available\n");
@@ -111,6 +125,8 @@ public:
          */
 
         const char **ports;
+
+        //--- connect input
         ports = jack_get_ports (client, nullptr, nullptr,
                                 JackPortIsPhysical|JackPortIsOutput);
         if (ports == nullptr) {
@@ -118,12 +134,17 @@ public:
             exit (1);
         }
 
-        if (jack_connect (client, ports[0], jack_port_name (input_port))) {
+        if (jack_connect (client, ports[0], jack_port_name (input_port[0]))) {
+            fprintf (stderr, "cannot connect input ports\n");
+        }
+
+        if (jack_connect (client, ports[1], jack_port_name (input_port[1]))) {
             fprintf (stderr, "cannot connect input ports\n");
         }
 
         free (ports);
 
+        //--- connect output
         ports = jack_get_ports (client, nullptr, nullptr,
                                 JackPortIsPhysical|JackPortIsInput);
         if (ports == nullptr) {
@@ -131,8 +152,11 @@ public:
             exit (1);
         }
 
-        if (jack_connect (client, jack_port_name (output_port), ports[0])) {
-            fprintf (stderr, "cannot connect output ports\n");
+        if (jack_connect (client, jack_port_name (output_port[0]), ports[0])) {
+            fprintf (stderr, "cannot connect output port 0\n");
+        }
+        if (jack_connect (client, jack_port_name (output_port[1]), ports[1])) {
+            fprintf (stderr, "cannot connect output port 0\n");
         }
 
         free (ports);
