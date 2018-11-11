@@ -39,7 +39,7 @@ namespace softcut {
 
         void cutToPos(float sec);
         // process a single channel
-        void processBlockMono(float* in, float* out, int numFrames);
+        void processBlockMono(const float* in, float* out, int numFrames);
 
     private:
         float* buf;

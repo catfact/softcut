@@ -7,7 +7,7 @@
 
 #include <boost/lockfree/spsc_queue.hpp>
 
-#include "SoftCutVoice.h"
+#include "SoftCut.h"
 
 namespace softcut {
 
@@ -32,13 +32,15 @@ namespace softcut {
             SET_FILTER_BP,
             SET_FILTER_BR,
             SET_FILTER_DRY,
+            SET_AMP_L,
+            SET_AMP_R,
             NUM_COMMANDS
         } Id;
 
     public:
-        static void handlePending(SoftCutVoice* sc);
-        static void post(Id id, float value);
-        static void post(Id id, bool value);
+        static void handlePending(SoftCut* sc);
+        static void post(Id id, int voice, float value);
+        static void post(Id id, int voice, bool value);
         static std::string labels[NUM_COMMANDS];
     private:
         class CommandPacket;

@@ -14,20 +14,44 @@ namespace softcut {
 
     public:
         enum { numVoices = 2 };
-        enum {  BUF_FRAMES = 16777216 };
-
+        enum { bufFrames = 16777216 };
+        enum { maxBlockSize=1024 };
 
         SoftCut();
 
         void init();
 
-        void processBlockMono(float* in, float* out, int numFrames);
+        void processBlock(const float *in0, const float* in1, float *out0, float* out1, int numFrames);
 
         void setSampleRate(unsigned int i);
 
+        void setRate(int voice, float rate);
+        void setLoopStart(int voice, float sec);
+        void setLoopEnd(int voice, float sec);
+        void setLoopFlag(int voice, bool val);
+        void setFadeTime(int voice, float sec);
+        void setRecLevel(int voice, float amp);
+        void setPreLevel(int voice, float amp);
+        void setRecFlag(int voice, bool val);
+		void cutToPos(int voice, float sec);
+
+        void setFilterFc(int voice, float);
+        void setFilterRq(int voice, float);
+        void setFilterLp(int voice, float);
+        void setFilterHp(int voice, float);
+        void setFilterBp(int voice, float);
+        void setFilterBr(int voice, float);
+        void setFilterDry(int voice, float);
+        void setFilterFcMod(int voice, float x);
+        // FIXME: yes this is an ugly API, but easiest r/n to keep consistent countof args for all setters
+		void setAmpLeft(int voice, float x);
+		void setAmpRight(int voice, float x);
+
     private:
         SoftCutVoice scv[numVoices];
-        float buf[BUF_FRAMES];
+        float outAmp[numVoices][2];
+        float outBus[maxBlockSize];
+		float buf[bufFrames];
     };
 }
 

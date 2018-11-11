@@ -35,65 +35,65 @@ std::string Commands::labels[NUM_COMMANDS] = {
 class Commands::CommandPacket {
 public:
     CommandPacket() { id = SET_LOOP_START; value.f = 0.0; }
-    CommandPacket(Id i, float val) : id(i) { value.f = val; }
-    CommandPacket(Id i, bool val) : id(i) { value.b = val; }
+    CommandPacket(Id i, int v, float val) : id(i), voice(v) { value.f = val; }
+    CommandPacket(Id i, int v, bool val) : id(i), voice(v) { value.b = val; }
 
     void setValue(bool v) { value.b = v; }
     void setValue(float v) { value.f = v; }
 
     // handler should be called on audio thread
-    void handle(SoftCutVoice* scv) {
+    void handle(SoftCut* sc) {
         switch (id) {
             case SET_RATE:
-                scv->setRate(value.f);
+                sc->setRate(voice, value.f);
                 break;
             case SET_LOOP_START:
-                scv->setLoopStart(value.f);
+                sc->setLoopStart(voice,value.f);
                 break;
             case SET_LOOP_END:
-                scv->setLoopEnd(value.f);
+                sc->setLoopEnd(voice,value.f);
                 break;
             case SET_LOOP_FLAG:
-                scv->setLoopFlag(value.b);
+                sc->setLoopFlag(voice,value.b);
                 break;
             case SET_FADE_TIME:
-                scv->setFadeTime(value.f);
+                sc->setFadeTime(voice,value.f);
                 break;
             case SET_REC_LEVEL:
-                scv->setRecLevel(value.f);
+                sc->setRecLevel(voice,value.f);
                 break;
             case SET_PRE_LEVEL:
-                scv->setPreLevel(value.f);
+                sc->setPreLevel(voice,value.f);
                 break;
             case SET_REC_FLAG:
-                scv->setRecFlag(value.b);
+                sc->setRecFlag(voice,value.b);
                 break;
             case SET_POSITION:
-                scv->cutToPos(value.f);
+                sc->cutToPos(voice,value.f);
                 break;
             case SET_FILTER_FC:
-                scv->setFilterFc(value.f);
+                sc->setFilterFc(voice,value.f);
                 break;
             case SET_FILTER_FC_MOD:
-                scv->setFilterFcMod(value.f);
+                sc->setFilterFcMod(voice,value.f);
                 break;
             case SET_FILTER_RQ:
-                scv->setFilterRq(value.f);
+                sc->setFilterRq(voice,value.f);
                 break;
             case SET_FILTER_LP:
-                scv->setFilterLp(value.f);
+                sc->setFilterLp(voice,value.f);
                 break;
             case SET_FILTER_HP:
-                scv->setFilterHp(value.f);
+                sc->setFilterHp(voice,value.f);
                 break;
             case SET_FILTER_BP:
-                scv->setFilterBp(value.f);
+                sc->setFilterBp(voice,value.f);
                 break;
             case SET_FILTER_BR:
-                scv->setFilterBr(value.f);
+                sc->setFilterBr(voice,value.f);
                 break;
             case SET_FILTER_DRY:
-                scv->setFilterDry(value.f);
+                sc->setFilterDry(voice,value.f);
                 break;
             default:
                 ;;
@@ -103,25 +103,26 @@ public:
 private:
     //Command type;
     Id id;
+    int voice;
     union {
         bool b;
         float f;
     } value;
 };
 
-void Commands::post(Commands::Id id, float value) {
-    CommandPacket p(id, value);
+void Commands::post(Commands::Id id, int voice, float value) {
+    CommandPacket p(id, voice, value);
     // std::cout << "post command: " << labels[id] << std::endl;
     q.push(p);
 }
 
-void Commands::post(Commands::Id id, bool value) {
-    CommandPacket p(id, value);
+void Commands::post(Commands::Id id, int voice, bool value) {
+    CommandPacket p(id, voice, value);
     // std::cout << "post command: " << labels[id] << std::endl;
     q.push(p);
 }
 
-void Commands::handlePending(SoftCutVoice* sc) {
+void Commands::handlePending(SoftCut* sc) {
     CommandPacket p;
     while (q.pop(p)) {
         p.handle(sc);

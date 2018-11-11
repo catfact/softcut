@@ -25,12 +25,9 @@ recRamp(48000, 0.1)
     svfDryLevel = 1.0;
 }
 
-void SoftCutVoice::processBlockMono(float *in, float *out, int numFrames) {
+void SoftCutVoice::processBlockMono(const float *in, float *out, int numFrames) {
     float trigDummy;
     float phaseDummy;
-
-    /// FIXME: need to handle in parent; commands need voice ids...
-    Commands::handlePending(this);
 
     float x;
     for(int i=0; i<numFrames; ++i) {

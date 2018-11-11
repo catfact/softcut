@@ -31,7 +31,7 @@ private:
         SoftCut& sc = imp->sc;
 
         // process in R -> out L
-        sc.processBlockMono(in[0], out[0], numFrames);
+        sc.processBlock(in[0], in[1], out[0], out[1], numFrames);
 
         // copy out L -> out R
         for(int i=0; i<numFrames; ++i) {
@@ -42,6 +42,7 @@ private:
     }
 
     static void jack_shutdown(void* data) {
+        (void)data;
         // nothing to do...
         // but here we would handle forced shutdown from jack server
     }

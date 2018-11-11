@@ -23,10 +23,6 @@ namespace softcut {
     }
 #endif
 
-    static float sign(float x) {
-        return x > 0.f ? 1.f : -1.f;
-    }
-
 // convert a time-to-convergence to a pole coefficient
 // "ref" argument defines the amount of convergence
 // target ratio is e^ref.
@@ -44,6 +40,7 @@ namespace softcut {
         return x + (x0 - x) * b;
     }
 
+#if 0 // unused
     static float dbamp(float db) {
         return std::isinf(db) ? 0.f : powf(10.f, db * 0.05);
     }
@@ -51,6 +48,7 @@ namespace softcut {
     static float ampdb(float amp) {
         return log10(amp) * 20.f;
     }
+#endif
 
     template<typename T, size_t size>
     class RunningAverage {
