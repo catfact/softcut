@@ -204,8 +204,8 @@ public:
         lo_server_thread_add_method(st, "/set/filterBp", "if", OscInterface::setFilterBp, sc);
         lo_server_thread_add_method(st, "/set/filterBr", "if", OscInterface::setFilterBr, sc);
         lo_server_thread_add_method(st, "/set/filterDry", "if", OscInterface::setFilterDry, sc);
-	lo_server_thread_add_method(st, "/set/AmpLeft", "if", OscInterface::setAmpLeft, sc);
-	lo_server_thread_add_method(st, "/set/AmpRight", "if", OscInterface::setAmpRight, sc);
+	lo_server_thread_add_method(st, "/set/ampLeft", "if", OscInterface::setAmpLeft, sc);
+	lo_server_thread_add_method(st, "/set/ampRight", "if", OscInterface::setAmpRight, sc);
 	
         lo_server_thread_add_method(st, "/quit", "", OscInterface::setQuit, sc);
         lo_server_thread_start(st);
