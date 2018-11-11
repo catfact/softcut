@@ -50,7 +50,8 @@ n.sendMsg("/set/recLevel", 1.0);
 n.sendMsg("/set/preLevel", 0.9);
 n.sendMsg("/set/preLevel", 0.0);
 
-n.sendMsg("/set/recFlag", 0);
+n.sendMsg("/set/recLevel", 0);
+n.sendMsg("/set/preLevel", 1.0);
 n.sendMsg("/set/position", 0.0);
 
 // long loop, long fade

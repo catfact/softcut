@@ -10,6 +10,16 @@
 
 using namespace softcut;
 
+// FIXME refactor
+// equal-power fade,
+// x = value at start
+// y = value at end
+// c = coefficient in [0, 1]
+static float epfade(float x, float y, float c) {
+    c *= M_PI_2;
+    return x * cosf(c) + y * sinf(c);
+}
+
 SubHead::SubHead() {
     this->init();
 }
@@ -96,13 +106,40 @@ void SubHead::poke(float in, float pre, float rec) {
         return;
     }
 
-    float fadeInv = 1.f - fade_;
+    float preFade;
+    float recFade;
+    // FIXME: hard to see a "perfect" option here (pre- and rec-levels during fade)
+    // the goal is for no discontinuities in rec/pre, no dips or bumps in volume after consecutive passes
 
-    // pre-level should have its own fade in/out
-    // the top of this fade should be 1
-    // and the button should be the specified prelevel
-    float preFade = fadeInv * (1.f - pre) + pre;
-    float recFade = rec * fade_;
+    // this option is correct while looping in one place,
+    // but it will glitch if you move the loop window over a previous xfade point
+#if 0
+    preFade = pre;
+    recFade = rec;
+#endif
+    // we can make a smooth transition of old material by doing this option:
+#if 0
+    preFade = (1.f - fade_) * (1.f - pre) + pre;
+    recFade = rec * fade_;
+#endif
+    // ... but it ends up keeping material around the xfade point.
+
+    // i'm not sure this is different...? (TODO: plot it)
+#if 1
+    preFade = std::max((1.f-fade_), fade_ * pre);
+    recFade = rec * fade_;
+#endif
+
+    // same, try cos segment xfade for pre, less noticeable?
+    // (... no, it's not, maybe a bit worse)
+#if 0
+    preFade = std::max(epfade(1, 0, fade_), epfade(0, pre, fade_));
+    recFade = epfade(0, rec, fade_);
+#endif
+
+    /// another answer?? seems like we actually need a longer fade for pre than for rec?
+    /// the goal being to not let pre approach 1.0 while record is still happening?
+
     sample_t y; // write value
     const sample_t* src = resamp_.output();
     for(int i=0; i<nframes; ++i) {
@@ -155,7 +192,8 @@ void SubHead::setPhase(phase_t phase) {
     idx_ = wrapBufIndex(static_cast<int>(phase_) - inc_dir_ * 8);
     // std::cout << "pos change; phase=" << phase_ << "; inc=" << inc_ << "; idx=" << idx_ << std::endl;
 
-    // FIXME: we are hitting this sometimes. fade is always quite small, maybe just rounding error?
+    // FIXME: we are hitting this sometimes. fade is always quite small...
+    // rounding error? wrong order of calculations?
 #if 0
     if(fade_ > std::numeric_limits<float>::epsilon()) {
         std::cerr << "fade=" << fade_ << std::endl;
