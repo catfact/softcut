@@ -15,7 +15,9 @@ namespace softcut {
     public:
         enum { numVoices = 2 };
         enum { bufFrames = 16777216 };
-        enum { maxBlockSize=1024 };
+        enum { maxBlockSize = 8192 };
+
+        int getNumVoices() { return numVoices; }
 
         SoftCut();
 
@@ -43,7 +45,7 @@ namespace softcut {
         void setFilterBr(int voice, float);
         void setFilterDry(int voice, float);
         void setFilterFcMod(int voice, float x);
-        // FIXME: yes this is an ugly API, but easiest r/n to keep consistent countof args for all setters
+        // FIXME: yes this is an ugly API, but easiest r/n to keep consistent count of args for all setters
 		void setAmpLeft(int voice, float x);
 		void setAmpRight(int voice, float x);
 

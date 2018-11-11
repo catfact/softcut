@@ -22,13 +22,20 @@ void SoftCut::processBlock(const float *in0, const float* in1, float *out0, floa
     (void)in1;
     Commands::handlePending(this);
 #if 0
-    scv[1].processBlockMono(in, out, numFrames);
+    scv[0].processBlockMono(in0, out0, numFrames);
 #else
+
+    for(int fr=0; fr<numFrames; ++fr) {
+        out0[fr] = 0;
+        out1[fr] = 0;
+    }
     for (int v=0; v<numVoices; ++v) {
         scv[v].processBlockMono(in0, outBus, numFrames);
+        float amp0 = outAmp[v][0];
+        float amp1 = outAmp[v][1];
         for(int fr=0; fr<numFrames; ++fr) {
-            out0[fr] = outBus[fr] * outAmp[v][0];
-            out1[fr] = outBus[fr] * outAmp[v][1];
+            out0[fr] += outBus[fr] * amp0;
+            out1[fr] += outBus[fr] * amp1;
         }
     }
 #endif

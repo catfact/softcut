@@ -1,70 +1,93 @@
 n = NetAddr("localhost", 9999);
 
 // change this to norns address for remote test
-n = NetAddr("192.168.1.11", 9999);
+//n = NetAddr("192.168.1.11", 9999);
 
 // echo
 (
-n.sendMsg("/set/loopStart", 1.0);
-n.sendMsg("/set/loopEnd", 2.0);
-n.sendMsg("/set/loopFlag", 1.0);
-n.sendMsg("/set/rate", 1.0);
+n.sendMsg("/set/ampLeft", 0, 1.0);
 
-n.sendMsg("/set/recLevel", 1.0);
-n.sendMsg("/set/preLevel", 0.5);
+n.sendMsg("/set/ampRight", 0, 0.5);
 
-n.sendMsg("/set/recFlag", 1);
+n.sendMsg("/set/loopStart", 0, 1.0);
+n.sendMsg("/set/loopEnd", 0, 2.0);
+n.sendMsg("/set/loopFlag", 0, 1.0);
+n.sendMsg("/set/rate", 0, 1.0);
 
-n.sendMsg("/set/recOffset", 50);
-n.sendMsg("/set/position", 1.0);
+n.sendMsg("/set/recLevel", 0, 1.0);
+n.sendMsg("/set/preLevel", 0, 0.5);
+
+n.sendMsg("/set/recFlag", 0, 1);
+
+n.sendMsg("/set/recOffset", 0, 50);
+n.sendMsg("/set/position", 0, 1.0);
+)
+
+// voice 2
+(
+n.sendMsg("/set/ampLeft", 1, 0.5);
+
+n.sendMsg("/set/ampRight", 1, 1.0);
+
+n.sendMsg("/set/loopStart", 1, 1.0);
+n.sendMsg("/set/loopEnd", 1, 2.0);
+n.sendMsg("/set/loopFlag", 1, 1.0);
+n.sendMsg("/set/rate", 1, 1.0);
+
+n.sendMsg("/set/recLevel", 1, 1.0);
+n.sendMsg("/set/preLevel", 10, 0.5);
+
+n.sendMsg("/set/recFlag", 1, 1);
+
+n.sendMsg("/set/recOffset", 1, 50);
+n.sendMsg("/set/position", 1, 1.0);
 )
 
 /// thingsss
-n.sendMsg("/set/rate", 0.47);
-n.sendMsg("/set/rate", -0.47);
+n.sendMsg("/set/rate", 0, 0.47);
+n.sendMsg("/set/rate", 0, -0.47);
 
-n.sendMsg("/set/rate", 5/8);
-n.sendMsg("/set/rate", 5/8 + 0.01);
-n.sendMsg("/set/rate", -3/2);
-n.sendMsg("/set/rate", 3/8);
-n.sendMsg("/set/rate", 8/5);
+n.sendMsg("/set/rate", 0, 5/8);
+n.sendMsg("/set/rate", 0, 5/8 + 0.01);
+n.sendMsg("/set/rate", 0, -3/2);
+n.sendMsg("/set/rate", 0, 3/8);
+n.sendMsg("/set/rate", 0, 8/5);
 
-n.sendMsg("/set/rate", -1);
+n.sendMsg("/set/rate", 0, -1);
 
-n.sendMsg("/set/rate", -6);
-n.sendMsg("/set/rate", 8);
-n.sendMsg("/set/rate", 5.5);
-n.sendMsg("/set/rate", -3/2);
-n.sendMsg("/set/rate", 1/8);
-n.sendMsg("/set/rate", -1/8);
+n.sendMsg("/set/rate", 0, -6);
+n.sendMsg("/set/rate", 0, 8);
+n.sendMsg("/set/rate", 0, 5.5);
+n.sendMsg("/set/rate", 0, -3/2);
+n.sendMsg("/set/rate", 0, 1/8);
+n.sendMsg("/set/rate", 0, -1/8);
 
 
-n.sendMsg("/set/rate", -4.7);
+n.sendMsg("/set/rate", 0, -4.7);
 
 
 // short loop
-n.sendMsg("/set/loopEnd", 1.25);
-n.sendMsg("/set/fadeTime", 0.06);
+n.sendMsg("/set/loopEnd", 0, 1.25);
+n.sendMsg("/set/fadeTime", 0, 0.06);
 
-n.sendMsg("/set/recLevel", 1.0);
-n.sendMsg("/set/preLevel", 0.9);
-n.sendMsg("/set/preLevel", 0.0);
+n.sendMsg("/set/recLevel", 0, 1.0);
+n.sendMsg("/set/preLevel", 0, 0.9);
+n.sendMsg("/set/preLevel", 0, 0.0);
 
-n.sendMsg("/set/recLevel", 0);
-n.sendMsg("/set/preLevel", 1.0);
-n.sendMsg("/set/position", 0.0);
+n.sendMsg("/set/recLevel", 0, 0);
+n.sendMsg("/set/preLevel", 0, 1.0);
+n.sendMsg("/set/position", 0, 0.0);
 
 // long loop, long fade
-n.sendMsg("/set/loopEnd", 5.0);
-n.sendMsg("/set/fadeTime", 2.0);
+n.sendMsg("/set/loopEnd", 0, 5.0);
+n.sendMsg("/set/fadeTime", 0, 2.0);
 
 
 /// resonaturr
-
-n.sendMsg("/set/loopStart", 1.0);
-n.sendMsg("/set/loopEnd", 1.0 + 1/110);
-n.sendMsg("/set/fadeTime", 1/220);
-n.sendMsg("/set/preLevel", 0.977);
+n.sendMsg("/set/loopStart", 0, 1.0);
+n.sendMsg("/set/loopEnd", 0, 1.0 + 1/110);
+n.sendMsg("/set/fadeTime", 0, 1/220);
+n.sendMsg("/set/preLevel", 0, 0.977);
 
 // randomize rate
 (
@@ -89,7 +112,7 @@ r = Routine {
 		});
 
 
-		n.sendMsg("/set/rate", rate);
+		n.sendMsg("/set/rate", 0, rate);
 	}
 }.play;
 )
@@ -106,8 +129,8 @@ q = Routine {
 		fade = dur * (0.1  + 0.8.rand);
 		postln([dur, fade]);
 		if(fade > dur, { postln("!!!!!!!!!!!!!!!"); });
-		n.sendMsg("/set/loopEnd", 1 + dur);
-		n.sendMsg("/set/fadeTime", fade);
+		n.sendMsg("/set/loopEnd", 0, 1 + dur);
+		n.sendMsg("/set/fadeTime", 0, fade);
 	}
 }.play;
 )
@@ -122,7 +145,7 @@ p = Routine {
 		(~mindur + ~mindur.rand).wait;
 		pos = 1.0 + 0.8.rand;
 		postln("pos " ++pos);
-		n.sendMsg("/set/position", pos);
+		n.sendMsg("/set/position", 0, pos);
     }
 }.play;
 )
@@ -134,29 +157,29 @@ p = Routine {
 ~mindur = 0.25;
 
 // freeze
-n.sendMsg("/set/recFlag", 0);
+n.sendMsg("/set/recFlag", 0, 0);
 
 // input filters
-n.sendMsg("/set/filterFc", 880 * 4);
-n.sendMsg("/set/filterRq", 0.7);
-n.sendMsg("/set/filterLp", 0.8);
-n.sendMsg("/set/filterBp", 0.0);
+n.sendMsg("/set/filterFc", 0, 880 * 4);
+n.sendMsg("/set/filterRq", 0, 0.7);
+n.sendMsg("/set/filterLp", 0, 0.8);
+n.sendMsg("/set/filterBp", 0, 0.0);
 
 // different!
-n.sendMsg("/set/filterFc", 550);
-n.sendMsg("/set/filterLp", 0.0);
-n.sendMsg("/set/filterHp", 0.8);
-n.sendMsg("/set/filterRq", 0.02);
+n.sendMsg("/set/filterFc", 0, 550);
+n.sendMsg("/set/filterLp", 0, 0.0);
+n.sendMsg("/set/filterHp", 0, 0.8);
+n.sendMsg("/set/filterRq", 0, 0.02);
 
-n.sendMsg("/set/filterLp", 0.8);
-n.sendMsg("/set/filterHp", 0.0);
+n.sendMsg("/set/filterLp", 0, 0.8);
+n.sendMsg("/set/filterHp", 0, 0.0);
 
-n.sendMsg("/set/filterFcMod", 0);
-n.sendMsg("/set/filterDry", 0);
-n.sendMsg("/set/filterFc", 330);
+n.sendMsg("/set/filterFcMod", 0, 0);
+n.sendMsg("/set/filterDry", 0, 0);
+n.sendMsg("/set/filterFc", 0, 330);
 
-n.sendMsg("/set/filterFcMod", 0.5);
-n.sendMsg("/set/filterFcMod", 1.0);
+n.sendMsg("/set/filterFcMod", 0, 0.5);
+n.sendMsg("/set/filterFcMod", 0, 1.0);
 /*
 r.stop;
 q.stop;

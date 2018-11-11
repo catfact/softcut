@@ -29,12 +29,14 @@ std::string Commands::labels[NUM_COMMANDS] = {
     "SET_FILTER_BP",
     "SET_FILTER_BR",
     "SET_FILTER_DRY",
+    "SET_AMP_L",
+    "SET_AMP_R"
 };
 #endif
 
 class Commands::CommandPacket {
 public:
-    CommandPacket() { id = SET_LOOP_START; value.f = 0.0; }
+    CommandPacket() { }
     CommandPacket(Id i, int v, float val) : id(i), voice(v) { value.f = val; }
     CommandPacket(Id i, int v, bool val) : id(i), voice(v) { value.b = val; }
 
@@ -43,6 +45,7 @@ public:
 
     // handler should be called on audio thread
     void handle(SoftCut* sc) {
+        if (voice < 0 || voice >= sc->getNumVoices()) { return; }
         switch (id) {
             case SET_RATE:
                 sc->setRate(voice, value.f);
@@ -95,6 +98,12 @@ public:
             case SET_FILTER_DRY:
                 sc->setFilterDry(voice,value.f);
                 break;
+            case SET_AMP_L:
+                sc->setAmpLeft(voice, value.f);
+                break;
+            case SET_AMP_R:
+                sc->setAmpRight(voice, value.f);
+                break;
             default:
                 ;;
         }
@@ -112,13 +121,13 @@ private:
 
 void Commands::post(Commands::Id id, int voice, float value) {
     CommandPacket p(id, voice, value);
-    // std::cout << "post command: " << labels[id] << std::endl;
+    std::cout << "post command: " << labels[id] << std::endl;
     q.push(p);
 }
 
 void Commands::post(Commands::Id id, int voice, bool value) {
     CommandPacket p(id, voice, value);
-    // std::cout << "post command: " << labels[id] << std::endl;
+    std::cout << "post command: " << labels[id] << std::endl;
     q.push(p);
 }
 
