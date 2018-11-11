@@ -34,7 +34,7 @@ private:
         sc.processBlock(in[0], in[1], out[0], out[1], numFrames);
 
         // copy out L -> out R
-        for(int i=0; i<numFrames; ++i) {
+        for(unsigned int i=0; i<numFrames; ++i) {
             out[1][i] = out[0][i];
         }
 
