@@ -111,34 +111,22 @@ void SubHead::poke(float in, float pre, float rec) {
     // FIXME: hard to see a "perfect" option here (pre- and rec-levels during fade)
     // the goal is for no discontinuities in rec/pre, no dips or bumps in volume after consecutive passes
 
-    // this option is correct while looping in one place,
-    // but it will glitch if you move the loop window over a previous xfade point
 #if 0
-    preFade = pre;
-    recFade = rec;
-#endif
-    // we can make a smooth transition of old material by doing this option:
-#if 0
+    // "naive" linear option.. this leaves a bump near the fade endpoints, as pre -> 1 creating long decay time
     preFade = (1.f - fade_) * (1.f - pre) + pre;
     recFade = rec * fade_;
 #endif
-    // ... but it ends up keeping material around the xfade point.
 
-    // i'm not sure this is different...? (TODO: plot it)
 #if 1
-    preFade = std::max((1.f-fade_), fade_ * pre);
-    recFade = rec * fade_;
+    // sinusoidal record level curve, parabolic pre-level gets us pretty close
+    float fadeInv = 1.f-fade_;
+    // FIXME: store more temp vars on set
+    preFade = fadeInv*fadeInv*(1.f-pre)+pre;
+    // FIXME: refactor and/or approximate
+    recFade = (1.f-((cos(fade_*M_PI)+1.f) * 0.5f)) * rec;
 #endif
 
-    // same, try cos segment xfade for pre, less noticeable?
-    // (... no, it's not, maybe a bit worse)
-#if 0
-    preFade = std::max(epfade(1, 0, fade_), epfade(0, pre, fade_));
-    recFade = epfade(0, rec, fade_);
-#endif
-
-    /// another answer?? seems like we actually need a longer fade for pre than for rec?
-    /// the goal being to not let pre approach 1.0 while record is still happening?
+    //... but it would be better to actually speed up the rec fade in comparison to the pre fade
 
     sample_t y; // write value
     const sample_t* src = resamp_.output();

@@ -6,7 +6,7 @@
 #include <portaudio.h>
 
 #include "PaWrapper.h"
-#include "SoftCutVoice.h"
+#include "SoftCut.h"
 
 using namespace softcut;
 
@@ -43,7 +43,7 @@ public:
         SoftCut& sc = imp->sc;
 
 #if 1
-        sc.processBlockMono(in[0], out[0], numFrames);
+        sc.processBlock(in[0], in[1], out[0], out[1], numFrames);
 #else // test: passthrough
         for( int i=0; i<numFrames; i++ ) {
             out[0][i] = in[0][i];
