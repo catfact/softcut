@@ -21,9 +21,7 @@ void SoftCut::init() {
 void SoftCut::processBlock(const float *in0, const float* in1, float *out0, float* out1, int numFrames) {
     (void)in1;
     Commands::handlePending(this);
-#if 0
-    scv[0].processBlockMono(in0, out0, numFrames);
-#else
+
 
     for(int fr=0; fr<numFrames; ++fr) {
         out0[fr] = 0;
@@ -38,7 +36,6 @@ void SoftCut::processBlock(const float *in0, const float* in1, float *out0, floa
             out1[fr] += outBus[fr] * amp1;
         }
     }
-#endif
 
 }
 

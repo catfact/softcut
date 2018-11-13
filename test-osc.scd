@@ -15,12 +15,14 @@ n.sendMsg("/set/loopFlag", 0, 1.0);
 n.sendMsg("/set/rate", 0, 1.0);
 
 n.sendMsg("/set/recLevel", 0, 1.0);
-n.sendMsg("/set/preLevel", 0, 0.5);
+n.sendMsg("/set/preLevel", 0, 0.7);
 
 n.sendMsg("/set/recFlag", 0, 1);
 
 n.sendMsg("/set/recOffset", 0, 50);
 n.sendMsg("/set/position", 0, 1.0);
+
+n.sendMsg("/set/fadeTime", 0, 0.125);
 )
 
 // voice 2
@@ -29,18 +31,19 @@ n.sendMsg("/set/ampLeft", 1, 0.5);
 
 n.sendMsg("/set/ampRight", 1, 1.0);
 
-n.sendMsg("/set/loopStart", 1, 1.0);
-n.sendMsg("/set/loopEnd", 1, 5.0);
+n.sendMsg("/set/loopStart", 1, 2.0);
+n.sendMsg("/set/loopEnd", 1, 5.5);
 n.sendMsg("/set/loopFlag", 1, 1.0);
 n.sendMsg("/set/rate", 1, 1.2);
 
-n.sendMsg("/set/recLevel", 1, 1.0);
-n.sendMsg("/set/preLevel", 1, 0.5);
+n.sendMsg("/set/fadeTime", 1, 0.2);
+n.sendMsg("/set/recLevel", 1, 0.5);
+n.sendMsg("/set/preLevel", 1, 0.2);
 
 n.sendMsg("/set/recFlag", 1, 1);
 
 n.sendMsg("/set/recOffset", 1, 50);
-n.sendMsg("/set/position", 1, 1.0);
+n.sendMsg("/set/position", 1, 2.0);
 )
 
 /// thingsss
@@ -119,14 +122,13 @@ r = Routine {
 
 // randomize loop duration too rarrh
 (
-
 ~mindur = 1.0;
 q = Routine {
 	var dur, fade;
 	inf.do {
 		(~mindur + (1.rand)).wait;
 		dur = ~mindur + ~mindur.rand;
-		fade = dur * (0.1  + 0.8.rand);
+		fade = dur * (0.1 + 0.5.rand);
 		postln([dur, fade]);
 		if(fade > dur, { postln("!!!!!!!!!!!!!!!"); });
 		n.sendMsg("/set/loopEnd", 0, 1 + dur);
@@ -138,12 +140,12 @@ q = Routine {
 
 // randomly cut to position
 (
-~mindur = 0.1
+~mindur = 0.5;
 p = Routine {
     var pos;
     inf.do {
 		(~mindur + ~mindur.rand).wait;
-		pos = 1.0 + 0.8.rand;
+		pos = 1.2 + 0.4.rand;
 		postln("pos " ++pos);
 		n.sendMsg("/set/position", 0, pos);
     }
@@ -180,6 +182,7 @@ n.sendMsg("/set/filterFc", 0, 330);
 
 n.sendMsg("/set/filterFcMod", 0, 0.5);
 n.sendMsg("/set/filterFcMod", 0, 1.0);
+
 /*
 r.stop;
 q.stop;

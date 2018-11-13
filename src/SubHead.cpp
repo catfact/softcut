@@ -117,30 +117,43 @@ void SubHead::poke(float in, float pre, float rec) {
     recFade = rec * fade_;
 #endif
 
-#if 1
+#if 0
     // sinusoidal record level curve, parabolic pre-level gets us pretty close
     float fadeInv = 1.f-fade_;
     // FIXME: store more temp vars on set
     preFade = fadeInv*fadeInv*(1.f-pre)+pre;
     // FIXME: refactor and/or approximate
-    recFade = (1.f-((cos(fade_*M_PI)+1.f) * 0.5f)) * rec;
+    recFade = (1.f-((cosf(fade_*static_cast<float>(M_PI))+1.f) * 0.5f)) * rec;
 #endif
 
-    //... but it would be better to actually speed up the rec fade in comparison to the pre fade
+    // OKAY... kinda more radical idea:
+    // only one subhead in each fade period should perform erasing
+    // erase level should be constant!
+    // FIXME: should have a very small slew, like fade^0.1 ?s
+    // FIXME: obvs very inefficient
+
+    // in fade period, erase level should be sqrt since it will happen twice on same material??
+    //preFade = state_ == ACTIVE ? pre : sqrtf(pre);
+    //... apparently not, somehow
+    preFade = pre;
+    //recFade = fade_ * rec;
+    recFade = epfade(0, rec, fade_);
 
     sample_t y; // write value
     const sample_t* src = resamp_.output();
+
     for(int i=0; i<nframes; ++i) {
         y = src[i];
 
 #if 1 // soft clipper
         y = clip_.processSample(y);
 #endif
-#if 0 // lowpass filter
+#if 1 // lowpass filter
         lpf_.processSample(&y);
 #endif
-        buf_[idx_] *= preFade;
+            buf_[idx_] *= preFade;
         buf_[idx_] += y * recFade;
+
         idx_ = wrapBufIndex(idx_ + inc_dir_);
     }
 }

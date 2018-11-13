@@ -36,9 +36,8 @@ count = 100;
 buf = zeros(1, n);
 
 % base rec/pre levels (before fade)
-rec0 = 0.8;
-pre0 = 0.25;
-g0 = impulse_gain(rec0, pre0)
+rec0 = 1.0;
+pre0 = 0.9;
 
 % compute rec/pre level buffers
 [rec, pre] = make_curves(n, nf, rec0, pre0);
@@ -54,10 +53,13 @@ plot(buf);
 % apply additional record passes with zero input
 % we should see a smooth decay of the original noise burst,
 % without bumps or dips (besides the initial imprint of the fade curves)
-% z = zeros(1, n);
 
-% hm, try with non-zero input..
-z = ones(1,n) * 0.5;
+
+% with zero input (impulse response)
+z = zeros(1, n);
+
+% with constant input (step response)
+% z = ones(1,n) * 0.5;
 
 for i=1:count
     % sum the buffer with a shifted copy of itself, to better observe xfade
@@ -149,9 +151,17 @@ end
 % but we may want a sinusoidal rec taper; 
 % then, squaring the pre curve looks _almost_ ok...
 function [rec, pre] = fade_curve_better_2(f, r0, p0)
-    pre = scale_pre(f.*f, p0);
+    pre = scale_pre(f .^ 2, p0);
     rec = (1-falling_raised_cos(f)) * r0;
 end
+
+% but we may want a sinusoidal rec taper; 
+% then, squaring the pre curve looks _almost_ ok...
+function [rec, pre] = fade_curve_exp_sine(f, r0, p0)
+    pre = scale_pre(f.^0.1, p0);
+    rec = (1-falling_raised_cos(f)) * r0;
+end
+
 
 % so.. the "real" answer would i guess be to scale the gain factor by the
 % inverse of the response of the filter produced by pre-level.
@@ -169,14 +179,14 @@ function [rec, pre] = fade_curve_hm(f, r0, p0)
         rec(i) = step * (1-pre(i)) / (1-pre(i)^2);
     end
     %}
-    % ohho, i'm dumb. of course! the rec level will be used twice,
-    % b/c in reality there are 
+    % ohho, i'm dumb. of course! the rec level will be used twice in xfade,
+    % b/c in reality there are two heads passing over the fade section
     rec = (max(0, log(f) + 1));
 end
 
 % convenience wrapper
 function [rec, pre] = fade_curve(f, r0, p0)
-   [rec, pre] = fade_curve_naive(f, r0, p0);
+   [rec, pre] = fade_curve_exp_sine(f, r0, p0);
 end 
 
 function [rec, pre] = make_curves(n, nf, r0, p0)

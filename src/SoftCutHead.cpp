@@ -40,10 +40,8 @@ void SoftCutHead::processSample(sample_t in, phase_t *outPhase, float *outTrig, 
         head[1].poke(in, pre, rec);
     }
 
-    Action act0 = head[0].updatePhase(start, end, loopFlag);
-    takeAction(act0);
-    Action act1 = head[1].updatePhase(start, end, loopFlag);
-    takeAction(act1);
+    takeAction(head[0].updatePhase(start, end, loopFlag));
+    takeAction(head[1].updatePhase(start, end, loopFlag));
 
     head[0].updateFade(fadeInc);
     head[1].updateFade(fadeInc);

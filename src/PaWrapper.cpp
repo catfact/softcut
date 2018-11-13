@@ -42,17 +42,7 @@ public:
         auto* imp = static_cast<PaWrapper::Imp*>(userData);
         SoftCut& sc = imp->sc;
 
-#if 1
         sc.processBlock(in[0], in[1], out[0], out[1], numFrames);
-#else // test: passthrough
-        for( int i=0; i<numFrames; i++ ) {
-            out[0][i] = in[0][i];
-        }
-#endif
-
-        for( int i=0; i<numFrames; i++ ) {
-            out[1][i] = out[0][i];
-        }
 
         return paContinue;
     }
