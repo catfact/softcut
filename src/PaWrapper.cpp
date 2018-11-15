@@ -31,7 +31,7 @@ public:
                               const PaStreamCallbackTimeInfo* timeInfo,
                               PaStreamCallbackFlags statusFlags,
                               void *userData ) {
-
+        (void)timeInfo;
         float *in[2];
         float *out[2];
         in[0] = ((float**)input)[0];
