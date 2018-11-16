@@ -5,6 +5,8 @@
 #include "SoftCut.h"
 #include "Commands.h"
 
+#include "FadeCurves.h"
+
 using namespace softcut;
 
 SoftCut::SoftCut() {
@@ -16,6 +18,12 @@ void SoftCut::init() {
     for (auto &v : scv) {
         v.setBuffer(buf, bufFrames);
     }
+
+    // FIXME? wrong place for this probly
+    FadeCurves::setMinPreWindowFrames(8);
+    FadeCurves::setMinRecDelayFrames(4);
+    FadeCurves::setPreWindowRatio(1.f/8);
+    FadeCurves::setRecDelayRatio(1.f/(8*16));
 }
 
 void SoftCut::processBlock(const float *in0, const float* in1, float *out0, float* out1, int numFrames) {

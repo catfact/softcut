@@ -6,6 +6,7 @@
 #include <limits>
 
 #include "Interpolate.h"
+#include "FadeCurves.h"
 #include "SubHead.h"
 
 using namespace softcut;
@@ -97,7 +98,7 @@ void SubHead::updateFade(float inc) {
     }
 }
 
-void SubHead::poke(float in, float pre, float rec) {
+void SubHead::poke(float in, float pre, float rec, int numFades) {
     // FIXME: since there's never really a reason to not push input, or to reset input ringbuf,
     // it follows that all resamplers can share an input ringbuf
     int nframes = resamp_.processFrame(in);
@@ -108,36 +109,9 @@ void SubHead::poke(float in, float pre, float rec) {
 
     float preFade;
     float recFade;
-    // FIXME: hard to see a "perfect" option here (pre- and rec-levels during fade)
-    // the goal is for no discontinuities in rec/pre, no dips or bumps in volume after consecutive passes
 
-#if 0
-    // "naive" linear option.. this leaves a bump near the fade endpoints, as pre -> 1 creating long decay time
-    preFade = (1.f - fade_) * (1.f - pre) + pre;
-    recFade = rec * fade_;
-#endif
-
-#if 0
-    // sinusoidal record level curve, parabolic pre-level gets us pretty close
-    float fadeInv = 1.f-fade_;
-    // FIXME: store more temp vars on set
-    preFade = fadeInv*fadeInv*(1.f-pre)+pre;
-    // FIXME: refactor and/or approximate
-    recFade = (1.f-((cosf(fade_*static_cast<float>(M_PI))+1.f) * 0.5f)) * rec;
-#endif
-
-    // OKAY... kinda more radical idea:
-    // only one subhead in each fade period should perform erasing
-    // erase level should be constant!
-    // FIXME: should have a very small slew, like fade^0.1 ?s
-    // FIXME: obvs very inefficient
-
-    // in fade period, erase level should be sqrt since it will happen twice on same material??
-    //preFade = state_ == ACTIVE ? pre : sqrtf(pre);
-    //... apparently not, somehow
-    preFade = pre;
-    //recFade = fade_ * rec;
-    recFade = epfade(0, rec, fade_);
+    preFade = pre + (1.f-pre) * FadeCurves::getPreFadeValue(fade_);
+    recFade = rec * FadeCurves::getRecFadeValue(fade_);
 
     sample_t y; // write value
     const sample_t* src = resamp_.output();
@@ -151,7 +125,7 @@ void SubHead::poke(float in, float pre, float rec) {
 #if 1 // lowpass filter
         lpf_.processSample(&y);
 #endif
-            buf_[idx_] *= preFade;
+        buf_[idx_] *= preFade;
         buf_[idx_] += y * recFade;
 
         idx_ = wrapBufIndex(idx_ + inc_dir_);

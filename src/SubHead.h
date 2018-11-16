@@ -33,7 +33,12 @@ namespace softcut {
 
     protected:
         sample_t peek();
-        void poke(sample_t in, float pre, float rec);
+        //! poke
+        //! @param in: input value
+        //! @param pre: scaling level for previous buffer content
+        //! @param rec: scaling level for new content
+        //! @param numFades: number of heads currently in crossfade
+        void poke(sample_t in, float pre, float rec, int numFades);
         Action updatePhase(phase_t start, phase_t end, bool loop);
         void updateFade(float inc);
 
@@ -64,7 +69,6 @@ namespace softcut {
         unsigned int bufFrames_;
         unsigned int bufMask_;
 
-
         State state_;
         rate_t rate_;
         int inc_dir_;
@@ -72,6 +76,7 @@ namespace softcut {
         float fade_;
         float trig_; // output trigger value
         bool active_;
+
     };
 
 }

@@ -22,7 +22,7 @@ n.sendMsg("/set/recFlag", 0, 1);
 n.sendMsg("/set/recOffset", 0, 50);
 n.sendMsg("/set/position", 0, 1.0);
 
-n.sendMsg("/set/fadeTime", 0, 0.125);
+n.sendMsg("/set/fadeTime", 0, 0.4);
 )
 
 // voice 2
