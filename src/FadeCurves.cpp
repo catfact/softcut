@@ -31,11 +31,12 @@ void FadeCurves::calcRecFade() {
     unsigned int ndr = std::max(recDelayMinFrames,
                                 static_cast<unsigned int>(recDelayRatio * fadeBufSize));
     unsigned int nr = n - ndr;
+
+    unsigned int i = 0;
     if(recShape == SINE) {
         const float phi = fpi / nr;
         float x = fpi;
         float y = 0.f;
-        unsigned int i = 0;
         while (i < ndr) {
             buf[i++] = y;
         }
@@ -48,7 +49,6 @@ void FadeCurves::calcRecFade() {
     } else if (recShape == LINEAR) {
         const float phi = 1.f / nr;
         float x = 0.f;
-        unsigned int i = 0;
         while (i < ndr) {
             buf[i++] = x;
         }
@@ -62,7 +62,6 @@ void FadeCurves::calcRecFade() {
         const float phi = fpi/(nr*2);
         float x = fpi;
         float y = 0.f;
-        unsigned int i = 0;
         while (i < ndr) {
             buf[i++] = y;
         }

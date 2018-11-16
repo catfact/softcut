@@ -148,3 +148,19 @@ void SoftCut::setRecFadeDelay(float x) {
     });
     t.detach();
 }
+
+
+void SoftCut::setPreFadeShape(float x) {
+    auto t = std::thread([x] {
+        FadeCurves::setPreShape(static_cast<FadeCurves::Shape>(x));
+    });
+    t.detach();
+}
+
+
+void SoftCut::setRecFadeShape(float x) {
+    auto t = std::thread([x] {
+        FadeCurves::setRecShape(static_cast<FadeCurves::Shape>(x));
+    });
+    t.detach();
+}

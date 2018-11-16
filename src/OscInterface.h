@@ -193,6 +193,19 @@ private:
         return 0;
     }
 
+    static int setPreFadeShape(const char *path, const char *types, lo_arg **argv, int argc, lo_message msg, void *data) {
+        (void)path; (void)types; (void)argc; (void)msg; (void)data;
+        if(argc<1) { return 0; }
+        Commands::post(Commands::SET_PRE_FADE_SHAPE, 0, argv[0]->f);
+        return 0;
+    }
+    static int setRecFadeShape(const char *path, const char *types, lo_arg **argv, int argc, lo_message msg, void *data) {
+        (void)path; (void)types; (void)argc; (void)msg; (void)data;
+        if(argc<1) { return 0; }
+        Commands::post(Commands::SET_REC_FADE_SHAPE, 0, argv[0]->f);
+        return 0;
+    }
+
 
 public:
     // FIXME: doesn't actually need pointer to audio class
@@ -221,6 +234,8 @@ public:
         // fade window parameters apply to all voices (and are rather expensive to recompute)
         lo_server_thread_add_method(st, "/set/preFadeWindow", "f", OscInterface::setPreFadeWindow, sc);
         lo_server_thread_add_method(st, "/set/recFadeDelay", "f", OscInterface::setRecFadeDelay, sc);
+        lo_server_thread_add_method(st, "/set/preFadeShape", "f", OscInterface::setPreFadeShape, sc);
+        lo_server_thread_add_method(st, "/set/recFadeShape", "f", OscInterface::setRecFadeShape, sc);
 
         lo_server_thread_add_method(st, "/quit", "", OscInterface::setQuit, sc);
         lo_server_thread_start(st);

@@ -36,6 +36,8 @@ namespace softcut {
             SET_AMP_R,
             SET_PRE_FADE_WINDOW,
             SET_REC_FADE_DELAY,
+            SET_PRE_FADE_SHAPE,
+            SET_REC_FADE_SHAPE,
             NUM_COMMANDS
         } Id;
 

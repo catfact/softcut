@@ -30,7 +30,11 @@ std::string Commands::labels[NUM_COMMANDS] = {
     "SET_FILTER_BR",
     "SET_FILTER_DRY",
     "SET_AMP_L",
-    "SET_AMP_R"
+    "SET_AMP_R",
+    "SET_PRE_FADE_WINDOW",
+    "SET_REC_FADE_DELAY",
+    "SET_PRE_FADE_SHAPE",
+    "SET_REC_FADE_SHAPE",
 };
 #endif
 
@@ -109,6 +113,12 @@ public:
                 break;
             case SET_REC_FADE_DELAY:
                 sc->setRecFadeDelay(value.f);
+                break;
+            case SET_PRE_FADE_SHAPE:
+                sc->setPreFadeShape(value.f);
+                break;
+            case SET_REC_FADE_SHAPE:
+                sc->setRecFadeShape(value.f);
                 break;
             default:
                 ;;

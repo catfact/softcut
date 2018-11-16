@@ -10,7 +10,7 @@ n.sendMsg("/set/ampLeft", 0, 1.0);
 n.sendMsg("/set/ampRight", 0, 0.4);
 
 n.sendMsg("/set/loopStart", 0, 1.0);
-n.sendMsg("/set/loopEnd", 0, 2.0);
+n.sendMsg("/set/loopEnd", 0, 1.2);
 n.sendMsg("/set/loopFlag", 0, 1.0);
 n.sendMsg("/set/rate", 0, 1.0);
 
@@ -59,6 +59,17 @@ n.sendMsg("/set/recFadeDelay", 0);
 // fade time is automatically scaled by rate
 n.sendMsg("/set/preFadeWindow", 1/16);
 n.sendMsg("/set/recFadeDelay", 1/4);
+
+//-- change fade shapes
+// rec
+n.sendMsg("/set/recFadeShape", 0); // linear
+n.sendMsg("/set/recFadeShape", 1); // sine taper
+n.sendMsg("/set/recFadeShape", 2); // raised cosine (equal-power)
+// pre
+n.sendMsg("/set/preFadeShape", 0); // linear
+n.sendMsg("/set/preFadeShape", 1); // sine taper
+n.sendMsg("/set/preFadeShape", 2); // raised cosine (equal-power)
+
 
 
 /// thingsss
