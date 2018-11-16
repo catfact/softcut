@@ -28,8 +28,13 @@ namespace softcut {
         // - index is in [0, 1]
         template<typename T, int N>
         static inline T tabLinear(T* buf, float x) {
-            auto i = static_cast<unsigned int>(x*N);
-            return buf[i] + (buf[i + 1] - buf[i]) * (x - static_cast<float>(i));
+            // FIXME: tidy/speed
+            const float fi = x * (N-2);
+            auto i = static_cast<unsigned int>(fi);
+            const float a = buf[i];
+            const float b = buf[i+1];
+            const float c = (fi - static_cast<float>(i));
+            return a + c*(b-a);
         }
 
     };

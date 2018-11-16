@@ -110,6 +110,10 @@ void SubHead::poke(float in, float pre, float rec, int numFades) {
     float preFade;
     float recFade;
 
+    if(std::fabsf(0.5f-fade_) < 0.1) {
+        int hello = 0;
+        ++hello;
+    }
     preFade = pre + (1.f-pre) * FadeCurves::getPreFadeValue(fade_);
     recFade = rec * FadeCurves::getRecFadeValue(fade_);
 
