@@ -11,15 +11,6 @@
 
 using namespace softcut;
 
-// FIXME refactor
-// equal-power fade,
-// x = value at start
-// y = value at end
-// c = coefficient in [0, 1]
-static float epfade(float x, float y, float c) {
-    c *= M_PI_2;
-    return x * cosf(c) + y * sinf(c);
-}
 
 SubHead::SubHead() {
     this->init();
@@ -44,7 +35,7 @@ Action SubHead::updatePhase(phase_t start, phase_t end, bool loop) {
         case ACTIVE:
             p = phase_ + rate_;
             if(active_) {
-                // FIXME: should refactor this a bit. 
+                // FIXME: should refactor this a bit.
                 if (rate_ > 0.f) {
                     if (p > end || p < start) {
                         if (loop) {
@@ -107,25 +98,18 @@ void SubHead::poke(float in, float pre, float rec, int numFades) {
         return;
     }
 
-    float preBase;
     float preFade;
     float recFade;
 
-    if(std::fabsf(0.5f-fade_) < 0.1) {
-        int hello = 0;
-        ++hello;
+    float preFadeBase;
+    // hm, i'd expect this to be necessary but somehow it seems not
+    if(0) { //numFades > 1) {
+        preFadeBase = sqrtf(pre);
+    } else {
+        preFadeBase = pre;
     }
 
-//    if(numFades > 1) {
-//        preBase = sqrtf(pre);
-//    } else {
-//        preBase = pre;
-//    }
-
-    // uhh
-    preBase = pre;
-
-    preFade = preBase + (1.f-preBase) * FadeCurves::getPreFadeValue(fade_);
+    preFade = preFadeBase + (1.f-preFadeBase) * FadeCurves::getPreFadeValue(fade_);
     recFade = rec * FadeCurves::getRecFadeValue(fade_);
 
     sample_t y; // write value

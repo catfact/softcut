@@ -179,10 +179,23 @@ private:
         return 0;
     }
 
+    static int setPreFadeWindow(const char *path, const char *types, lo_arg **argv, int argc, lo_message msg, void *data) {
+        (void)path; (void)types; (void)argc; (void)msg; (void)data;
+        if(argc<1) { return 0; }
+        Commands::post(Commands::SET_PRE_FADE_WINDOW, 0, argv[0]->f);
+        return 0;
+    }
+
+    static int setRecFadeDelay(const char *path, const char *types, lo_arg **argv, int argc, lo_message msg, void *data) {
+        (void)path; (void)types; (void)argc; (void)msg; (void)data;
+        if(argc<1) { return 0; }
+        Commands::post(Commands::SET_REC_FADE_DELAY, 0, argv[0]->f);
+        return 0;
+    }
+
 
 public:
-
-    // FIXME: doesn't need pointer to audio class
+    // FIXME: doesn't actually need pointer to audio class
     static void init(SoftCut* sc)
     {
         st = lo_server_thread_new(port.c_str(), handleLoError);
@@ -194,7 +207,6 @@ public:
         lo_server_thread_add_method(st, "/set/recLevel", "if", OscInterface::setRecLevel, sc);
         lo_server_thread_add_method(st, "/set/preLevel", "if", OscInterface::setPreLevel, sc);
         lo_server_thread_add_method(st, "/set/recFlag", "if", OscInterface::setRecFlag, sc);
-//        lo_server_thread_add_method(st, "/set/recOffset", "if", OscInterface::setRecOffset, sc);
         lo_server_thread_add_method(st, "/set/position", "if", OscInterface::setPosition, sc);
         lo_server_thread_add_method(st, "/set/filterFc", "if", OscInterface::setFilterFc, sc);
         lo_server_thread_add_method(st, "/set/filterFcMod", "if", OscInterface::setFilterFcMod, sc);
@@ -204,9 +216,12 @@ public:
         lo_server_thread_add_method(st, "/set/filterBp", "if", OscInterface::setFilterBp, sc);
         lo_server_thread_add_method(st, "/set/filterBr", "if", OscInterface::setFilterBr, sc);
         lo_server_thread_add_method(st, "/set/filterDry", "if", OscInterface::setFilterDry, sc);
-	lo_server_thread_add_method(st, "/set/ampLeft", "if", OscInterface::setAmpLeft, sc);
-	lo_server_thread_add_method(st, "/set/ampRight", "if", OscInterface::setAmpRight, sc);
-	
+        lo_server_thread_add_method(st, "/set/ampLeft", "if", OscInterface::setAmpLeft, sc);
+        lo_server_thread_add_method(st, "/set/ampRight", "if", OscInterface::setAmpRight, sc);
+        // fade window parameters apply to all voices (and are rather expensive to recompute)
+        lo_server_thread_add_method(st, "/set/preFadeWindow", "f", OscInterface::setPreFadeWindow, sc);
+        lo_server_thread_add_method(st, "/set/recFadeDelay", "f", OscInterface::setRecFadeDelay, sc);
+
         lo_server_thread_add_method(st, "/quit", "", OscInterface::setQuit, sc);
         lo_server_thread_start(st);
         quitFlag = false;

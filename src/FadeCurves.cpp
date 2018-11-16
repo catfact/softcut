@@ -21,6 +21,7 @@ float FadeCurves::recFadeBuf[fadeBufSize];
 float FadeCurves::preFadeBuf[fadeBufSize];
 
 void FadeCurves::calcRecFade() {
+    float buf[fadeBufSize];
     unsigned int n = fadeBufSize - 1;
     // build rec-fade curve
     // this will be scaled by base rec level
@@ -32,26 +33,19 @@ void FadeCurves::calcRecFade() {
     float y = 0.f;
     unsigned int i = 0;
     while (i < ndr) {
-        recFadeBuf[i++] = y;
+        buf[i++] = y;
     }
     while (i < n) {
         y = cosf(x) * 0.5f + 0.5f;
-        recFadeBuf[i++] = y;
+        buf[i++] = y;
         x += phi;
     }
-    recFadeBuf[n] = 1.f;
-
-    // DEBUG
-    using std::cout;
-    using std::endl;
-    cout << "[ ";
-    for(int fr=0; fr<fadeBufSize; ++fr) {
-        cout << " " << recFadeBuf[fr] << " ";
-    }
-    cout << " ]" << endl;
+    buf[n] = 1.f;
+    memcpy(recFadeBuf, buf, fadeBufSize*sizeof(float));
 }
 
 void FadeCurves::calcPreFade() {
+    float buf[fadeBufSize];
     // build pre-fade curve
     // this will be scaled and added to the base pre value (mapping [0, 1] -> [pre, 1])
     unsigned int nwp = std::max(preWindowMinFrames,
@@ -60,10 +54,11 @@ void FadeCurves::calcPreFade() {
     const float phi = fpi / nwp;
     unsigned int i = 0;
     while(i <nwp) {
-        preFadeBuf[i++] = cosf(x) * 0.5f + 0.5f;
+        buf[i++] = cosf(x) * 0.5f + 0.5f;
         x += phi;
     }
-    while(i<fadeBufSize) { preFadeBuf[i++] = 0.f; }
+    while(i<fadeBufSize) { buf[i++] = 0.f; }
+    memcpy(preFadeBuf, buf, fadeBufSize*sizeof(float));
 
 }
 

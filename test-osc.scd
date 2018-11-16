@@ -37,14 +37,21 @@ n.sendMsg("/set/loopFlag", 1, 1.0);
 n.sendMsg("/set/rate", 1, 1.2);
 
 n.sendMsg("/set/fadeTime", 1, 0.2);
-n.sendMsg("/set/recLevel", 1, 0.5);
-n.sendMsg("/set/preLevel", 1, 0.2);
+n.sendMsg("/set/recLevel", 1, 1.0);
+n.sendMsg("/set/preLevel", 1, 0.7);
 
 n.sendMsg("/set/recFlag", 1, 1);
 
 n.sendMsg("/set/recOffset", 1, 50);
 n.sendMsg("/set/position", 1, 2.0);
 )
+
+//-- fade curves:
+// for flat response while looping in place ?
+n.sendMsg("/set/preFadeWindow", 0);
+n.sendMsg("/set/recFadeDelay", 0);
+
+
 
 /// thingsss
 n.sendMsg("/set/rate", 0, 0.47);
@@ -115,7 +122,7 @@ r = Routine {
 		});
 
 
-		n.sendMsg("/set/rate", 0, rate);
+		n.sendMsg("/set/rate", [0, 1].choose, rate);
 	}
 }.play;
 )
