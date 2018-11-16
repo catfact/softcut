@@ -127,13 +127,13 @@ private:
 
 void Commands::post(Commands::Id id, int voice, float value) {
     CommandPacket p(id, voice, value);
-    std::cout << "post command: " << labels[id] << std::endl;
+    std::cout << "post command: "<< labels[id]<<"\t ("<<voice<<", "<<value<<")"<<std::endl;
     q.push(p);
 }
 
 void Commands::post(Commands::Id id, int voice, bool value) {
     CommandPacket p(id, voice, value);
-    std::cout << "post command: " << labels[id] << std::endl;
+    std::cout << "post command: "<< labels[id]<<"\t ("<<voice<<", "<<value<<")"<<std::endl;
     q.push(p);
 }
 

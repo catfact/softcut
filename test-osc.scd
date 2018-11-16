@@ -57,10 +57,8 @@ n.sendMsg("/set/recFadeDelay", 0);
 // and a dip in fade volume (high delay)
 // delay and window are both specified as a ratio of the fade time
 // fade time is automatically scaled by rate
-n.sendMsg("/set/preFadeWindow", 1/256);
-n.sendMsg("/set/recFadeDelay", 1/32);
-
-
+n.sendMsg("/set/preFadeWindow", 1/16);
+n.sendMsg("/set/recFadeDelay", 1/4);
 
 
 /// thingsss

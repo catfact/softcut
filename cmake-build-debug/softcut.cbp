@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="softcut"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/Users/emb/code/softcut/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/emb/code/softcut/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/emb/code/softcut/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/emb/code/softcut/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/emb/code/softcut/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/Users/emb/code/softcut/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/emb/code/softcut/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/emb/code/softcut/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/emb/code/softcut/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/emb/code/softcut/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/Users/emb/code/softcut/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/emb/code/softcut/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/emb/code/softcut/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/emb/code/softcut/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/emb/code/softcut/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="softcut">
+				<Option output="/Users/emb/code/softcut/cmake-build-debug/softcut" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/emb/code/softcut/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/emb/code/softcut/softcut"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/10.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/emb/code/softcut/cmake-build-debug/Makefile&quot;  VERBOSE=1 softcut"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/emb/code/softcut/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/emb/code/softcut/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/emb/code/softcut/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="softcut/fast">
+				<Option output="/Users/emb/code/softcut/cmake-build-debug/softcut" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/emb/code/softcut/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/emb/code/softcut/softcut"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/10.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/emb/code/softcut/cmake-build-debug/Makefile&quot;  VERBOSE=1 softcut/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/emb/code/softcut/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/emb/code/softcut/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/emb/code/softcut/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/Users/emb/code/softcut/src/Commands.cpp">
+			<Option target="softcut"/>
+		</Unit>
+		<Unit filename="/Users/emb/code/softcut/src/Commands.h">
+			<Option target="softcut"/>
+		</Unit>
+		<Unit filename="/Users/emb/code/softcut/src/FadeCurves.cpp">
+			<Option target="softcut"/>
+		</Unit>
+		<Unit filename="/Users/emb/code/softcut/src/FadeCurves.h">
+			<Option target="softcut"/>
+		</Unit>
+		<Unit filename="/Users/emb/code/softcut/src/OscInterface.cpp">
+			<Option target="softcut"/>
+		</Unit>
+		<Unit filename="/Users/emb/code/softcut/src/OscInterface.h">
+			<Option target="softcut"/>
+		</Unit>
+		<Unit filename="/Users/emb/code/softcut/src/PaWrapper.cpp">
+			<Option target="softcut"/>
+		</Unit>
+		<Unit filename="/Users/emb/code/softcut/src/PaWrapper.h">
+			<Option target="softcut"/>
+		</Unit>
+		<Unit filename="/Users/emb/code/softcut/src/Resampler.h">
+			<Option target="softcut"/>
+		</Unit>
+		<Unit filename="/Users/emb/code/softcut/src/SoftClip.h">
+			<Option target="softcut"/>
+		</Unit>
+		<Unit filename="/Users/emb/code/softcut/src/SoftCut.cpp">
+			<Option target="softcut"/>
+		</Unit>
+		<Unit filename="/Users/emb/code/softcut/src/SoftCut.h">
+			<Option target="softcut"/>
+		</Unit>
+		<Unit filename="/Users/emb/code/softcut/src/SoftCutHead.cpp">
+			<Option target="softcut"/>
+		</Unit>
+		<Unit filename="/Users/emb/code/softcut/src/SoftCutHead.h">
+			<Option target="softcut"/>
+		</Unit>
+		<Unit filename="/Users/emb/code/softcut/src/SoftCutVoice.cpp">
+			<Option target="softcut"/>
+		</Unit>
+		<Unit filename="/Users/emb/code/softcut/src/SoftCutVoice.h">
+			<Option target="softcut"/>
+		</Unit>
+		<Unit filename="/Users/emb/code/softcut/src/SubHead.cpp">
+			<Option target="softcut"/>
+		</Unit>
+		<Unit filename="/Users/emb/code/softcut/src/SubHead.h">
+			<Option target="softcut"/>
+		</Unit>
+		<Unit filename="/Users/emb/code/softcut/src/Svf.cpp">
+			<Option target="softcut"/>
+		</Unit>
+		<Unit filename="/Users/emb/code/softcut/src/Svf.h">
+			<Option target="softcut"/>
+		</Unit>
+		<Unit filename="/Users/emb/code/softcut/src/Types.h">
+			<Option target="softcut"/>
+		</Unit>
+		<Unit filename="/Users/emb/code/softcut/src/Utilities.h">
+			<Option target="softcut"/>
+		</Unit>
+		<Unit filename="/Users/emb/code/softcut/src/softcut-main.cpp">
+			<Option target="softcut"/>
+		</Unit>
+		<Unit filename="/Users/emb/code/softcut/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
