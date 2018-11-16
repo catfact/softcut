@@ -1,8 +1,0 @@
-"/Users/emb/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/182.5107.21/CLion.app/Contents/bin/cmake/mac/bin/cmake" -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /Users/emb/code/softcut
-CMAKE_C_FLAGS_DEBUG is -g
-CMAKE_C_FLAGS_RELEASE is -O3 -DNDEBUG
-CMAKE_C_FLAGS_RELWITHDEBINFO is -O2 -g -DNDEBUG
-CMAKE_C_FLAGS_MINSIZEREL is -Os -DNDEBUG
--- Configuring done
--- Generating done
--- Build files have been written to: /Users/emb/code/softcut/cmake-build-debug

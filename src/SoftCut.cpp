@@ -21,6 +21,8 @@ void SoftCut::init() {
     }
 
     // FIXME? wrong place for this probly
+    FadeCurves::setPreShape(FadeCurves::Shape::LINEAR);
+    FadeCurves::setRecShape(FadeCurves::Shape::RAISED);
     FadeCurves::setMinPreWindowFrames(0);
     FadeCurves::setMinRecDelayFrames(0);
     FadeCurves::setPreWindowRatio(1.f/8);

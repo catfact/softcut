@@ -5,6 +5,7 @@
 #include <math.h>
 #include <algorithm>
 #include <iostream>
+#include <boost/assert.hpp>
 
 #include "Interpolate.h"
 #include "FadeCurves.h"
@@ -19,6 +20,8 @@ unsigned int FadeCurves::recDelayMinFrames;
 unsigned int FadeCurves::preWindowMinFrames;
 float FadeCurves::recFadeBuf[fadeBufSize];
 float FadeCurves::preFadeBuf[fadeBufSize];
+FadeCurves::Shape FadeCurves::recShape = LINEAR;
+FadeCurves::Shape FadeCurves::preShape = LINEAR;
 
 void FadeCurves::calcRecFade() {
     float buf[fadeBufSize];
@@ -28,19 +31,48 @@ void FadeCurves::calcRecFade() {
     unsigned int ndr = std::max(recDelayMinFrames,
                                 static_cast<unsigned int>(recDelayRatio * fadeBufSize));
     unsigned int nr = n - ndr;
-    const float phi = fpi / nr;
-    float x = fpi;
-    float y = 0.f;
-    unsigned int i = 0;
-    while (i < ndr) {
-        buf[i++] = y;
+    if(recShape == SINE) {
+        const float phi = fpi / nr;
+        float x = fpi;
+        float y = 0.f;
+        unsigned int i = 0;
+        while (i < ndr) {
+            buf[i++] = y;
+        }
+        while (i < n) {
+            y = cosf(x) * 0.5f + 0.5f;
+            buf[i++] = y;
+            x += phi;
+        }
+        buf[n] = 1.f;
+    } else if (recShape == LINEAR) {
+        const float phi = 1.f / nr;
+        float x = 0.f;
+        unsigned int i = 0;
+        while (i < ndr) {
+            buf[i++] = x;
+        }
+        while (i < n) {
+            buf[i++] = x;
+            x += phi;
+        }
+        buf[n] = 1.f;
+    } else {
+        BOOST_ASSERT(recShape == RAISED);
+        const float phi = fpi/(nr*2);
+        float x = fpi;
+        float y = 0.f;
+        unsigned int i = 0;
+        while (i < ndr) {
+            buf[i++] = y;
+        }
+        while (i < n) {
+            y = sinf(x);
+            buf[i++] = y;
+            x += phi;
+        }
+        buf[n] = 1.f;
     }
-    while (i < n) {
-        y = cosf(x) * 0.5f + 0.5f;
-        buf[i++] = y;
-        x += phi;
-    }
-    buf[n] = 1.f;
     memcpy(recFadeBuf, buf, fadeBufSize*sizeof(float));
 }
 
@@ -50,12 +82,28 @@ void FadeCurves::calcPreFade() {
     // this will be scaled and added to the base pre value (mapping [0, 1] -> [pre, 1])
     unsigned int nwp = std::max(preWindowMinFrames,
                                 static_cast<unsigned int>(preWindowRatio * fadeBufSize));
-    float x = 0.f;
-    const float phi = fpi / nwp;
+
     unsigned int i = 0;
-    while(i <nwp) {
-        buf[i++] = cosf(x) * 0.5f + 0.5f;
-        x += phi;
+    float x = 0.f;
+    if(preShape == SINE) {
+        const float phi = fpi / nwp;
+        while (i < nwp) {
+            buf[i++] = cosf(x) * 0.5f + 0.5f;
+            x += phi;
+        }
+    } else if (preShape == LINEAR){
+        const float phi = 1.f / nwp;
+        while (i < nwp) {
+            buf[i++] = 1.f - x;
+            x += phi;
+        }
+    } else {
+        BOOST_ASSERT(preShape == RAISED);
+        const float phi = fpi / (nwp*2);
+        while (i < nwp) {
+            buf[i++] = cosf(x);
+            x += phi;
+        }
     }
     while(i<fadeBufSize) { buf[i++] = 0.f; }
     memcpy(preFadeBuf, buf, fadeBufSize*sizeof(float));
@@ -89,4 +137,14 @@ float FadeCurves::getRecFadeValue(float x) {
 
 float FadeCurves::getPreFadeValue(float x) {
     return Interpolate::tabLinear<float, fadeBufSize>(preFadeBuf, x);
+}
+
+void FadeCurves::setPreShape(FadeCurves::Shape x) {
+    preShape = x;
+    calcPreFade();
+}
+
+void FadeCurves::setRecShape(FadeCurves::Shape x) {
+    recShape = x;
+    calcRecFade();
 }

@@ -13,11 +13,14 @@ namespace softcut {
 
     class FadeCurves {
     public:
+        typedef enum { LINEAR=0, SINE=1, RAISED=2 } Shape;
         static void setRecDelayRatio(float x);
         static void setPreWindowRatio(float x);
         static void setMinRecDelayFrames(unsigned int x);
         static void setMinPreWindowFrames(unsigned int x);
-
+        // set curve shape
+        static void setPreShape(Shape x);
+        static void setRecShape(Shape x);
         // x is assumed to be in [0,1]
         static float getRecFadeValue(float x);
 
@@ -25,7 +28,6 @@ namespace softcut {
 
     private:
         static void calcPreFade();
-
         static void calcRecFade();
 
     private:
@@ -41,6 +43,8 @@ namespace softcut {
         static unsigned int preWindowMinFrames;
         static float recFadeBuf[fadeBufSize];
         static float preFadeBuf[fadeBufSize];
+        static Shape recShape;
+        static Shape preShape;
     };
 }
 
