@@ -32,6 +32,7 @@ namespace softcut {
 
         // xfade curve buffers
         static constexpr unsigned int fadeBufSize = 1001;
+
         // record delay and pre window in fade, as proportion of fade time
         static float recDelayRatio;
         static float preWindowRatio;

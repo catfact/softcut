@@ -4,6 +4,7 @@
 
 #include <math.h>
 #include <algorithm>
+#include <iostream>
 
 #include "Interpolate.h"
 #include "FadeCurves.h"
@@ -39,6 +40,15 @@ void FadeCurves::calcRecFade() {
         x += phi;
     }
     recFadeBuf[n] = 1.f;
+
+    // DEBUG
+    using std::cout;
+    using std::endl;
+    cout << "[ ";
+    for(int fr=0; fr<fadeBufSize; ++fr) {
+        cout << " " << recFadeBuf[fr] << " ";
+    }
+    cout << " ]" << endl;
 }
 
 void FadeCurves::calcPreFade() {

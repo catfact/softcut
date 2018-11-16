@@ -4,7 +4,26 @@ n = NetAddr("localhost", 9999);
 //n = NetAddr("192.168.1.11", 9999);
 
 // echo
--
+(
+n.sendMsg("/set/ampLeft", 0, 1.0);
+
+n.sendMsg("/set/ampRight", 0, 0.4);
+
+n.sendMsg("/set/loopStart", 0, 1.0);
+n.sendMsg("/set/loopEnd", 0, 2.0);
+n.sendMsg("/set/loopFlag", 0, 1.0);
+n.sendMsg("/set/rate", 0, 1.0);
+
+n.sendMsg("/set/recLevel", 0, 1.0);
+n.sendMsg("/set/preLevel", 0, 0.7);
+
+n.sendMsg("/set/recFlag", 0, 1);
+
+n.sendMsg("/set/recOffset", 0, 50);
+n.sendMsg("/set/position", 0, 1.0);
+
+n.sendMsg("/set/fadeTime", 0, 0.2;
+)
 
 // voice 2
 (
@@ -13,13 +32,13 @@ n.sendMsg("/set/ampLeft", 1, 0.5);
 n.sendMsg("/set/ampRight", 1, 1.0);
 
 n.sendMsg("/set/loopStart", 1, 2.0);
-n.sendMsg("/set/loopEnd", 1, 2.5);
+n.sendMsg("/set/loopEnd", 1, 5.5);
 n.sendMsg("/set/loopFlag", 1, 1.0);
 n.sendMsg("/set/rate", 1, 1.2);
 
 n.sendMsg("/set/fadeTime", 1, 0.2);
 n.sendMsg("/set/recLevel", 1, 0.5);
-n.sendMsg("/set/preLevel", 1, 0.9);
+n.sendMsg("/set/preLevel", 1, 0.2);
 
 n.sendMsg("/set/recFlag", 1, 1);
 

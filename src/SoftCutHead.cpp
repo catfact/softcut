@@ -42,18 +42,18 @@ void SoftCutHead::processSample(sample_t in, phase_t *outPhase, float *outTrig, 
     BOOST_ASSERT_MSG(!(head[0].state_ == ACTIVE && head[1].state_ == ACTIVE), "multiple active heads");
 
 
-    // whichever is closest to the _beginning of a fadein_, or the _end of a fadeout_, should poke first?
-//    if(recRun) {
-//        if(head[0].state_ == FADEIN && head[0].fade_ < 0.5f) {
-//            head[0].poke(in, pre, rec, numFades);
-//            head[1].poke(in, pre, rec, numFades);
-//        } else {
-//            head[1].poke(in, pre, rec, numFades);
-//            head[0].poke(in, pre, rec, numFades);
-//        }
-//    }
-    head[0].poke(in, pre, rec, numFades);
-    head[1].poke(in, pre, rec, numFades);
+    // // // whichever is closest to the _beginning of a fadein_, or the _end of a fadeout_, should poke first?
+    if(recRun) {
+        if(head[0].state_ == FADEIN && head[0].fade_ < 0.5f) {
+            head[0].poke(in, pre, rec, numFades);
+            head[1].poke(in, pre, rec, numFades);
+        } else {
+            head[1].poke(in, pre, rec, numFades);
+            head[0].poke(in, pre, rec, numFades);
+        }
+    }
+//    head[0].poke(in, pre, rec, numFades);
+//    head[1].poke(in, pre, rec, numFades);
 
     takeAction(head[0].updatePhase(start, end, loopFlag));
     takeAction(head[1].updatePhase(start, end, loopFlag));

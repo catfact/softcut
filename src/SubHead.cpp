@@ -107,6 +107,7 @@ void SubHead::poke(float in, float pre, float rec, int numFades) {
         return;
     }
 
+    float preBase;
     float preFade;
     float recFade;
 
@@ -114,7 +115,17 @@ void SubHead::poke(float in, float pre, float rec, int numFades) {
         int hello = 0;
         ++hello;
     }
-    preFade = pre + (1.f-pre) * FadeCurves::getPreFadeValue(fade_);
+
+//    if(numFades > 1) {
+//        preBase = sqrtf(pre);
+//    } else {
+//        preBase = pre;
+//    }
+
+    // uhh
+    preBase = pre;
+
+    preFade = preBase + (1.f-preBase) * FadeCurves::getPreFadeValue(fade_);
     recFade = rec * FadeCurves::getRecFadeValue(fade_);
 
     sample_t y; // write value
