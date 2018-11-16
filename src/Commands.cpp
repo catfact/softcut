@@ -104,6 +104,12 @@ public:
             case SET_AMP_R:
                 sc->setAmpRight(voice, value.f);
                 break;
+            case SET_PRE_FADE_WINDOW:
+                sc->setPreFadeWindow(value.f);
+                break;
+            case SET_REC_FADE_DELAY:
+                sc->setRecFadeDelay(value.f);
+                break;
             default:
                 ;;
         }

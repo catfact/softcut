@@ -28,6 +28,7 @@ void SoftCutHead::init() {
 }
 
 void SoftCutHead::processSample(sample_t in, phase_t *outPhase, float *outTrig, sample_t *outAudio) {
+
     *outAudio = mixFade(head[0].peek(), head[1].peek(), head[0].fade(), head[1].fade());
     *outTrig = head[0].trig() + head[1].trig();
 
@@ -35,18 +36,31 @@ void SoftCutHead::processSample(sample_t in, phase_t *outPhase, float *outTrig, 
         *outPhase = head[active].phase();
     }
 
-    if(recRun) {
-        head[0].poke(in, pre, rec);
-        head[1].poke(in, pre, rec);
-    }
+    int numFades = (head[0].state_ == FADEIN || head[0].state_ == FADEOUT)
+            + (head[1].state_ == FADEIN || head[1].state_ == FADEOUT);
 
-    Action act0 = head[0].updatePhase(start, end, loopFlag);
-    takeAction(act0);
-    Action act1 = head[1].updatePhase(start, end, loopFlag);
-    takeAction(act1);
+    BOOST_ASSERT_MSG(!(head[0].state_ == ACTIVE && head[1].state_ == ACTIVE), "multiple active heads");
+
+
+    // // // whichever is closest to the _beginning of a fadein_, or the _end of a fadeout_, should poke first?
+    if(recRun) {
+        if(head[0].state_ == FADEIN && head[0].fade_ < 0.5f) {
+            head[0].poke(in, pre, rec, numFades);
+            head[1].poke(in, pre, rec, numFades);
+        } else {
+            head[1].poke(in, pre, rec, numFades);
+            head[0].poke(in, pre, rec, numFades);
+        }
+    }
+//    head[0].poke(in, pre, rec, numFades);
+//    head[1].poke(in, pre, rec, numFades);
+
+    takeAction(head[0].updatePhase(start, end, loopFlag));
+    takeAction(head[1].updatePhase(start, end, loopFlag));
 
     head[0].updateFade(fadeInc);
     head[1].updateFade(fadeInc);
+
 }
 
 
@@ -108,6 +122,9 @@ void SoftCutHead::cutToPhase(float pos) {
 
 void SoftCutHead::setFadeTime(float secs) {
     fadeTime = secs;
+//    auto fadeFrames = std::floorf(fadeTime * sr);
+//    head[0].setFadeFrames(fadeFrames);
+//    head[1].setFadeFrames(fadeFrames);
     calcFadeInc();
 }
 void SoftCutHead::calcFadeInc() {

@@ -6,7 +6,7 @@
 #define SOFTCUT_PAWRAPPER_H
 
 namespace softcut {
-    class SoftCutVoice;
+    class SoftCut;
 
     class PaWrapper {
     public:
@@ -18,7 +18,7 @@ namespace softcut {
 
         static void stop();
 
-        static SoftCutVoice* getSoftCut();
+        static SoftCut* getSoftCut();
 
     private:
         class Imp;

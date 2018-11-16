@@ -2,8 +2,11 @@
 // Created by emb on 11/10/18.
 //
 
-#include "SoftCut.h"
+#include <thread>
+
 #include "Commands.h"
+#include "FadeCurves.h"
+#include "SoftCut.h"
 
 using namespace softcut;
 
@@ -16,14 +19,18 @@ void SoftCut::init() {
     for (auto &v : scv) {
         v.setBuffer(buf, bufFrames);
     }
+
+    // FIXME? wrong place for this probly
+    FadeCurves::setMinPreWindowFrames(0);
+    FadeCurves::setMinRecDelayFrames(0);
+    FadeCurves::setPreWindowRatio(1.f/8);
+    FadeCurves::setRecDelayRatio(1.f/(8*16));
 }
 
 void SoftCut::processBlock(const float *in0, const float* in1, float *out0, float* out1, int numFrames) {
     (void)in1;
     Commands::handlePending(this);
-#if 0
-    scv[0].processBlockMono(in0, out0, numFrames);
-#else
+
 
     for(int fr=0; fr<numFrames; ++fr) {
         out0[fr] = 0;
@@ -38,8 +45,6 @@ void SoftCut::processBlock(const float *in0, const float* in1, float *out0, floa
             out1[fr] += outBus[fr] * amp1;
         }
     }
-#endif
-
 }
 
 void SoftCut::setSampleRate(unsigned int hz) {
@@ -122,4 +127,22 @@ void SoftCut::setAmpLeft(int voice, float x) {
 
 void SoftCut::setAmpRight(int voice, float x) {
     outAmp[voice][1] = x;
+}
+
+// NB fade curve recalculation happens on a separate thread
+// the update function first fills a new buffer, then copies the final values
+// this should mitigate glitches a little, but they can certainly still occur
+// if fade curves are updated while loop recording is active
+void SoftCut::setPreFadeWindow(float x) {
+    auto t = std::thread([x] {
+        FadeCurves::setPreWindowRatio(x);
+    });
+    t.detach();
+}
+
+void SoftCut::setRecFadeDelay(float x) {
+    auto t = std::thread([x] {
+        FadeCurves::setRecDelayRatio(x);
+    });
+    t.detach();
 }

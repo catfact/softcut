@@ -22,7 +22,7 @@ set (SRC
         src/Svf.cpp
         src/SoftClip.h
         src/Types.h
-        src/Utilities.h)
+        src/Utilities.h src/FadeCurves.cpp src/FadeCurves.h)
 
 if(UNIX)
     if(APPLE)
@@ -63,7 +63,7 @@ target_link_libraries(softcut ${lo_lib})
 set_target_properties(softcut PROPERTIES
         CXX_STANDARD 14
         CXX_STANDARD_REQUIRED YES
-        CXX_EXTENSIONS NO
+        CXX_EXTENSIONS YES
         )
 
 target_compile_options(softcut PRIVATE -Wall -Wextra -pedantic)

@@ -34,6 +34,8 @@ namespace softcut {
             SET_FILTER_DRY,
             SET_AMP_L,
             SET_AMP_R,
+            SET_PRE_FADE_WINDOW,
+            SET_REC_FADE_DELAY,
             NUM_COMMANDS
         } Id;
 

@@ -6,19 +6,11 @@
 #include <limits>
 
 #include "Interpolate.h"
+#include "FadeCurves.h"
 #include "SubHead.h"
 
 using namespace softcut;
 
-// FIXME refactor
-// equal-power fade,
-// x = value at start
-// y = value at end
-// c = coefficient in [0, 1]
-static float epfade(float x, float y, float c) {
-    c *= M_PI_2;
-    return x * cosf(c) + y * sinf(c);
-}
 
 SubHead::SubHead() {
     this->init();
@@ -43,7 +35,7 @@ Action SubHead::updatePhase(phase_t start, phase_t end, bool loop) {
         case ACTIVE:
             p = phase_ + rate_;
             if(active_) {
-                // FIXME: should refactor this a bit. 
+                // FIXME: should refactor this a bit.
                 if (rate_ > 0.f) {
                     if (p > end || p < start) {
                         if (loop) {
@@ -97,7 +89,7 @@ void SubHead::updateFade(float inc) {
     }
 }
 
-void SubHead::poke(float in, float pre, float rec) {
+void SubHead::poke(float in, float pre, float rec, int numFades) {
     // FIXME: since there's never really a reason to not push input, or to reset input ringbuf,
     // it follows that all resamplers can share an input ringbuf
     int nframes = resamp_.processFrame(in);
@@ -108,51 +100,33 @@ void SubHead::poke(float in, float pre, float rec) {
 
     float preFade;
     float recFade;
-    // FIXME: hard to see a "perfect" option here (pre- and rec-levels during fade)
-    // the goal is for no discontinuities in rec/pre, no dips or bumps in volume after consecutive passes
 
-    // this option is correct while looping in one place,
-    // but it will glitch if you move the loop window over a previous xfade point
-#if 0
-    preFade = pre;
-    recFade = rec;
-#endif
-    // we can make a smooth transition of old material by doing this option:
-#if 0
-    preFade = (1.f - fade_) * (1.f - pre) + pre;
-    recFade = rec * fade_;
-#endif
-    // ... but it ends up keeping material around the xfade point.
+    float preFadeBase;
+    // hm, i'd expect this to be necessary but somehow it seems not
+    if(0) { //numFades > 1) {
+        preFadeBase = sqrtf(pre);
+    } else {
+        preFadeBase = pre;
+    }
 
-    // i'm not sure this is different...? (TODO: plot it)
-#if 1
-    preFade = std::max((1.f-fade_), fade_ * pre);
-    recFade = rec * fade_;
-#endif
-
-    // same, try cos segment xfade for pre, less noticeable?
-    // (... no, it's not, maybe a bit worse)
-#if 0
-    preFade = std::max(epfade(1, 0, fade_), epfade(0, pre, fade_));
-    recFade = epfade(0, rec, fade_);
-#endif
-
-    /// another answer?? seems like we actually need a longer fade for pre than for rec?
-    /// the goal being to not let pre approach 1.0 while record is still happening?
+    preFade = preFadeBase + (1.f-preFadeBase) * FadeCurves::getPreFadeValue(fade_);
+    recFade = rec * FadeCurves::getRecFadeValue(fade_);
 
     sample_t y; // write value
     const sample_t* src = resamp_.output();
+
     for(int i=0; i<nframes; ++i) {
         y = src[i];
 
 #if 1 // soft clipper
         y = clip_.processSample(y);
 #endif
-#if 0 // lowpass filter
+#if 1 // lowpass filter
         lpf_.processSample(&y);
 #endif
         buf_[idx_] *= preFade;
         buf_[idx_] += y * recFade;
+
         idx_ = wrapBufIndex(idx_ + inc_dir_);
     }
 }

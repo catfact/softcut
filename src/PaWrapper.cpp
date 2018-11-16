@@ -6,7 +6,7 @@
 #include <portaudio.h>
 
 #include "PaWrapper.h"
-#include "SoftCutVoice.h"
+#include "SoftCut.h"
 
 using namespace softcut;
 
@@ -31,7 +31,8 @@ public:
                               const PaStreamCallbackTimeInfo* timeInfo,
                               PaStreamCallbackFlags statusFlags,
                               void *userData ) {
-
+        (void)timeInfo;
+        (void)statusFlags;
         float *in[2];
         float *out[2];
         in[0] = ((float**)input)[0];
@@ -42,17 +43,7 @@ public:
         auto* imp = static_cast<PaWrapper::Imp*>(userData);
         SoftCut& sc = imp->sc;
 
-#if 1
-        sc.processBlockMono(in[0], out[0], numFrames);
-#else // test: passthrough
-        for( int i=0; i<numFrames; i++ ) {
-            out[0][i] = in[0][i];
-        }
-#endif
-
-        for( int i=0; i<numFrames; i++ ) {
-            out[1][i] = out[0][i];
-        }
+        sc.processBlock(in[0], in[1], out[0], out[1], numFrames);
 
         return paContinue;
     }
