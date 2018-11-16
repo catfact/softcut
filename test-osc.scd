@@ -47,9 +47,19 @@ n.sendMsg("/set/position", 1, 2.0);
 )
 
 //-- fade curves:
-// for flat response while looping in place ?
+// for totally flat response while looping in place
 n.sendMsg("/set/preFadeWindow", 0);
 n.sendMsg("/set/recFadeDelay", 0);
+
+// for moving the loop points during record,
+// may want larger delay / window
+// balance is then between a bump in decay time (long window, low delay)
+// and a dip in fade volume (high delay)
+// delay and window are both specified as a ratio of the fade time
+// fade time is automatically scaled by rate
+n.sendMsg("/set/preFadeWindow", 1/256);
+n.sendMsg("/set/recFadeDelay", 1/32);
+
 
 
 
