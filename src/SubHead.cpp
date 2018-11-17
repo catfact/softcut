@@ -101,8 +101,8 @@ void SubHead::poke(float in, float pre, float rec, int numFades) {
 
     BOOST_ASSERT_MSG(fade_ >= 0.f && fade_ <= 1.f, "bad fade coefficient in poke()");
 
-    float preFade;
-    float recFade;
+//    float preFade;
+//    float recFade;
 
     float preFadeBase;
     // hm, i'd expect this to be necessary but somehow it seems not

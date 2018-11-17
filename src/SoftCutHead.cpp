@@ -31,7 +31,7 @@ void SoftCutHead::init() {
 void SoftCutHead::processSample(sample_t in, phase_t *outPhase, float *outTrig, sample_t *outAudio) {
 
 #if 1 // testing...
-    testBuf.update(head[0].phase_, head[0].fade_, rate, pre, rec);
+    testBuf.update(head[0].phase_, head[0].fade_, rate, head[0].preFade, head[0].recFade);
 #endif
 
     *outAudio = mixFade(head[0].peek(), head[1].peek(), head[0].fade(), head[1].fade());

@@ -26,7 +26,7 @@ public:
     }
 
     void update(float phase, float fade, float rate, float pre, float rec) {
-        buf[Phase][idx] = phase
+        buf[Phase][idx] = phase;
         buf[Fade][idx] = fade;
         buf[Rate][idx] = rate;
         buf[Pre][idx] = pre;

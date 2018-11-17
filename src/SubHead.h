@@ -77,6 +77,11 @@ namespace softcut {
         float trig_; // output trigger value
         bool active_;
 
+        // test...
+    public:
+        float preFade;
+        float recFade;
+
     };
 
 }
