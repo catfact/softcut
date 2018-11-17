@@ -164,3 +164,7 @@ void SoftCut::setRecFadeShape(float x) {
     });
     t.detach();
 }
+
+void SoftCut::printTestBuffers() {
+    scv[0].printTestBuffers();
+}

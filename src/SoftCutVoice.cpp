@@ -134,3 +134,7 @@ void SoftCutVoice::setBuffer(float *b, int nf) {
     sch.setBuffer(buf, bufFrames);
 }
 
+void SoftCutVoice::printTestBuffers() {
+    sch.printTestBuffers();
+}
+

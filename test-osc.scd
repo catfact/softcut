@@ -214,6 +214,6 @@ r.stop;
 q.stop;
 p.stop;
 
-
+n.sendMsg("/printTestBuffers");
 n.sendMsg("/quit");
 */

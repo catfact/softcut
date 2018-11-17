@@ -55,6 +55,8 @@ namespace softcut {
         void setPreFadeShape(float x);
         void setRecFadeShape(float x);
 
+        void printTestBuffers();
+
     private:
         SoftCutVoice scv[numVoices];
         float outAmp[numVoices][2];

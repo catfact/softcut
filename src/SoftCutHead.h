@@ -8,6 +8,7 @@
 #include <cstdint>
 #include "SubHead.h"
 #include "Types.h"
+#include "TestBuffers.h"
 
 namespace  softcut{
 
@@ -41,6 +42,8 @@ namespace  softcut{
 
         rate_t getRate();
 
+        void printTestBuffers();
+
     private:
         // fade in to new position (given in samples)
         // assumption: phase is in range!
@@ -66,6 +69,7 @@ namespace  softcut{
         bool recRun;
 
         float rate;
+        TestBuffers testBuf;
     };
 }
 #endif //CUTFADEVOICE_CUTFADEVOICELOGIC_H

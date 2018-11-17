@@ -41,6 +41,8 @@ namespace softcut {
         // process a single channel
         void processBlockMono(const float* in, float* out, int numFrames);
 
+        void printTestBuffers();
+
     private:
         float* buf;
         int bufFrames;

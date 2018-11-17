@@ -25,9 +25,14 @@ void SoftCutHead::init() {
     rate = 1.f;
     setFadeTime(0.1f);
     recRun = false;
+    testBuf.init();
 }
 
 void SoftCutHead::processSample(sample_t in, phase_t *outPhase, float *outTrig, sample_t *outAudio) {
+
+#if 1 // testing...
+    testBuf.update(head[0].phase_, head[0].fade_, rate, pre, rec);
+#endif
 
     *outAudio = mixFade(head[0].peek(), head[1].peek(), head[0].fade(), head[1].fade());
     *outTrig = head[0].trig() + head[1].trig();
@@ -62,7 +67,6 @@ void SoftCutHead::processSample(sample_t in, phase_t *outPhase, float *outTrig, 
     head[1].updateFade(fadeInc);
 
 }
-
 
 void SoftCutHead::setRate(rate_t x)
 {
@@ -129,7 +133,7 @@ void SoftCutHead::setFadeTime(float secs) {
 }
 void SoftCutHead::calcFadeInc() {
     fadeInc = (float) fabs(rate) / std::max(1.f, (fadeTime * sr));
-    fadeInc = std::min(fadeInc, 1.f);
+    fadeInc = std::max(0.f, std::min(fadeInc, 1.f));
     // printf("fade time = %f; rate = %f; inc = %f\n", fadeTime, rate, fadeInc);
 }
 
@@ -188,4 +192,8 @@ void SoftCutHead::cutToPos(float seconds) {
 
 rate_t SoftCutHead::getRate() {
     return rate;
+}
+
+void SoftCutHead::printTestBuffers() {
+    testBuf.print();
 }

@@ -22,7 +22,7 @@ set (SRC
         src/Svf.cpp
         src/SoftClip.h
         src/Types.h
-        src/Utilities.h src/FadeCurves.cpp src/FadeCurves.h)
+        src/Utilities.h src/FadeCurves.cpp src/FadeCurves.h src/TestBuffers.cpp src/TestBuffers.h)
 
 if(UNIX)
     if(APPLE)
