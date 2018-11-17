@@ -28,24 +28,23 @@ void SoftCutHead::init() {
     testBuf.init();
 }
 
-void SoftCutHead::processSample(sample_t in, phase_t *outPhase, float *outTrig, sample_t *outAudio) {
+void SoftCutHead::processSample(sample_t in, float *outPhase, float *outTrig, sample_t *outAudio) {
 
 #if 1 // testing...
-    testBuf.update(head[0].phase_, head[0].fade_, rate, head[0].preFade, head[0].recFade);
+    testBuf.update(static_cast<float>(head[0].phase_), head[0].idx_, head[0].fade_, head[0].state_, head[0].preFade, head[0].recFade);
 #endif
 
     *outAudio = mixFade(head[0].peek(), head[1].peek(), head[0].fade(), head[1].fade());
     *outTrig = head[0].trig() + head[1].trig();
 
     if(outPhase != nullptr) {
-        *outPhase = head[active].phase();
+        *outPhase = static_cast<float>(head[active].phase());
     }
 
     int numFades = (head[0].state_ == FADEIN || head[0].state_ == FADEOUT)
             + (head[1].state_ == FADEIN || head[1].state_ == FADEOUT);
 
     BOOST_ASSERT_MSG(!(head[0].state_ == ACTIVE && head[1].state_ == ACTIVE), "multiple active heads");
-
 
     // // // whichever is closest to the _beginning of a fadein_, or the _end of a fadeout_, should poke first?
     if(recRun) {
@@ -101,7 +100,7 @@ void SoftCutHead::takeAction(Action act)
     }
 }
 
-void SoftCutHead::cutToPhase(float pos) {
+void SoftCutHead::cutToPhase(phase_t pos) {
     State s = head[active].state();
 
     // ignore if we are already in a crossfade

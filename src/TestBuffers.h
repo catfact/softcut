@@ -11,8 +11,8 @@
 namespace softcut {
 class TestBuffers {
 public:
-    typedef enum { Phase, Fade, Rate, Pre, Rec, numChannels } Channel;
-    enum { numFrames = 65536, frameMask = 65535 };
+    typedef enum { Read, Write, Fade, State, Pre, Rec, numChannels } Channel;
+    enum { numFrames = 131072, frameMask = 131071 };
 
     float buf[numChannels][numFrames]{};
     unsigned int idx = 0;
@@ -25,10 +25,11 @@ public:
         }
     }
 
-    void update(float phase, float fade, float rate, float pre, float rec) {
-        buf[Phase][idx] = phase;
+    void update(float readPhase, float writePhase, float fade, float state, float pre, float rec) {
+        buf[Read][idx] = readPhase;
+        buf[Write][idx] = writePhase;
         buf[Fade][idx] = fade;
-        buf[Rate][idx] = rate;
+        buf[State][idx] = state;
         buf[Pre][idx] = pre;
         buf[Rec][idx] = rec;
         idx = (idx+1)&frameMask;
@@ -37,16 +38,18 @@ public:
     // print buffer contents in matlab format
     void print() {
         using std::endl;
-        std::ofstream ofs ("softcut-test-buffers.m", std::ofstream::out);
-        ofs << "[" << endl;
+        std::ofstream ofs ("softcut_test_buffers.m", std::ofstream::out);
+        ofs << "function y = softcut_test_buffers() " << endl;
+        ofs << "  y = [" << endl;
         for (int ch=0; ch<numChannels; ++ch) {
-            ofs << "[ ";
+            ofs << "    [ ";
             for (int fr=0; fr<numFrames; ++fr) {
                 ofs << buf[ch][fr] << " ";
             }
-            ofs << " ]," << endl << endl;
+            ofs << "    ]," << endl << endl;
         }
-        ofs << "]" << endl;
+        ofs << "  ];" << endl;
+        ofs << "end" << endl;
 
         ofs.close();
     }

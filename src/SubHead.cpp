@@ -112,9 +112,13 @@ void SubHead::poke(float in, float pre, float rec, int numFades) {
         preFadeBase = pre;
     }
 
+#if 0 // test
+    preFade = pre;
+    recFade = rec * fade_;
+#else
     preFade = preFadeBase + (1.f-preFadeBase) * FadeCurves::getPreFadeValue(fade_);
     recFade = rec * FadeCurves::getRecFadeValue(fade_);
-
+#endif
     sample_t y; // write value
     const sample_t* src = resamp_.output();
 
@@ -166,8 +170,9 @@ void SubHead::setSampleRate(float sr) {
 void SubHead::setPhase(phase_t phase) {
     phase_ = phase;
     // FIXME?: magic number hack here for small record offset
-    idx_ = wrapBufIndex(static_cast<int>(phase_) - inc_dir_ * 8);
-    // std::cout << "pos change; phase=" << phase_ << "; inc=" << inc_ << "; idx=" << idx_ << std::endl;
+    idx_ = wrapBufIndex(static_cast<int>(phase_) - (inc_dir_ * 8));
+    //idx_ = wrapBufIndex(static_cast<int>(phase_));
+    // std::cout << "pos change; phase=" << phase_ << "; inc=" << inc_dir_ << "; idx=" << idx_ << std::endl;
 
     // FIXME: we are hitting this sometimes. fade is always quite small...
     // rounding error? wrong order of calculations?
@@ -192,7 +197,7 @@ void SubHead::setBuffer(float *buf, unsigned int frames) {
     BOOST_ASSERT_MSG((bufFrames_ != 0) && !(bufFrames_ & bufMask_), "buffer size is not 2^N");
 }
 
-void SubHead::setRate(float rate) {
+void SubHead::setRate(rate_t rate) {
     rate_ = rate;
     inc_dir_ = boost::math::sign(rate);
     // NB: resampler doesn't handle negative rates.

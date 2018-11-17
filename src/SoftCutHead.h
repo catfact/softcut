@@ -19,7 +19,7 @@ namespace  softcut{
         void init();
 
         // per-sample update function
-        void processSample(sample_t in, phase_t *outPhase, float *outTrig, sample_t *outAudio);
+        void processSample(sample_t in, float *outPhase, float *outTrig, sample_t *outAudio);
 
         void setSampleRate(float sr);
         void setBuffer(sample_t *buf, uint32_t size);

@@ -20,7 +20,6 @@ int main() {
     std::cout << "OSC rx port number: " << OscInterface::getPortNumber() << std::endl;
     std::cout << std::numeric_limits<float>::epsilon() << std::endl;
 
-    // FIXME: stop!
     while(!OscInterface::shouldQuit()) {
         sleep(100);
     }
