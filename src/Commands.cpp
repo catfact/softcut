@@ -19,6 +19,7 @@ std::string Commands::labels[NUM_COMMANDS] = {
     "SET_FADE_TIME",
     "SET_REC_LEVEL",
     "SET_PRE_LEVEL",
+    "SET_REC_OFFSET",
     "SET_REC_FLAG",
     "SET_POSITION",
     "SET_FILTER_FC",

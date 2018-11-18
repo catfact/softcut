@@ -46,18 +46,19 @@ void SoftCutHead::processSample(sample_t in, float *outPhase, float *outTrig, sa
 
     BOOST_ASSERT_MSG(!(head[0].state_ == ACTIVE && head[1].state_ == ACTIVE), "multiple active heads");
 
-    // // // whichever is closest to the _beginning of a fadein_, or the _end of a fadeout_, should poke first?
-    if(recRun) {
-        if(head[0].state_ == FADEIN && head[0].fade_ < 0.5f) {
-            head[0].poke(in, pre, rec, numFades);
-            head[1].poke(in, pre, rec, numFades);
-        } else {
-            head[1].poke(in, pre, rec, numFades);
-            head[0].poke(in, pre, rec, numFades);
-        }
-    }
-//    head[0].poke(in, pre, rec, numFades);
-//    head[1].poke(in, pre, rec, numFades);
+//    // // // whichever is closest to the _beginning of a fadein_, or the _end of a fadeout_, should poke first?
+//    if(recRun) {
+//        if(head[0].state_ == FADEIN && head[0].fade_ < 0.5f) {
+//            head[0].poke(in, pre, rec, numFades);
+//            head[1].poke(in, pre, rec, numFades);
+//        } else {
+//            head[1].poke(in, pre, rec, numFades);
+//            head[0].poke(in, pre, rec, numFades);
+//        }
+//    }
+
+    head[0].poke(in, pre, rec, numFades);
+    head[1].poke(in, pre, rec, numFades);
 
     takeAction(head[0].updatePhase(start, end, loopFlag));
     takeAction(head[1].updatePhase(start, end, loopFlag));
@@ -89,9 +90,11 @@ void SoftCutHead::takeAction(Action act)
 {
     switch (act) {
         case Action::LOOP_POS:
+            std::cerr << "looping: go to start" << std::endl;
             cutToPhase(start);
             break;
         case Action::LOOP_NEG:
+            std::cerr << "looping: go to end" << std::endl;
             cutToPhase(end);
             break;
         case Action::STOP:
@@ -121,13 +124,11 @@ void SoftCutHead::cutToPhase(phase_t pos) {
     head[active].active_ = false;
     head[newActive].active_ = true;
     active = newActive;
+    std::cerr << "active: " << active << std::endl;
 }
 
 void SoftCutHead::setFadeTime(float secs) {
     fadeTime = secs;
-//    auto fadeFrames = std::floorf(fadeTime * sr);
-//    head[0].setFadeFrames(fadeFrames);
-//    head[1].setFadeFrames(fadeFrames);
     calcFadeInc();
 }
 void SoftCutHead::calcFadeInc() {

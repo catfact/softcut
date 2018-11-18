@@ -70,7 +70,7 @@ namespace  softcut{
         float rec; // record level
         bool recRun;
 
-        float rate;
+        rate_t rate;
         TestBuffers testBuf;
     };
 }

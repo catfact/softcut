@@ -90,6 +90,14 @@ void SubHead::updateFade(float inc) {
     }
 }
 
+#if 0
+/// test: no resampling
+void SubHead::poke(float in, float pre, float rec, int numFades) {
+    sample_t* p = &buf_[static_cast<unsigned int>(phase_)&bufMask_];
+    *p *= pre;
+    *p += (in * rec);
+}
+#else
 void SubHead::poke(float in, float pre, float rec, int numFades) {
     (void)numFades;
     // FIXME: since there's never really a reason to not push input, or to reset input ringbuf,
@@ -102,22 +110,11 @@ void SubHead::poke(float in, float pre, float rec, int numFades) {
 
     BOOST_ASSERT_MSG(fade_ >= 0.f && fade_ <= 1.f, "bad fade coefficient in poke()");
 
-//    float preFade;
-//    float recFade;
-
-    float preFadeBase;
-    // hm, i'd expect this to be necessary but somehow it seems not
-    if(0) { //numFades > 1) {
-        preFadeBase = sqrtf(pre);
-    } else {
-        preFadeBase = pre;
-    }
-
 #if 0 // test
     preFade = pre;
     recFade = rec * fade_;
 #else
-    preFade = preFadeBase + (1.f-preFadeBase) * FadeCurves::getPreFadeValue(fade_);
+    preFade = pre + (1.f-pre) * FadeCurves::getPreFadeValue(fade_);
     recFade = rec * FadeCurves::getRecFadeValue(fade_);
 #endif
     sample_t y; // write value
@@ -138,6 +135,7 @@ void SubHead::poke(float in, float pre, float rec, int numFades) {
         wrIdx_ = wrapBufIndex(wrIdx_ + inc_dir_);
     }
 }
+#endif
 
 float SubHead::peek() {
     return peek4();
@@ -170,13 +168,8 @@ void SubHead::setSampleRate(float sr) {
 
 void SubHead::setPhase(phase_t phase) {
     phase_ = phase;
-    // FIXME?: magic number hack here for small record offset
-    // wrIdx_ = wrapBufIndex(static_cast<int>(phase_) - (inc_dir_ * 8));
     wrIdx_ = wrapBufIndex(static_cast<int>(phase_) + (inc_dir_ * recOffset_));
-    // wrIdx_ = wrapBufIndex(static_cast<int>(phase_));
-
-    // std::cout << "pos change; phase=" << phase_ << "; inc=" << inc_dir_ << "; idx=" << idx_ << std::endl;
-
+    std::cerr << "new phase="<<phase_ << "; wrIdx="<<wrIdx_ << std::endl;
     // FIXME: we are hitting this sometimes. fade is always quite small...
     // rounding error? wrong order of calculations?
 #if 0
