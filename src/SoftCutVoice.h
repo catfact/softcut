@@ -14,7 +14,7 @@ namespace softcut {
     class SoftCutVoice {
     public:
         SoftCutVoice();
-        void setBuffer(float* buf, int numFrames);
+        void setBuffer(float* buf, unsigned int numFrames);
 
         void setSampleRate(float hz);
         void setRate(float rate);

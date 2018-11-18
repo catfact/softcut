@@ -60,12 +60,12 @@ namespace softcut {
 
 
     private:
-        Resampler<sample_t> resamp_;
+        Resampler resamp_;
         LowpassBrickwall lpf_;
         SoftClip clip_;
 
         sample_t* buf_; // output buffer
-        unsigned int idx_; // write index
+        unsigned int wrIdx_; // write index
         unsigned int bufFrames_;
         unsigned int bufMask_;
 

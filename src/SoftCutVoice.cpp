@@ -25,7 +25,7 @@ recRamp(48000, 0.1)
     svfDryLevel = 1.0;
 }
 
-void SoftCutVoice::processBlockMono(const float *in, float *out, int numFrames) {
+void SoftCutVoice:: processBlockMono(const float *in, float *out, int numFrames) {
     float trigDummy;
     float phaseDummy;
 
@@ -128,7 +128,7 @@ void SoftCutVoice::updateFilterFc() {
     svf.setFc(fc*fcMod + (1.f-fcMod )*svf.getFc());
 }
 
-void SoftCutVoice::setBuffer(float *b, int nf) {
+void SoftCutVoice::setBuffer(float *b, unsigned int nf) {
     buf = b;
     bufFrames = nf;
     sch.setBuffer(buf, bufFrames);

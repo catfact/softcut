@@ -9,7 +9,7 @@
 #include <cmath>
 
 #include <boost/assert.hpp>
-
+#include "Types.h"
 #include "Interpolate.h"
 
 // ultra-simple resampling class
@@ -21,7 +21,6 @@
 
 namespace softcut {
 
-    template<typename T>
     class Resampler {
 
     public:
@@ -40,7 +39,7 @@ namespace softcut {
 #endif
         {}
 
-        int processFrame(T x){
+        int processFrame(sample_t x){
             pushInput(x);
             if(rate_ > 1.0) {
                 return writeUp();
@@ -49,14 +48,14 @@ namespace softcut {
             }
         }
 
-        void setRate(T r) {
+        void setRate(rate_t r) {
             rate_ = r;
             phi_ = 1.0 / r;
         }
         // void setBuffer(float *buf, int frames);
-        void setPhase(T phase) { phase_ = phase; }
-        const T* output(){
-            return static_cast<const T*>(outBuf_);
+        void setPhase(phase_t phase) { phase_ = phase; }
+        const sample_t* output(){
+            return static_cast<const sample_t*>(outBuf_);
         }
 
         void reset() {
@@ -64,37 +63,37 @@ namespace softcut {
 #ifdef RESAMPLER_INTERPOLATE_LINEAR
             x_ = 0.f;
 #else
-            for (float &i : inBuf_) { i = 0.f; }
-            for (float &i : outBuf_) { i = 0.f; }
+            for (sample_t &i : inBuf_) { i = 0.f; }
+            for (sample_t &i : outBuf_) { i = 0.f; }
             inBufIdx_ = 0;
 #endif
         }
 
     private:
-        double rate_;
+        rate_t rate_;
         // phase increment
-        double phi_;
+        phase_t phi_;
         // last written phase
-        double phase_;
+        phase_t phase_;
 #ifdef RESAMPLER_INTERPOLATE_LINEAR
         // current input value
-        float x_;
+        sample_t x_;
         // last input value
-        float x_1_;
+        sample_t x_1_;
 #else
         // input ringbuffer
-        T inBuf_[IN_BUF_FRAMES];
+        sample_t inBuf_[IN_BUF_FRAMES];
         unsigned int inBufIdx_;
 #endif
         // output buffer
-        T outBuf_[OUT_BUF_FRAMES];
+        sample_t outBuf_[OUT_BUF_FRAMES];
 
     private:
         // push an input value
-        void pushInput(T x){
+        void pushInput(sample_t x){
 #ifdef RESAMPLER_INTERPOLATE_LINEAR
             x_1_ = x_;
-    x_ = x;
+            x_ = x;
 #else
             inBufIdx_ = (inBufIdx_ + 1) & IN_BUF_MASK;
             inBuf_[inBufIdx_] = x;
@@ -103,16 +102,19 @@ namespace softcut {
 
         // interpolate the most recent input samples
         // @param f in [0, 1]
-        T interpolate(T f){
+        sample_t interpolate(phase_t f){
 #ifdef RESAMPLER_INTERPOLATE_LINEAR
-            return x_1_ + (x_ - x_1_)*f;
+            return x_1_ + (x_ - x_1_) * f;
 #else
             unsigned int i0, i1, i2, i3;
             i0 = (inBufIdx_ + 1) & IN_BUF_MASK;
             i1 = (inBufIdx_ + 2) & IN_BUF_MASK;
             i2 = (inBufIdx_ + 3) & IN_BUF_MASK;
             i3 = inBufIdx_;
-            return (Interpolate::hermite<T>(f, inBuf_[i0], inBuf_[i1], inBuf_[i2], inBuf_[i3]));
+            return static_cast<sample_t>(Interpolate::hermite<phase_t>(f, inBuf_[i0],
+                                                                       inBuf_[i1],
+                                                                       inBuf_[i2],
+                                                                       inBuf_[i3]));
 #endif
         }
 
@@ -121,13 +123,13 @@ namespace softcut {
         // return frames written (>= 1)
         // assumptions: input has been pushed. rate_ > 1.0
         int writeUp(){
-            T p = phase_ + rate_;
-            unsigned int nf = static_cast<unsigned int>(p);
+            phase_t p = phase_ + rate_;
+            auto nf = static_cast<unsigned int>(p);
             // we can assume that n >= 1 here
             // we want to track fractional output phase for interpolation
             // this is normalized to the distance between input frames
             // so: the distance to the first output frame boundary:
-            T f = 1.0 - phase_;
+            phase_t f = 1.0 - phase_;
             // normalized (divided by rate);
             f = f * phi_;
             // write the first output frame
@@ -140,7 +142,7 @@ namespace softcut {
                 i++;
             }
             // store the remainder of the updated, un-normalized output phase
-            phase_ = p - static_cast<T>(nf);
+            phase_ = p - static_cast<phase_t>(nf);
             return nf;
         }
 
@@ -153,20 +155,19 @@ namespace softcut {
             // as with upsampling inner loop,
             // we need to produce a fractional interpolation coefficient,
             // by "normalizing" to the output phase period
-            T p = phase_ + rate_;
+            phase_t p = phase_ + rate_;
             BOOST_ASSERT_MSG(p >= 0.0, "resampler encountered negative phase");
             auto nf = static_cast<unsigned int>(p);
             if (nf > 0) {
-                float f = 1.f - phase_;
+                phase_t f = 1.0 - phase_;
                 f *= phi_;
                 outBuf_[0] = interpolate(f);
-                phase_ = p - static_cast<T>(nf);
+                phase_ = p - static_cast<phase_t>(nf);
             } else {
                 phase_ = p;
             }
             return nf;
         }
-
 
     };
 

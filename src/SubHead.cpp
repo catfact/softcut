@@ -131,10 +131,10 @@ void SubHead::poke(float in, float pre, float rec, int numFades) {
 #if 1 // lowpass filter
         lpf_.processSample(&y);
 #endif
-        buf_[idx_] *= preFade;
-        buf_[idx_] += y * recFade;
+        buf_[wrIdx_] *= preFade;
+        buf_[wrIdx_] += y * recFade;
 
-        idx_ = wrapBufIndex(idx_ + inc_dir_);
+        wrIdx_ = wrapBufIndex(wrIdx_ + inc_dir_);
     }
 }
 
@@ -170,7 +170,7 @@ void SubHead::setSampleRate(float sr) {
 void SubHead::setPhase(phase_t phase) {
     phase_ = phase;
     // FIXME?: magic number hack here for small record offset
-    idx_ = wrapBufIndex(static_cast<int>(phase_) - (inc_dir_ * 8));
+    wrIdx_ = wrapBufIndex(static_cast<int>(phase_) - (inc_dir_ * 8));
     //idx_ = wrapBufIndex(static_cast<int>(phase_));
     // std::cout << "pos change; phase=" << phase_ << "; inc=" << inc_dir_ << "; idx=" << idx_ << std::endl;
 
