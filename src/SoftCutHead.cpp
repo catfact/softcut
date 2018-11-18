@@ -196,3 +196,8 @@ rate_t SoftCutHead::getRate() {
 void SoftCutHead::printTestBuffers() {
     testBuf.print();
 }
+
+void SoftCutHead::setRecOffset(float d) {
+    head[0].setRecOffset(d);
+    head[1].setRecOffset(d);
+}

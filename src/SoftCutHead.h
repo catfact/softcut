@@ -44,6 +44,8 @@ namespace  softcut{
 
         void printTestBuffers();
 
+        void setRecOffset(float d);
+
     private:
         // fade in to new position (given in samples)
         // assumption: phase is in range!

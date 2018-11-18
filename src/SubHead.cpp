@@ -23,6 +23,7 @@ void SubHead::init() {
     state_ = INACTIVE;
     resamp_.setPhase(0);
     inc_dir_ = 1;
+    recOffset_ = -8;
 }
 
 Action SubHead::updatePhase(phase_t start, phase_t end, bool loop) {
@@ -170,8 +171,10 @@ void SubHead::setSampleRate(float sr) {
 void SubHead::setPhase(phase_t phase) {
     phase_ = phase;
     // FIXME?: magic number hack here for small record offset
-    wrIdx_ = wrapBufIndex(static_cast<int>(phase_) - (inc_dir_ * 8));
-    //idx_ = wrapBufIndex(static_cast<int>(phase_));
+    // wrIdx_ = wrapBufIndex(static_cast<int>(phase_) - (inc_dir_ * 8));
+    wrIdx_ = wrapBufIndex(static_cast<int>(phase_) + (inc_dir_ * recOffset_));
+    // wrIdx_ = wrapBufIndex(static_cast<int>(phase_));
+
     // std::cout << "pos change; phase=" << phase_ << "; inc=" << inc_dir_ << "; idx=" << idx_ << std::endl;
 
     // FIXME: we are hitting this sometimes. fade is always quite small...
@@ -208,3 +211,7 @@ void SubHead::setRate(rate_t rate) {
 
 void SubHead::setState(State state) { state_ = state; }
 void SubHead::setTrig(float trig) { trig_ = trig; }
+
+void SubHead::setRecOffset(float d) {
+    recOffset_  = static_cast<int>(d);
+}

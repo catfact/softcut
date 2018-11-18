@@ -168,3 +168,7 @@ void SoftCut::setRecFadeShape(float x) {
 void SoftCut::printTestBuffers() {
     scv[0].printTestBuffers();
 }
+
+void SoftCut::setRecOffset(int i, float d) {
+    scv[i].setRecOffset(d);
+}

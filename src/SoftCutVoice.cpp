@@ -138,3 +138,7 @@ void SoftCutVoice::printTestBuffers() {
     sch.printTestBuffers();
 }
 
+void SoftCutVoice::setRecOffset(float d) {
+    sch.setRecOffset(d);
+}
+

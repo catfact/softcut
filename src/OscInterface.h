@@ -85,6 +85,14 @@ private:
         return 0;
     }
 
+    static int setRecOffset(const char *path, const char *types,
+                           lo_arg **argv, int argc, lo_message msg, void *data) {
+        (void)path; (void)types; (void)argc; (void)msg; (void)data;
+        if(argc<2) { return 0; }
+        Commands::post(Commands::SET_REC_OFFSET, argv[0]->i, argv[1]->f);
+        return 0;
+    }
+
     static int setRecFlag(const char *path, const char *types,
                             lo_arg **argv, int argc, lo_message msg, void *data) {
         (void)path; (void)types; (void)argc; (void)msg; (void)data;
@@ -230,6 +238,7 @@ public:
         lo_server_thread_add_method(st, "/set/fadeTime", "if", OscInterface::setFadeTime, sc);
         lo_server_thread_add_method(st, "/set/recLevel", "if", OscInterface::setRecLevel, sc);
         lo_server_thread_add_method(st, "/set/preLevel", "if", OscInterface::setPreLevel, sc);
+        lo_server_thread_add_method(st, "/set/recOffset", "if", OscInterface::setRecOffset, sc);
         lo_server_thread_add_method(st, "/set/recFlag", "if", OscInterface::setRecFlag, sc);
         lo_server_thread_add_method(st, "/set/position", "if", OscInterface::setPosition, sc);
         lo_server_thread_add_method(st, "/set/filterFc", "if", OscInterface::setFilterFc, sc);

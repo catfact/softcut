@@ -10,7 +10,7 @@ n.sendMsg("/set/ampLeft", 0, 1.0);
 n.sendMsg("/set/ampRight", 0, 0.4);
 
 n.sendMsg("/set/loopStart", 0, 1.0);
-n.sendMsg("/set/loopEnd", 0, 1.2);
+n.sendMsg("/set/loopEnd", 0, 1.5);
 n.sendMsg("/set/loopFlag", 0, 1.0);
 n.sendMsg("/set/rate", 0, 1.0);
 
@@ -19,7 +19,7 @@ n.sendMsg("/set/preLevel", 0, 0.7);
 
 n.sendMsg("/set/recFlag", 0, 1);
 
-n.sendMsg("/set/recOffset", 0, 50);
+n.sendMsg("/set/recOffset", 0, -10);
 n.sendMsg("/set/position", 0, 1.0);
 
 n.sendMsg("/set/fadeTime", 0, 0.2);
@@ -57,8 +57,8 @@ n.sendMsg("/set/recFadeDelay", 0);
 // and a dip in fade volume (high delay)
 // delay and window are both specified as a ratio of the fade time
 // fade time is automatically scaled by rate
-n.sendMsg("/set/preFadeWindow", 1/16);
-n.sendMsg("/set/recFadeDelay", 1/4);
+n.sendMsg("/set/preFadeWindow", 1/128);
+n.sendMsg("/set/recFadeDelay", 1/64);
 
 //-- change fade shapes
 // rec
@@ -74,6 +74,7 @@ n.sendMsg("/set/preFadeShape", 2); // raised cosine (equal-power)
 
 /// thingsss
 n.sendMsg("/set/rate", 0, 0.47);
+n.sendMsg("/set/rate", 0, 0.4);
 n.sendMsg("/set/rate", 0, -0.47);
 
 n.sendMsg("/set/rate", 0, 5/8);
@@ -96,8 +97,8 @@ n.sendMsg("/set/rate", 0, -4.7);
 
 
 // short loop
-n.sendMsg("/set/loopEnd", 0, 1.25);
-n.sendMsg("/set/fadeTime", 0, 0.06);
+n.sendMsg("/set/loopEnd", 0, 10);
+n.sendMsg("/set/fadeTime", 0, 1);
 
 n.sendMsg("/set/recLevel", 0, 1.0);
 n.sendMsg("/set/preLevel", 0, 0.9);

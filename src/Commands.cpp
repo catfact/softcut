@@ -75,6 +75,9 @@ public:
             case SET_REC_FLAG:
                 sc->setRecFlag(voice,value.b);
                 break;
+            case SET_REC_OFFSET:
+                sc->setRecOffset(voice,value.f);
+                break;
             case SET_POSITION:
                 sc->cutToPos(voice,value.f);
                 break;
@@ -122,6 +125,7 @@ public:
                 break;
             default:
                 ;;
+            case NUM_COMMANDS:break;
         }
     }
 

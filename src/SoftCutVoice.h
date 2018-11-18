@@ -43,6 +43,8 @@ namespace softcut {
 
         void printTestBuffers();
 
+        void setRecOffset(float d);
+
     private:
         float* buf;
         int bufFrames;

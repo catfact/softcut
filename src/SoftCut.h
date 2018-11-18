@@ -57,6 +57,8 @@ namespace softcut {
 
         void printTestBuffers();
 
+        void setRecOffset(int i, float d);
+
     private:
         SoftCutVoice scv[numVoices];
         float outAmp[numVoices][2];
