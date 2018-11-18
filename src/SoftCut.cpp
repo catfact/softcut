@@ -33,7 +33,6 @@ void SoftCut::processBlock(const float *in0, const float* in1, float *out0, floa
     (void)in1;
     Commands::handlePending(this);
 
-
     for(int fr=0; fr<numFrames; ++fr) {
         out0[fr] = 0;
         out1[fr] = 0;
@@ -171,4 +170,12 @@ void SoftCut::printTestBuffers() {
 
 void SoftCut::setRecOffset(int i, float d) {
     scv[i].setRecOffset(d);
+}
+
+void SoftCut::setLevelSlewTime(int i, float d) {
+    scv[i].setLevelSlewTime(d);
+}
+
+void SoftCut::setRateSlewTime(int i, float d) {
+    scv[i].setRateSlewTime(d);
 }

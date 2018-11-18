@@ -57,8 +57,7 @@ void FadeCurves::calcRecFade() {
             x += phi;
         }
         buf[n] = 1.f;
-    } else {
-        BOOST_ASSERT(recShape == RAISED);
+    } else if (recShape == RAISED) {
         const float phi = fpi/(nr*2);
         float x = fpi;
         float y = 0.f;
@@ -71,6 +70,8 @@ void FadeCurves::calcRecFade() {
             x += phi;
         }
         buf[n] = 1.f;
+    } else {
+        BOOST_ASSERT_MSG(false, "undefined fade shape");
     }
     memcpy(recFadeBuf, buf, fadeBufSize*sizeof(float));
 }
@@ -96,13 +97,15 @@ void FadeCurves::calcPreFade() {
             buf[i++] = 1.f - x;
             x += phi;
         }
-    } else {
+    } else if (recShape == RAISED) {
         BOOST_ASSERT(preShape == RAISED);
         const float phi = fpi / (nwp*2);
         while (i < nwp) {
             buf[i++] = cosf(x);
             x += phi;
         }
+    } else {
+        BOOST_ASSERT_MSG(false, "undefined fade shape");
     }
     while(i<fadeBufSize) { buf[i++] = 0.f; }
     memcpy(preFadeBuf, buf, fadeBufSize*sizeof(float));

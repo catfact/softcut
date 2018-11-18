@@ -39,6 +39,8 @@ namespace softcut {
             SET_REC_FADE_DELAY,
             SET_PRE_FADE_SHAPE,
             SET_REC_FADE_SHAPE,
+            SET_LEVEL_SLEW_TIME,
+            SET_RATE_SLEW_TIME,
             NUM_COMMANDS
         } Id;
 

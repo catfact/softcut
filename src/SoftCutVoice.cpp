@@ -142,3 +142,12 @@ void SoftCutVoice::setRecOffset(float d) {
     sch.setRecOffset(d);
 }
 
+void SoftCutVoice::setLevelSlewTime(float d) {
+    recRamp.setTime(d);
+    preRamp.setTime(d);
+}
+
+void SoftCutVoice::setRateSlewTime(float d) {
+    rateRamp.setTime(d);
+}
+

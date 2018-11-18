@@ -45,6 +45,10 @@ namespace softcut {
 
         void setRecOffset(float d);
 
+        void setLevelSlewTime(float d);
+
+        void setRateSlewTime(float d);
+
     private:
         float* buf;
         int bufFrames;

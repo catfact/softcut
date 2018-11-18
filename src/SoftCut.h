@@ -55,16 +55,18 @@ namespace softcut {
         void setPreFadeShape(float x);
         void setRecFadeShape(float x);
 
-        void printTestBuffers();
 
         void setRecOffset(int i, float d);
+		void setLevelSlewTime(int i, float d);
+		void setRateSlewTime(int i, float d);
 
-    private:
+		void printTestBuffers();
+	private:
         SoftCutVoice scv[numVoices];
         float outAmp[numVoices][2];
         float outBus[maxBlockSize];
 		float buf[bufFrames];
-    };
+	};
 }
 
 

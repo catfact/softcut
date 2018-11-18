@@ -215,6 +215,21 @@ private:
         return 0;
     }
 
+
+    static int setLevelSlewTime(const char *path, const char *types, lo_arg **argv, int argc, lo_message msg, void *data) {
+        (void)path; (void)types; (void)argc; (void)msg; (void)data;
+        if(argc<2) { return 0; }
+        Commands::post(Commands::SET_LEVEL_SLEW_TIME, argv[0]->i, argv[1]->f);
+        return 0;
+    }
+
+    static int setRateSlewTime(const char *path, const char *types, lo_arg **argv, int argc, lo_message msg, void *data) {
+        (void)path; (void)types; (void)argc; (void)msg; (void)data;
+        if(argc<2) { return 0; }
+        Commands::post(Commands::SET_RATE_SLEW_TIME, argv[0]->i, argv[1]->f);
+        return 0;
+    }
+
     static int printTestBuffers(const char *path, const char *types, lo_arg **argv, int argc, lo_message msg, void *data) {
         (void) path;
         (void) types;
@@ -256,6 +271,8 @@ public:
         lo_server_thread_add_method(st, "/set/recFadeDelay", "f", OscInterface::setRecFadeDelay, sc);
         lo_server_thread_add_method(st, "/set/preFadeShape", "f", OscInterface::setPreFadeShape, sc);
         lo_server_thread_add_method(st, "/set/recFadeShape", "f", OscInterface::setRecFadeShape, sc);
+        lo_server_thread_add_method(st, "/set/levelSlewTime", "if", OscInterface::setLevelSlewTime, sc);
+        lo_server_thread_add_method(st, "/set/rateSlewTime", "if", OscInterface::setRateSlewTime, sc);
 
         lo_server_thread_add_method(st, "/quit", "", OscInterface::setQuit, sc);
         lo_server_thread_add_method(st, "/printTestBuffers", "", OscInterface::printTestBuffers, sc);
