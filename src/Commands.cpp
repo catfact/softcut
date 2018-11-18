@@ -19,8 +19,8 @@ std::string Commands::labels[NUM_COMMANDS] = {
     "SET_FADE_TIME",
     "SET_REC_LEVEL",
     "SET_PRE_LEVEL",
-    "SET_REC_OFFSET",
     "SET_REC_FLAG",
+    "SET_REC_OFFSET",
     "SET_POSITION",
     "SET_FILTER_FC",
     "SET_FILTER_FC_MOD",
@@ -76,7 +76,7 @@ public:
                 sc->setPreLevel(voice,value.f);
                 break;
             case SET_REC_FLAG:
-                sc->setRecFlag(voice,value.b);
+                sc->setRecFlag(voice, value.b);
                 break;
             case SET_REC_OFFSET:
                 sc->setRecOffset(voice,value.f);

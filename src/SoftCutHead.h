@@ -68,7 +68,7 @@ namespace  softcut{
         bool loopFlag;  // set to loop, unset for 1-shot
         float pre; // pre-record level
         float rec; // record level
-        bool recRun;
+        bool recFlag;
 
         rate_t rate;
         TestBuffers testBuf;

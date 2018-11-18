@@ -24,7 +24,7 @@ void SoftCutHead::init() {
     active = 0;
     rate = 1.f;
     setFadeTime(0.1f);
-    recRun = false;
+    recFlag = false;
     testBuf.init();
 }
 
@@ -46,20 +46,12 @@ void SoftCutHead::processSample(sample_t in, float *outPhase, float *outTrig, sa
 
     BOOST_ASSERT_MSG(!(head[0].state_ == ACTIVE && head[1].state_ == ACTIVE), "multiple active heads");
 
-//    // // // whichever is closest to the _beginning of a fadein_, or the _end of a fadeout_, should poke first?
-//    if(recRun) {
-//        if(head[0].state_ == FADEIN && head[0].fade_ < 0.5f) {
-//            head[0].poke(in, pre, rec, numFades);
-//            head[1].poke(in, pre, rec, numFades);
-//        } else {
-//            head[1].poke(in, pre, rec, numFades);
-//            head[0].poke(in, pre, rec, numFades);
-//        }
-//    }
 
-    head[0].poke(in, pre, rec, numFades);
-    head[1].poke(in, pre, rec, numFades);
-
+    // FIXME: should probably continue to push input to resampler when not recording
+    if(recFlag) {
+        head[0].poke(in, pre, rec, numFades);
+        head[1].poke(in, pre, rec, numFades);
+    }
     takeAction(head[0].updatePhase(start, end, loopFlag));
     takeAction(head[1].updatePhase(start, end, loopFlag));
 
@@ -170,7 +162,7 @@ void SoftCutHead::setPre(float x) {
 }
 
 void SoftCutHead::setRecRun(bool val) {
-    recRun = val;
+    recFlag = val;
 }
 
 phase_t SoftCutHead::getActivePhase() {
