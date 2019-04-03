@@ -1,3 +1,13 @@
+# notice
+
+this project has become stale. current softcut lives in the main norns repo, and is baked into the `crone` program as one of two jack / OSC clients (the other is a mixer.)
+
+https://github.com/monome/norns/tree/dev/crone
+
+someday i will find time to refactor it into a proper library and port to other platforms/environments.
+
+-------------
+
 # softcut
 library for seamless audio looping
 
